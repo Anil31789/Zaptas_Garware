@@ -169,6 +169,11 @@ export default function AnnouncementCard() {
                         ? `${ConnectMe.img_URL}${announcement.imagePath[0]}`
                         : "./csrimg.png"
                     }
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      // objectFit: "cover", // Ensures the image fills the container
+                    }}
                     alt="CSR"
                   />
                 </div>

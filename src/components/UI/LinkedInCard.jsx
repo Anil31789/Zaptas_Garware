@@ -302,102 +302,113 @@ export default function LinkedInCard() {
       )}
 
       {/* Modal for LinkedIn Post */}
-      <Modal show={showModal} onHide={closePostPopup} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <PostCard post={selectedPost?.text} />
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "100%",
-              height: "100%",
-            }}
-          >
-            {selectedPost?.multimedia?.type === "image" ? (
-              <img
-                src={selectedPost.multimedia.url}
-                alt="LinkedIn selectedPost"
-                style={{ width: "100%", height: "auto" }}
-              />
-            ) : selectedPost?.multimedia?.type === "video" ? (
-              <video
-                controls
-                autoPlay
-                muted
-                loop
-                style={{
-                  width: "100%",
-                  height: "60%",
-                  objectFit: "cover", // Ensures the video covers the space without distortion
-                }}
-              >
-                <source src={selectedPost.multimedia.url} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            ) : null}
-          </div>
+      <Modal show={showModal} onHide={closePostPopup} size="lg" centered>
+      {/* Modal Header */}
+      <Modal.Header closeButton>
+        <Modal.Title className="fs-5">
+          <PostCard post={selectedPost?.text} size={600} />
+        </Modal.Title>
+      </Modal.Header>
 
-          <div className="likencmt">
-            <div>
-              <FaThumbsUp
-                className={`like-icon  ${
-                  loadingPostIds.includes(selectedPost?.id) ? "loading" : ""
-                }`}
-                style={{
-                  color: selectedPost?.fetchUserLikesStatus
-                    ? "blue"
-                    : "gray",
-                  cursor: "pointer",
-                }}
-                onClick={() =>
-                  handleLikeToggle(
-                    selectedPost.id,
-                    selectedPost?.fetchUserLikesStatus
-                      ? "disslike"
-                      : "likepost",
-                    "modelBox"
-                  )
-                }
-              />
-              &nbsp;
-              {selectedPost?.likeCount?.totalLikes} Likes
-            </div>
-            {/* <div
-              onClick={() => setShowComments(!showComments)}
-              style={{ cursor: "pointer" }}
-            >
-              <FaRegCommentDots /> 1 comment
-            </div> */}
-          </div>
-
-          {/* {showComments && (
-            <div>
-              {comments.map((comment, index) => (
-                <div key={index}>
-                  <p>{comment}</p>
-                </div>
-              ))}
-            </div>
-          )} */}
-        </Modal.Body>
-        {/* <Modal.Footer>
-          <div className="add-comment-box">
-            <input
-              type="text"
-              className="form-control"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Write a comment..."
+      {/* Modal Body */}
+      <Modal.Body className="p-4">
+        {/* Multimedia Content */}
+        <div
+          className="d-flex justify-content-center align-items-center mb-4"
+          style={{ width: "100%" }}
+        >
+          {selectedPost?.multimedia?.type === "image" ? (
+            <img
+              src={selectedPost.multimedia.url}
+              alt="LinkedIn Post"
+              className="img-fluid rounded"
+              style={{ maxHeight: "400px" }}
             />
-            <FaPaperPlane onClick={addComment} />
+          ) : selectedPost?.multimedia?.type === "video" ? (
+            <video
+              controls
+              autoPlay
+              muted
+              loop
+              className="rounded"
+              style={{
+                maxWidth: "100%",
+                maxHeight: "400px",
+                objectFit: "cover",
+              }}
+            >
+              <source src={selectedPost.multimedia.url} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <p className="text-muted">No multimedia available for this post.</p>
+          )}
+        </div>
+
+        {/* Like and Comment Section */}
+        <div className="d-flex justify-content-between align-items-center border-top pt-3">
+          {/* Like Button */}
+          <div className="d-flex align-items-center">
+            <FaThumbsUp
+              className={`like-icon fs-5 ${
+                loadingPostIds.includes(selectedPost?.id) ? "loading" : ""
+              }`}
+              style={{
+                color: selectedPost?.fetchUserLikesStatus ? "blue" : "gray",
+                cursor: "pointer",
+              }}
+              onClick={() =>
+                handleLikeToggle(
+                  selectedPost.id,
+                  selectedPost?.fetchUserLikesStatus
+                    ? "disslike"
+                    : "likepost",
+                  "modelBox"
+                )
+              }
+            />
+            <span className="ms-2 text-secondary">
+              {selectedPost?.likeCount?.totalLikes || 0} Likes
+            </span>
           </div>
-        </Modal.Footer> */}
-      </Modal>
+
+          {/* Comment Section */}
+          {/* <div
+            className="d-flex align-items-center text-primary"
+            style={{ cursor: "pointer" }}
+            onClick={() => setShowComments(!showComments)}
+          >
+            <FaRegCommentDots className="fs-5" />
+            <span className="ms-2">1 comment</span>
+          </div> */}
+        </div>
+
+        {/* Comments Section */}
+        {/* {showComments && (
+          <div className="mt-3">
+            {comments.map((comment, index) => (
+              <div key={index} className="border rounded p-2 mb-2">
+                <p className="mb-1">{comment}</p>
+              </div>
+            ))}
+          </div>
+        )} */}
+      </Modal.Body>
+
+      {/* Add Comment Box */}
+      <Modal.Footer>
+        {/* <div className="input-group">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Write a comment..."
+          />
+          <button className="btn btn-primary">
+            <FaPaperPlane />
+          </button>
+        </div> */}
+      </Modal.Footer>
+    </Modal>
     </div>
   );
 }

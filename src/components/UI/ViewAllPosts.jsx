@@ -124,7 +124,7 @@ export default function ViewAllPosts() {
         <div key={index} className="card viewall-card mb-2">
           <div className="update-container">
             <a href="" className="update-image">
-              <img width="48" src="./logo.PNG" />
+              <img width="48" src="./logo.png" />
             </a>
             <a href="" className="update-title">
               <span>GHFL [Garware Hi-Tech Films Limited]</span>

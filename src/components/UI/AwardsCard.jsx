@@ -344,11 +344,32 @@ export default function AnnouncementCard() {
                         src={`${ConnectMe.img_URL}${image}`} // Display the existing image
                         alt={`Selected Banner ${index + 1}`}
                         className="modelcard-image"
-                        onClick={() => {
-                          handleClose(); // Close the modal or menu
-                          setSelectedImage(`${ConnectMe.img_URL}${image}`); // Set the selected image for preview
-                        }}
-                      />
+                      onClick={() => {
+    handleClose(); // Close the modal or menu
+    setSelectedImage(`${ConnectMe.img_URL}${image}`); // Set the selected image for preview
+  }}
+  onMouseEnter={(e) => {
+    const hoverText = document.createElement("div");
+    hoverText.innerText = "Click here to view";
+    hoverText.style.position = "absolute";
+    hoverText.style.top = "50%";
+    hoverText.style.left = "50%";
+    hoverText.style.transform = "translate(-50%, -50%)";
+    hoverText.style.color = "white";
+    hoverText.style.backgroundColor = "rgba(0, 0, 0, 0.75)";
+    hoverText.style.padding = "5px 10px";
+    hoverText.style.borderRadius = "5px";
+    hoverText.style.zIndex = "1";
+    hoverText.style.pointerEvents = "none";
+    hoverText.classList.add("hover-text"); // Add a class for easy cleanup
+    e.target.parentElement.style.position = "relative"; // Ensure the container is relatively positioned
+    e.target.parentElement.appendChild(hoverText); // Append hover text
+  }}
+  onMouseLeave={(e) => {
+    const hoverText = e.target.parentElement.querySelector(".hover-text");
+    if (hoverText) hoverText.remove(); // Remove the hover text
+  }}
+/>
                       {/* Cross icon in the top-right corner */}
                     </div>
                   </div>
