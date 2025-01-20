@@ -52,8 +52,9 @@ export default function AnnouncementCard() {
   const handleLikedisslike = async (announcementId, isLiked) => {
     showToast(isLiked ? "Unlike success" : "Like success", "success");
     const token = getTokenFromLocalStorage();
-    const url = `${ConnectMe.BASE_URL}/industry/${announcementId}/${isLiked ? "unlike" : "like"
-      }`;
+    const url = `${ConnectMe.BASE_URL}/industry/${announcementId}/${
+      isLiked ? "unlike" : "like"
+    }`;
     const headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -69,8 +70,8 @@ export default function AnnouncementCard() {
               // Update the likes array and the likesCount locally
               const updatedLikes = isLiked
                 ? announcement.likes.filter(
-                  (userId) => userId !== response.userId
-                )
+                    (userId) => userId !== response.userId
+                  )
                 : [...announcement.likes, response.userId];
 
               return {
@@ -106,7 +107,7 @@ export default function AnnouncementCard() {
         setError("Failed to update like.");
         fetchAnnouncements();
       }
-    } catch (err) {
+     } catch (err) {
       setError("Error updating like.");
       fetchAnnouncements();
     }
@@ -327,33 +328,66 @@ export default function AnnouncementCard() {
                       <img
                         src={`${ConnectMe.img_URL}${image}`} // Display the existing image
                         alt={`Selected Banner ${index + 1}`}
-                        className="modelcard-image"
-                        onClick={() => {
-                          handleClose(); // Close the modal or menu
-                          setSelectedImage(`${ConnectMe.img_URL}${image}`); // Set the selected image for preview
-                        }}
-                        onMouseEnter={(e) => {
-                          const hoverText = document.createElement("div");
-                          hoverText.innerText = "Click here to view";
-                          hoverText.style.position = "absolute";
-                          hoverText.style.top = "50%";
-                          hoverText.style.left = "50%";
-                          hoverText.style.transform = "translate(-50%, -50%)";
-                          hoverText.style.color = "white";
-                          hoverText.style.backgroundColor = "rgba(0, 0, 0, 0.75)";
-                          hoverText.style.padding = "5px 10px";
-                          hoverText.style.borderRadius = "5px";
-                          hoverText.style.zIndex = "1";
-                          hoverText.style.pointerEvents = "none";
-                          hoverText.classList.add("hover-text"); // Add a class for easy cleanup
-                          e.target.parentElement.style.position = "relative"; // Ensure the container is relatively positioned
-                          e.target.parentElement.appendChild(hoverText); // Append hover text
-                        }}
-                        onMouseLeave={(e) => {
-                          const hoverText = e.target.parentElement.querySelector(".hover-text");
-                          if (hoverText) hoverText.remove(); // Remove the hover text
-                        }}
-                      />
+                        className="modelcard-image img-fluid rounded"
+                      onClick={() => {
+    handleClose(); // Close the modal or menu
+    setSelectedImage(`${ConnectMe.img_URL}${image}`); // Set the selected image for preview
+  }}
+   style={{
+    width: "100%",
+    height: "200px",
+    objectFit: "cover",
+    position: "relative",
+  }}
+  onMouseEnter={(e) => {
+    // Check if hover text already exists
+    if (e.target.parentElement.querySelector(".hover-text")) return;
+
+    const hoverText = document.createElement("div");
+    hoverText.innerText = "Click here to view";
+    hoverText.style.position = "absolute";
+    hoverText.style.top = "50%";
+    hoverText.style.left = "50%";
+    hoverText.style.transform = "translate(-50%, -50%)";
+    hoverText.style.color = "white";
+    hoverText.style.backgroundColor = "rgba(0, 0, 0, 0.75)";
+    hoverText.style.padding = "10px 20px";
+    hoverText.style.borderRadius = "8px";
+    hoverText.style.fontFamily = "Arial, sans-serif";
+    hoverText.style.fontSize = "16px";
+    hoverText.style.fontWeight = "bold";
+    hoverText.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.2)";
+    hoverText.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+    hoverText.style.opacity = "0";
+    hoverText.style.pointerEvents = "none";
+    hoverText.style.zIndex = "10";
+    hoverText.classList.add("hover-text");
+
+    // Ensure container has relative positioning
+    e.target.parentElement.style.position = "relative";
+    e.target.parentElement.appendChild(hoverText);
+
+    // Add transition effect
+    setTimeout(() => {
+      hoverText.style.opacity = "1";
+      hoverText.style.transform = "translate(-50%, -50%) scale(1.1)";
+    }, 10);
+  }}
+  onMouseLeave={(e) => {
+    const hoverText = e.target.parentElement.querySelector(".hover-text");
+
+    if (hoverText) {
+      // Smooth fade-out effect
+      hoverText.style.opacity = "0";
+      hoverText.style.transform = "translate(-50%, -50%) scale(0.9)";
+
+      // Ensure cleanup after transition ends
+      setTimeout(() => {
+        if (hoverText.parentElement) hoverText.remove();
+      }, 300); // Matches the transition duration
+    }
+  }}
+/>
                       {/* Cross icon in the top-right corner */}
                     </div>
                   </div>
@@ -378,7 +412,7 @@ export default function AnnouncementCard() {
               <span> {selectedAnnouncement?.likes?.length} Likes</span>{" "}
               {/* Display likes count */}
             </div>
-          </Modal.Body>
+              </Modal.Body>
         </Modal>
       )}
 

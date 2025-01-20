@@ -348,7 +348,16 @@ export default function AnnouncementCard() {
     handleClose(); // Close the modal or menu
     setSelectedImage(`${ConnectMe.img_URL}${image}`); // Set the selected image for preview
   }}
+   style={{
+    width: "100%",
+    height: "200px",
+    objectFit: "cover",
+    position: "relative",
+  }}
   onMouseEnter={(e) => {
+    // Check if hover text already exists
+    if (e.target.parentElement.querySelector(".hover-text")) return;
+
     const hoverText = document.createElement("div");
     hoverText.innerText = "Click here to view";
     hoverText.style.position = "absolute";
@@ -357,17 +366,41 @@ export default function AnnouncementCard() {
     hoverText.style.transform = "translate(-50%, -50%)";
     hoverText.style.color = "white";
     hoverText.style.backgroundColor = "rgba(0, 0, 0, 0.75)";
-    hoverText.style.padding = "5px 10px";
-    hoverText.style.borderRadius = "5px";
-    hoverText.style.zIndex = "1";
+    hoverText.style.padding = "10px 20px";
+    hoverText.style.borderRadius = "8px";
+    hoverText.style.fontFamily = "Arial, sans-serif";
+    hoverText.style.fontSize = "16px";
+    hoverText.style.fontWeight = "bold";
+    hoverText.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.2)";
+    hoverText.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+    hoverText.style.opacity = "0";
     hoverText.style.pointerEvents = "none";
-    hoverText.classList.add("hover-text"); // Add a class for easy cleanup
-    e.target.parentElement.style.position = "relative"; // Ensure the container is relatively positioned
-    e.target.parentElement.appendChild(hoverText); // Append hover text
+    hoverText.style.zIndex = "10";
+    hoverText.classList.add("hover-text");
+
+    // Ensure container has relative positioning
+    e.target.parentElement.style.position = "relative";
+    e.target.parentElement.appendChild(hoverText);
+
+    // Add transition effect
+    setTimeout(() => {
+      hoverText.style.opacity = "1";
+      hoverText.style.transform = "translate(-50%, -50%) scale(1.1)";
+    }, 10);
   }}
   onMouseLeave={(e) => {
     const hoverText = e.target.parentElement.querySelector(".hover-text");
-    if (hoverText) hoverText.remove(); // Remove the hover text
+
+    if (hoverText) {
+      // Smooth fade-out effect
+      hoverText.style.opacity = "0";
+      hoverText.style.transform = "translate(-50%, -50%) scale(0.9)";
+
+      // Ensure cleanup after transition ends
+      setTimeout(() => {
+        if (hoverText.parentElement) hoverText.remove();
+      }, 300); // Matches the transition duration
+    }
   }}
 />
                       {/* Cross icon in the top-right corner */}

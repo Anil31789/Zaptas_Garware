@@ -297,7 +297,7 @@ export default function Headers() {
                 ))}
               </ul>
             </li>
-            <li className="nav-item dropdown">
+            {/* <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle d-flex align-items-center"
                 href="#"
@@ -351,7 +351,7 @@ export default function Headers() {
                   </li>
                 ))}
               </ul>
-            </li>
+            </li> */}
           </ul>
 
           <div className="d-flex social-icons">
