@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { HiArrowCircleRight } from "react-icons/hi";
 import { AiOutlineSound } from "react-icons/ai";
 import { Modal, Spinner } from "react-bootstrap";
-import { FaThumbsUp } from "react-icons/fa";
+import { FaNewspaper, FaThumbsUp } from "react-icons/fa";
 import "./AnnouncementCard.css";
 import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
@@ -146,7 +146,7 @@ export default function AnnouncementCard() {
       <div className="card mb-3">
         <div className="card-header d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
-            <AiOutlineSound className="me-2" />
+            <FaNewspaper className="me-2" />
             <h5 className="mb-0">Industry News</h5>
           </div>
           <a

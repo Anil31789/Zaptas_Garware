@@ -11,6 +11,8 @@ import showToast from "../../utils/toastHelper";
 import PostCard from "./postDisplay";
 import ViewAllPopup from "./ViewAllPopup";
 import { useNavigate } from "react-router-dom";
+import { MdOutlineAnnouncement } from "react-icons/md";
+import { IoIosMegaphone } from "react-icons/io";
 
 export default function AnnouncementCard() {
   const [announcements, setAnnouncements] = useState([]);
@@ -138,7 +140,7 @@ export default function AnnouncementCard() {
       <div className="card mb-3">
         <div className="card-header d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
-            <AiOutlineSound className="me-2" />
+            <IoIosMegaphone className="me-2" />
             <h5 className="mb-0">Announcements</h5>
           </div>
           <a

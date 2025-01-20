@@ -65,11 +65,11 @@ export default function Sidebar() {
             <FaUsers /> <span>Awards</span>
           </Link>
         </li>
-        <li>
+        {/* <li>
           <Link to="/admin/CalenderHoliday" style={{ textDecoration: 'none', color: 'inherit' }}>
             <FaUsers /> <span>CalenderHoliday</span>
           </Link>
-        </li>
+        </li> */}
         <li>
           <Link to="/admin/it" style={{ textDecoration: 'none', color: 'inherit' }}>
             <FaUsers /> <span>IT</span>

@@ -274,7 +274,7 @@ export default function CalenderHoliday() {
       <div className="container mt-4">
         {/* <h2> Current Announcements</h2> */}
         <div className="old-announcements border p-3">
-          <h4>Current CSR</h4>
+          <h4>Current Holidays</h4>
           <ul className="list-group">
             {existingAnnouncements.map((announcement) => (
               <li
@@ -303,7 +303,7 @@ export default function CalenderHoliday() {
               className="d-flex justify-content-between align-items-center" // Flexbox layout
               style={{ fontSize: '20px' }}
             >
-              <span>Edit Announcement</span>
+              <span>Edit Holiday</span>
               <div
                 onClick={() => setSelectedAnnouncement(null)}
                 style={{ cursor: 'pointer' }}

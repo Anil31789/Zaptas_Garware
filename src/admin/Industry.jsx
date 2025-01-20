@@ -444,7 +444,7 @@ export default function IndustryPage() {
               className="d-flex justify-content-between align-items-center" // Flexbox layout
               style={{ fontSize: '20px' }}
             >
-              <span>Edit Announcement</span>
+              <span>Edit News</span>
               <div
                 onClick={() => setSelectedAnnouncement(null)}
                 style={{ cursor: 'pointer' }}
@@ -503,7 +503,7 @@ export default function IndustryPage() {
                   required
                 ></textarea>
               </div>
-              <div className="mb-3">
+              {/* <div className="mb-3">
                 <label htmlFor="location" className="form-label">Location</label>
                 <input
                   type="text"
@@ -513,9 +513,9 @@ export default function IndustryPage() {
                   value={selectedAnnouncement.location}
                   onChange={handleInputChange}
                 />
-              </div>
+              </div> */}
               <div className="mb-3">
-                <label htmlFor="AnnouncementDate" className="form-label">Announcement Date</label>
+                <label htmlFor="AnnouncementDate" className="form-label">News Date</label>
                 <input
                   type="date"
                   className="form-control"
@@ -651,7 +651,7 @@ export default function IndustryPage() {
                 required
                 value={formData.title}
                 onChange={handleChange}
-                placeholder="Enter announcement title"
+                placeholder="Enter News title"
               />
             </div>
 
@@ -678,13 +678,13 @@ export default function IndustryPage() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="date">CSR Date</label>
+              <label htmlFor="date">News Date</label>
               <input type="date" id="AnnouncementDate" value={formData.AnnouncementDate}
                 onChange={handleChange}
                 placeholder="29 Nov 2024" />
             </div>
 
-            <div className="form-group">
+            {/* <div className="form-group">
               <label htmlFor="location">For Which Location CSR is for?</label>
               <input
                 type="text"
@@ -693,7 +693,7 @@ export default function IndustryPage() {
                 onChange={handleChange}
                 placeholder="Chhatrapati Sambhajinagar (Maharashtra)"
               />
-            </div>
+            </div> */}
 
             <div className="form-group">
               <label htmlFor="description">Description</label>

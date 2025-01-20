@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import { HiArrowCircleRight } from "react-icons/hi";
-import { AiOutlineSound } from "react-icons/ai";
+import { AiOutlineMessage } from "react-icons/ai";
 import { Modal, Spinner } from "react-bootstrap";
 import { FaThumbsUp } from "react-icons/fa";
 import "./AnnouncementCard.css";
@@ -144,7 +144,7 @@ export default function AnnouncementCard() {
       <div className="card mb-3">
         <div className="card-header d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
-            <AiOutlineSound className="me-2" />
+            <AiOutlineMessage className="me-2" />
             <h5 className="mb-0">Legacy</h5>
           </div>
           <a href="#" className="text-decoration-none">
@@ -177,7 +177,7 @@ export default function AnnouncementCard() {
                 <div className="announcement-disc">
                   <p className="card-text">{announcement.title}</p>
 
-                  <div className="card-text fs-6">
+                  <div className="card-text fs-6 ">
                     <PostCard post={announcement.description} size={280} />
                   </div>
                   <div className="d-flex justify-content-between mt-2">

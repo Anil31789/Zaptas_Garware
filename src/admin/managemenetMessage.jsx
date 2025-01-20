@@ -408,7 +408,7 @@ console.log(selectedImages,'abcdef')
       <div className="container mt-4">
         {/* <h2> Current Announcements</h2> */}
         <div className="old-announcements border p-3">
-          <h4>Current </h4>
+          <h4>Current Message </h4>
           <ul className="list-group">
             {existingAnnouncements.map((announcement) => (
               <li
@@ -437,7 +437,7 @@ console.log(selectedImages,'abcdef')
               className="d-flex justify-content-between align-items-center" // Flexbox layout
               style={{ fontSize: '20px' }}
             >
-              <span>Edit </span>
+              <span>Edit Message </span>
               <div
                 onClick={() => setSelectedAnnouncement(null)}
                 style={{ cursor: 'pointer' }}
@@ -583,7 +583,7 @@ console.log(selectedImages,'abcdef')
                 required
                 value={formData.title}
                 onChange={handleChange}
-                placeholder="Enter announcement title"
+                placeholder="Enter Message title"
               />
             </div>
 

@@ -418,7 +418,7 @@ export default function AwardsPage() {
       <div className="container mt-4">
         {/* <h2> Current Announcements</h2> */}
         <div className="old-announcements border p-3">
-          <h4>Current CSR</h4>
+          <h4>Current Awards</h4>
           <ul className="list-group">
             {existingAnnouncements.map((announcement) => (
               <li
@@ -447,7 +447,7 @@ export default function AwardsPage() {
               className="d-flex justify-content-between align-items-center" // Flexbox layout
               style={{ fontSize: '20px' }}
             >
-              <span>Edit Announcement</span>
+              <span>Edit Awards</span>
               <div
                 onClick={() => setSelectedAnnouncement(null)}
                 style={{ cursor: 'pointer' }}
@@ -529,7 +529,7 @@ export default function AwardsPage() {
                   required
                 ></textarea>
               </div>
-              <div className="mb-3">
+              {/* <div className="mb-3">
                 <label htmlFor="location" className="form-label">Location</label>
                 <input
                   type="text"
@@ -539,7 +539,7 @@ export default function AwardsPage() {
                   value={selectedAnnouncement.location}
                   onChange={handleInputChange}
                 />
-              </div>
+              </div> */}
               <div className="mb-3">
                 <label htmlFor="AnnouncementDate" className="form-label">Award Date</label>
                 <input
@@ -627,7 +627,7 @@ export default function AwardsPage() {
       {
         selectedAnnouncement == null &&
         <div className="new-announcements">
-          <h4>New</h4>
+          <h4>New Award</h4>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="title">Award Title</label>
@@ -637,7 +637,7 @@ export default function AwardsPage() {
                 required
                 value={formData.title}
                 onChange={handleChange}
-                placeholder="Enter announcement title"
+                placeholder="Enter Award title"
               />
             </div>
 
@@ -690,7 +690,7 @@ export default function AwardsPage() {
                 placeholder="29 Nov 2024" />
             </div>
 
-            <div className="form-group">
+            {/* <div className="form-group">
               <label htmlFor="location">For Which Location Award is for?</label>
               <input
                 type="text"
@@ -699,7 +699,7 @@ export default function AwardsPage() {
                 onChange={handleChange}
                 placeholder="Chhatrapati Sambhajinagar (Maharashtra)"
               />
-            </div>
+            </div> */}
 
             <div className="form-group">
               <label htmlFor="description">Description</label>

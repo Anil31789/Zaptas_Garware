@@ -410,7 +410,7 @@ console.log(selectedImages,'abcdef')
       <div className="container mt-4">
         {/* <h2> Current Announcements</h2> */}
         <div className="old-announcements border p-3">
-          <h4>Current CSR</h4>
+          <h4>Current Announcement</h4>
           <ul className="list-group">
             {existingAnnouncements.map((announcement) => (
               <li
@@ -498,7 +498,7 @@ console.log(selectedImages,'abcdef')
                   required
                 ></textarea>
               </div>
-              <div className="mb-3">
+              {/* <div className="mb-3">
                 <label htmlFor="location" className="form-label">Location</label>
                 <input
                   type="text"
@@ -508,7 +508,7 @@ console.log(selectedImages,'abcdef')
                   value={selectedAnnouncement.location}
                   onChange={handleInputChange}
                 />
-              </div>
+              </div> */}
               <div className="mb-3">
                 <label htmlFor="AnnouncementDate" className="form-label">Announcement Date</label>
                 <input
@@ -636,10 +636,10 @@ console.log(selectedImages,'abcdef')
       {
         selectedAnnouncement == null &&
         <div className="new-announcements">
-          <h4>New CSR</h4>
+          <h4>New Announcement</h4>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="title">CSR Title</label>
+              <label htmlFor="title">Announcement Title</label>
               <input
                 type="text"
                 id="title"
@@ -673,13 +673,13 @@ console.log(selectedImages,'abcdef')
             </div>
 
             <div className="form-group">
-              <label htmlFor="date">CSR Date</label>
+              <label htmlFor="date">Announcement Date</label>
               <input type="date" id="AnnouncementDate" value={formData.AnnouncementDate}
                 onChange={handleChange}
                 placeholder="29 Nov 2024" />
             </div>
 
-            <div className="form-group">
+            {/* <div className="form-group">
               <label htmlFor="location">For Which Location CSR is for?</label>
               <input
                 type="text"
@@ -688,7 +688,7 @@ console.log(selectedImages,'abcdef')
                 onChange={handleChange}
                 placeholder="Chhatrapati Sambhajinagar (Maharashtra)"
               />
-            </div>
+            </div> */}
 
             <div className="form-group">
               <label htmlFor="description">Description</label>
