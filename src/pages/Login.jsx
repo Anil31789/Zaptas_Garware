@@ -3,7 +3,7 @@ import { Container, Row, Col, Form, Button, Alert, Spinner } from "react-bootstr
 import { FaEnvelope, FaLock, FaKey } from "react-icons/fa";
 import showToast from "../utils/toastHelper";
 import ConnectMe from "../config/connect";
-import { apiCall } from "../utils/apiCall";
+import { addTokenToLocalStorage, apiCall } from "../utils/apiCall";
 import { useNavigate } from "react-router-dom";
 
 
@@ -55,6 +55,7 @@ const Login = () => {
       const response = await apiCall("POST", url, headers, payload);
 
       if (response.success) {
+        addTokenToLocalStorage(response?.data?.token);
         showToast("Login successful!", "success");
         navigate("/"); // Redirect to the home page or any other route
       } else {
