@@ -17,6 +17,7 @@ export default function AnnouncementCard() {
   const [show, setShow] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null); // For full-size image preview
+    const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
   // Fetch announcements on component mount
   useEffect(() => {
@@ -222,6 +223,7 @@ export default function AnnouncementCard() {
                         style={{ cursor: "pointer", margin: 0 }}
                       >
                         <FaPaperPlane style={{ color: "gray" }} />
+                        
                       </p>
                     </div>
                     <div className="date-badge-container">

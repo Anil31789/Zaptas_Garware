@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "./BirthdayBox.css";
 import { FaAward, FaBirthdayCake, FaMapMarkerAlt } from "react-icons/fa";
-import { apiCall } from "../../utils/apiCall";
+import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
+import SendEmailPopup from "./sendMailPopup";
 
 export default function WorkAnniversary() {
   const [workAnniversaries, setWorkAnniversaries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectEmail,setSelectEmail]= useState(null)
+const [selectName,setSelectName]= useState(null)
   const sampleData = [
     {
       FirstName: "John",
@@ -53,7 +56,7 @@ export default function WorkAnniversary() {
     try {
       setLoading(true); // Show loader while fetching
       const url = `${ConnectMe.BASE_URL}/hrms/work-anniversary`; // Replace with actual URL
-      const token = localStorage.getItem("authToken"); // Assuming the token is stored in localStorage
+       const token = getTokenFromLocalStorage(); // Assuming the token is stored in localStorage
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -180,9 +183,20 @@ export default function WorkAnniversary() {
                             </div>
                             <div className="d-flex justify-content-center">
                               {" "}
-                              <button className="send-wish-btn">
+                              <button className="send-wish-btn" onClick={(()=>{
+                                setSelectEmail(wish?.OfficalEmailID)
+                                setSelectName(`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim())
+                                setShowPopup(true)
+                              })}>
                                 Send Wish
                               </button>
+                              <SendEmailPopup
+                                show={showPopup}
+                                 handleClose={() => setShowPopup(false)}
+                                recipient={selectEmail}
+                                personalName={selectName}
+                                // personalName={`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim()}
+                              />
                             </div>
                           </div>
                         </div>

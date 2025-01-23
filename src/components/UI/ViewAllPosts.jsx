@@ -13,6 +13,7 @@ export default function ViewAllPosts() {
   const [count, setCount] = useState(6); // Number of posts to fetch per API call
   const [loadingPostIds, setLoadingPostIds] = useState([]); // Track which posts are being liked/unliked
   const currentRequest = useRef(null);
+  const [loginRequired, setloginRequired] = useState(false)
   const startRef = useRef(0); // Ref for start index
 
   // Function to fetch posts
@@ -32,6 +33,7 @@ export default function ViewAllPosts() {
       const response = await apiCall("GET", url, headers);
 
       if (response.success && response.data.posts.length > 0) {
+        setloginRequired(response?.data?.requiredLogin)
         setPosts((prev) => [...prev, ...response.data.posts]); // Append new posts to the existing list
         startRef.current += response.data.posts.length; // Update startRef based on the number of posts received
       } else {
@@ -118,6 +120,32 @@ export default function ViewAllPosts() {
     }
   };
 
+
+  const handleLinkedInCallback = async () => {
+    try {
+      const url = `${ConnectMe.BASE_URL}/auth/linkedin`;
+      const token = getTokenFromLocalStorage();
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      const response = await apiCall("GET", url, headers);
+
+      if (response.success) {
+        showToast("Login Success", "success");
+        const authUrl = `${response.data}`;
+        window.open(authUrl, "_blank");
+      } else {
+        showToast("Login Failed", "error");
+        console.error("LinkedIn login failed:", response.message);
+      }
+    } catch (error) {
+      showToast("Login Failed", "error");
+      console.error("Error during LinkedIn login:", error.message);
+    }
+  };
+
   return (
     <div className="container mt-3">
       {posts.map((post, index) => (
@@ -151,24 +179,57 @@ export default function ViewAllPosts() {
                 ) : null}
               </div>
             )}
-            <p>
-              <FaThumbsUp
-                className={`like-icon ${
-                  loadingPostIds.includes(post.id) ? "loading" : ""
-                }`}
-                style={{
-                  color: post?.fetchUserLikesStatus ? "blue" : "gray",
-                  cursor: "pointer",
-                }}
-                onClick={() =>
-                  handleLikeToggle(
-                    post.id,
-                    post?.fetchUserLikesStatus ? "disslike" : "likepost"
-                  )
-                }
-              />
-              {post.likeCount?.totalLikes || 0} Likes
-            </p>
+              <div className="d-flex justify-content-center align-items-center my-3">
+                      {loginRequired ? (
+                        // If loginRequired, show "Login with LinkedIn" button
+                        <button
+                          onClick={handleLinkedInCallback}
+                          className="btn btn-primary btn-lg"
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: "10px 20px",
+                            fontSize: "16px",
+                            fontWeight: "bold",
+                            borderRadius: "5px",
+                          }}
+                        >
+                          <img
+                            src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
+                            alt="LinkedIn"
+                            style={{ width: "20px", height: "20px", marginRight: "10px" }}
+                          />
+                          Login with LinkedIn
+                        </button>
+                      ) : (
+                        // If logged in, show like button
+                        <p
+                          className="card-like fs-6 m-0"
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                          }}
+                          onClick={(event) => {
+                            event.stopPropagation(); // Prevent other interactions
+                            handleLikeToggle(
+                              post.id,
+                              post?.fetchUserLikesStatus ? "disslike" : "likepost"
+                            );
+                          }}
+                        >
+                          <FaThumbsUp
+                            className={`like-icon ${loadingPostIds.includes(post.id) ? "loading" : ""}`}
+                            style={{
+                              color: post?.fetchUserLikesStatus ? "blue" : "gray",
+                            }}
+                          />
+                          <span style={{ marginLeft: "5px" }}>{post?.likeCount?.totalLikes}</span>
+                        </p>
+                      )}
+                    </div>
           </div>
         </div>
       ))}

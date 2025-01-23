@@ -43,7 +43,7 @@ export default function UploadBanners() {
 
   const deleteBanner = async (bannerId) => {
     try {
-      const url = `${ConnectMe.BASE_URL}/banner/uploadAdminImages/${bannerId}`;
+      const url = `${ConnectMe.BASE_URL}/banner/deletebanners/${bannerId}`;
       const token = getTokenFromLocalStorage();
       const headers = {
         Authorization: `Bearer ${token}`,

@@ -18,7 +18,7 @@ const UserProfile = () => {
         try {
             setLoading(true); // Show loader while fetching
             const url = `${ConnectMe.BASE_URL}/hrms/userProfile`; // Replace with actual URL
-            const token = localStorage.getItem("authToken"); // Assuming the token is stored in localStorage
+             const token = getTokenFromLocalStorage(); // Assuming the token is stored in localStorage
             const headers = {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",

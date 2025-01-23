@@ -55,6 +55,7 @@ const Login = () => {
       const response = await apiCall("POST", url, headers, payload);
 
       if (response.success) {
+        localStorage.setItem("userDetails", JSON.stringify(response?.data?.user));
         addTokenToLocalStorage(response?.data?.token);
         showToast("Login successful!", "success");
         navigate("/"); // Redirect to the home page or any other route

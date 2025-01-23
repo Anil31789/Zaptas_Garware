@@ -30,6 +30,7 @@ export default function LinkedInCard() {
   ]);
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
+  const [loginRequired, setloginRequired] = useState(false)
   const [loading, setLoading] = useState(false); // Loader state
   const currentRequest = useRef(null);
   const navigate = useNavigate();
@@ -48,6 +49,7 @@ export default function LinkedInCard() {
 
       if (response.success) {
         setPosts(response?.data?.posts);
+        setloginRequired(response?.data?.requiredLogin)
       } else {
         if (!response.success && response.errorMessage === "loginRequired") {
           setLoggin(true);
@@ -71,6 +73,11 @@ export default function LinkedInCard() {
 
   const handleLikeToggle = async (postId, method, name = null) => {
     try {
+
+      if (loginRequired) {
+        showToast("Need To Login First", "error")
+        return
+      }
       setLoadingPostIds((prevIds) => [...prevIds, postId]); // Add post ID to loading state
 
       // Cancel the previous request if it's ongoing
@@ -100,8 +107,8 @@ export default function LinkedInCard() {
                 method === "likepost"
                   ? prevPost.likeCount.totalLikes + 1
                   : method === "disslike"
-                  ? prevPost.likeCount.totalLikes - 1
-                  : prevPost.likeCount.totalLikes,
+                    ? prevPost.likeCount.totalLikes - 1
+                    : prevPost.likeCount.totalLikes,
             },
           };
         });
@@ -110,17 +117,17 @@ export default function LinkedInCard() {
           prevPosts.map((post) =>
             post.id === postId
               ? {
-                  ...post,
-                  fetchUserLikesStatus: method === "likepost" ? true : false,
-                  likeCount: {
-                    totalLikes:
-                      method === "likepost"
-                        ? post.likeCount.totalLikes + 1
-                        : method === "disslike"
+                ...post,
+                fetchUserLikesStatus: method === "likepost" ? true : false,
+                likeCount: {
+                  totalLikes:
+                    method === "likepost"
+                      ? post.likeCount.totalLikes + 1
+                      : method === "disslike"
                         ? post.likeCount.totalLikes - 1
                         : post.likeCount.totalLikes,
-                  },
-                }
+                },
+              }
               : post
           )
         );
@@ -220,78 +227,136 @@ export default function LinkedInCard() {
           <Carousel>
             {memoizedPosts.map((post) => (
               <Carousel.Item key={post.id} className="linkekItem">
-                <div className="row mb-3" onClick={() => openPostPopup(post)}>
+                <div
+                  className="row mb-3"
+                  style={{
+                    height: "100%", // Full height for the card
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between", // Push the footer to the bottom
+                  }}
+                >
+                  {/* Scrollable Content Section */}
                   <div
-                    className="csr-media col-sm-12 text-center"
+                    className="post-content"
                     style={{
-                      cursor: "pointer",
+                      flex: 1, // Fills available space
+                      overflowY: "auto", // Enables vertical scrolling when content overflows
+                      padding: "10px",
                       display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      padding: 0, // Remove padding
-                      margin: 0, // Remove margin
-                      height: "250px", // Fixed height
-                      overflow: "hidden", // Crop any extra space
+                      flexDirection: "column",
+                      justifyContent: "flex-start",
                     }}
                   >
-                    {post.multimedia.type === "image" ? (
-                      <img
-                        src={post.multimedia.url}
-                        alt="LinkedIn Post"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover", // Ensures the image fills the container
-                        }}
-                      />
-                    ) : post.multimedia.type === "video" ? (
-                      <video
-                        controls
-                        autoPlay
-                        muted
-                        loop
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover", // Ensures the video fills the container
-                          margin: 0, // Ensure no white space
-                          padding: 0, // Ensure no white space
-                        }}
-                      >
-                        <source src={post.multimedia.url} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    ) : null}
+                    {/* Media Section */}
+                    <div
+                      className="csr-media col-sm-12 text-center"
+                      style={{
+                        cursor: "pointer",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "250px", // Fixed height for media
+                        overflow: "hidden", // Crop any extra space
+                      }}
+                      onClick={() => openPostPopup(post)}
+                    >
+                      {post.multimedia.type === "image" ? (
+                        <img
+                          src={post.multimedia.url}
+                          alt="LinkedIn Post"
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover", // Ensures the image fills the container
+                          }}
+                        />
+                      ) : post.multimedia.type === "video" ? (
+                        <video
+                          controls
+                          autoPlay
+                          muted
+                          loop
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover", // Ensures the video fills the container
+                          }}
+                        >
+                          <source src={post.multimedia.url} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      ) : null}
+                    </div>
+
+                    {/* Post Text Section */}
+                    <div className="announcement-disc col-sm-12 mt-2">
+                      <div className="card-text fs-6">
+                        <PostCard post={post.text} size={180} />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="announcement-disc col-sm-12 mt-2">
-                    <div className="card-text fs-6">
-                      <PostCard post={post.text} size={180} />
-                    </div>
-                    <div className="d-flex justify-content-between mt-2">
-                      <p className="card-like fs-6">
-                        <FaThumbsUp
-                          className={`like-icon ${
-                            loadingPostIds.includes(post.id) ? "loading" : ""
-                          }`}
+                  {/* Footer Section with Fixed Like Button */}
+                  <div
+                    className="footer-section"
+                    style={{
+                      background: "#fff", // Background to separate it visually
+                      padding: "10px 15px",
+                      borderTop: "1px solid #ddd", // Add a border for separation
+                      textAlign: "center", // Center align the footer content
+                    }}
+                  >
+                    <div className="d-flex justify-content-center align-items-center my-3">
+                      {loginRequired ? (
+                        // If loginRequired, show "Login with LinkedIn" button
+                        <button
+                          onClick={handleLinkedInCallback}
+                          className="btn btn-primary btn-lg"
                           style={{
-                            color: post?.fetchUserLikesStatus
-                              ? "blue"
-                              : "gray",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: "10px 20px",
+                            fontSize: "16px",
+                            fontWeight: "bold",
+                            borderRadius: "5px",
+                          }}
+                        >
+                          <img
+                            src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
+                            alt="LinkedIn"
+                            style={{ width: "20px", height: "20px", marginRight: "10px" }}
+                          />
+                          Login with LinkedIn
+                        </button>
+                      ) : (
+                        // If logged in, show like button
+                        <p
+                          className="card-like fs-6 m-0"
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
                             cursor: "pointer",
                           }}
                           onClick={(event) => {
-                            event.stopPropagation(); // Prevent the modal from opening
+                            event.stopPropagation(); // Prevent other interactions
                             handleLikeToggle(
                               post.id,
-                              post?.fetchUserLikesStatus
-                                ? "disslike"
-                                : "likepost"
+                              post?.fetchUserLikesStatus ? "disslike" : "likepost"
                             );
                           }}
-                        />
-                        {post?.likeCount?.totalLikes}
-                      </p>
+                        >
+                          <FaThumbsUp
+                            className={`like-icon ${loadingPostIds.includes(post.id) ? "loading" : ""}`}
+                            style={{
+                              color: post?.fetchUserLikesStatus ? "blue" : "gray",
+                            }}
+                          />
+                          <span style={{ marginLeft: "5px" }}>{post?.likeCount?.totalLikes}</span>
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -299,81 +364,111 @@ export default function LinkedInCard() {
             ))}
           </Carousel>
         </div>
+
+
+
       )}
 
       {/* Modal for LinkedIn Post */}
       <Modal show={showModal} onHide={closePostPopup} size="lg" centered>
-      {/* Modal Header */}
-      <Modal.Header closeButton>
-        <Modal.Title className="fs-5">
-          <PostCard post={selectedPost?.text} size={600} />
-        </Modal.Title>
-      </Modal.Header>
+        {/* Modal Header */}
+        <Modal.Header closeButton>
+          <Modal.Title className="fs-5">
+            <PostCard post={selectedPost?.text} size={600} />
+          </Modal.Title>
+        </Modal.Header>
 
-      {/* Modal Body */}
-      <Modal.Body className="p-4">
-        {/* Multimedia Content */}
-        <div
-          className="d-flex justify-content-center align-items-center mb-4"
-          style={{ width: "100%" }}
-        >
-          {selectedPost?.multimedia?.type === "image" ? (
-            <img
-              src={selectedPost.multimedia.url}
-              alt="LinkedIn Post"
-              className="img-fluid rounded"
-              style={{ maxHeight: "400px" }}
-            />
-          ) : selectedPost?.multimedia?.type === "video" ? (
-            <video
-              controls
-              autoPlay
-              muted
-              loop
-              className="rounded"
-              style={{
-                maxWidth: "100%",
-                maxHeight: "400px",
-                objectFit: "cover",
-              }}
-            >
-              <source src={selectedPost.multimedia.url} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          ) : (
-            <p className="text-muted">No multimedia available for this post.</p>
-          )}
-        </div>
-
-        {/* Like and Comment Section */}
-        <div className="d-flex justify-content-between align-items-center border-top pt-3">
-          {/* Like Button */}
-          <div className="d-flex align-items-center">
-            <FaThumbsUp
-              className={`like-icon fs-5 ${
-                loadingPostIds.includes(selectedPost?.id) ? "loading" : ""
-              }`}
-              style={{
-                color: selectedPost?.fetchUserLikesStatus ? "blue" : "gray",
-                cursor: "pointer",
-              }}
-              onClick={() =>
-                handleLikeToggle(
-                  selectedPost.id,
-                  selectedPost?.fetchUserLikesStatus
-                    ? "disslike"
-                    : "likepost",
-                  "modelBox"
-                )
-              }
-            />
-            <span className="ms-2 text-secondary">
-              {selectedPost?.likeCount?.totalLikes || 0} Likes
-            </span>
+        {/* Modal Body */}
+        <Modal.Body className="p-4">
+          {/* Multimedia Content */}
+          <div
+            className="d-flex justify-content-center align-items-center mb-4"
+            style={{ width: "100%" }}
+          >
+            {selectedPost?.multimedia?.type === "image" ? (
+              <img
+                src={selectedPost.multimedia.url}
+                alt="LinkedIn Post"
+                className="img-fluid rounded"
+                style={{ maxHeight: "400px" }}
+              />
+            ) : selectedPost?.multimedia?.type === "video" ? (
+              <video
+                controls
+                autoPlay
+                muted
+                loop
+                className="rounded"
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "400px",
+                  objectFit: "cover",
+                }}
+              >
+                <source src={selectedPost.multimedia.url} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <p className="text-muted">No multimedia available for this post.</p>
+            )}
           </div>
 
-          {/* Comment Section */}
-          {/* <div
+          {/* Like and Comment Section */}
+          <div className="d-flex justify-content-between align-items-center border-top pt-3">
+            {/* Like Button */}
+            <div className="d-flex align-items-center justify-content-center my-3">
+  {loginRequired ? (
+    // If login is required, display the LinkedIn login button
+    <button
+      onClick={handleLinkedInCallback}
+      className="btn btn-primary btn-lg d-flex align-items-center"
+      style={{
+        padding: "10px 20px",
+        fontSize: "16px",
+        fontWeight: "bold",
+        borderRadius: "5px",
+        display: "flex",
+      }}
+    >
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
+        alt="LinkedIn"
+        style={{
+          width: "20px",
+          height: "20px",
+          marginRight: "10px",
+        }}
+      />
+      Login with LinkedIn
+    </button>
+  ) : (
+    // If logged in, display the like button
+    <div className="d-flex align-items-center">
+      <FaThumbsUp
+        className={`like-icon fs-5 ${
+          loadingPostIds.includes(selectedPost?.id) ? "loading" : ""
+        }`}
+        style={{
+          color: selectedPost?.fetchUserLikesStatus ? "blue" : "gray",
+          cursor: "pointer",
+        }}
+        onClick={() =>
+          handleLikeToggle(
+            selectedPost.id,
+            selectedPost?.fetchUserLikesStatus ? "disslike" : "likepost",
+            "modelBox"
+          )
+        }
+      />
+      <span className="ms-2 text-secondary">
+        {selectedPost?.likeCount?.totalLikes || 0} Likes
+      </span>
+    </div>
+  )}
+</div>
+
+            {/* Comment Section */}
+            {/* <div
             className="d-flex align-items-center text-primary"
             style={{ cursor: "pointer" }}
             onClick={() => setShowComments(!showComments)}
@@ -381,10 +476,10 @@ export default function LinkedInCard() {
             <FaRegCommentDots className="fs-5" />
             <span className="ms-2">1 comment</span>
           </div> */}
-        </div>
+          </div>
 
-        {/* Comments Section */}
-        {/* {showComments && (
+          {/* Comments Section */}
+          {/* {showComments && (
           <div className="mt-3">
             {comments.map((comment, index) => (
               <div key={index} className="border rounded p-2 mb-2">
@@ -393,11 +488,11 @@ export default function LinkedInCard() {
             ))}
           </div>
         )} */}
-      </Modal.Body>
+        </Modal.Body>
 
-      {/* Add Comment Box */}
-      <Modal.Footer>
-        {/* <div className="input-group">
+        {/* Add Comment Box */}
+        <Modal.Footer>
+          {/* <div className="input-group">
           <input
             type="text"
             className="form-control"
@@ -407,8 +502,8 @@ export default function LinkedInCard() {
             <FaPaperPlane />
           </button>
         </div> */}
-      </Modal.Footer>
-    </Modal>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

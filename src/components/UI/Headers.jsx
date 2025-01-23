@@ -355,7 +355,7 @@ export default function Headers() {
           </ul>
 
           <div className="d-flex social-icons">
-            <a
+            {/* <a
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
@@ -386,7 +386,7 @@ export default function Headers() {
               className="mx-2"
             >
               <FaLinkedinIn size={20} />
-            </a>
+            </a> */}
             <a
               onClick={() => {
                 navigate("/service");

@@ -2,16 +2,17 @@ import { useState, useEffect } from "react";
 import { FaBirthdayCake, FaMapMarkerAlt } from "react-icons/fa";
 import "./BirthdayBox.css";
 import ConnectMe from "../../config/connect";
-import { apiCall } from "../../utils/apiCall";
+import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
+import SendEmailPopup from "./sendMailPopup";
 
 export default function BirthdayBox() {
   const [birthdayWishes, setBirthdayWishes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+  const [showPopup, setShowPopup] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-
-
+  const [selectEmail, setSelectEmail] = useState(null)
+  const [selectName, setSelectName] = useState(null)
 
   const handleNext = () => {
     if ((currentIndex + 1) * 3 < birthdayWishes.length) {
@@ -30,7 +31,7 @@ export default function BirthdayBox() {
     try {
       setLoading(true); // Show loader while fetching
       const url = `${ConnectMe.BASE_URL}/hrms/birthday-wishes`; // Replace with actual URL
-      const token = localStorage.getItem("authToken"); // Assuming the token is stored in localStorage
+      const token = getTokenFromLocalStorage(); // Assuming the token is stored in localStorage
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -102,17 +103,17 @@ export default function BirthdayBox() {
                       <div className="col-md-3" key={index}>
                         <div className="wish-card shadow-sm" style={{
                           backgroundImage: "url(./birthday-cake.png)",
-                          
+
                         }}>
                           <div className="user-image">
-                          <img
+                            <img
                               src={wish?.images?.imagePath ? `${ConnectMe.img_URL}${wish?.images?.imagePath}` : "./user.png"} // Check if `userImage` exists, else fallback to default
                               alt="User"
                               className="rounded-circle"
                             />
                           </div>
                           <div className="wish-content">
-                          <h5 className="title card-text text-danger fw-bold celebrating-text">
+                            <h5 className="title card-text text-danger fw-bold celebrating-text">
                               {`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim()}
                             </h5>
                             <p className="message">{wish.CustomField6 || "Support"}</p>
@@ -131,10 +132,21 @@ export default function BirthdayBox() {
                               </span>
                             </div>
                             <div className="d-flex justify-content-center">
-                              {" "}
-                              <button className="send-wish-btn">
+
+                              <button className="send-wish-btn" onClick={(() => {
+                                setSelectEmail(wish?.OfficalEmailID)
+                                // setSelectName(`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim())
+                                setSelectName(`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim())
+                                setShowPopup(true)
+                              })}>
                                 Send Wish
                               </button>
+                              <SendEmailPopup
+                                show={showPopup}
+                                handleClose={() => setShowPopup(false)}
+                                recipient={selectEmail}
+                                personalName={selectName}
+                              />
                             </div>
                           </div>
                         </div>

@@ -424,7 +424,7 @@ console.log(selectedImages,'abcdef')
                   >
                     Update
                   </button>
-                  <button className="btn btn-danger btn-sm me-2" onClick={() => deleteAnnouncemnt(announcement)}>Delete</button>
+                  {/* <button className="btn btn-danger btn-sm me-2" onClick={() => deleteAnnouncemnt(announcement)}>Delete</button> */}
                 </div>
               </li>
             ))}
@@ -571,103 +571,103 @@ console.log(selectedImages,'abcdef')
 
 
       {
-        selectedAnnouncement == null &&
-        <div className="new-announcements">
-          <h4>New Message</h4>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="title"> Title</label>
-              <input
-                type="text"
-                id="title"
-                required
-                value={formData.title}
-                onChange={handleChange}
-                placeholder="Enter Message title"
-              />
-            </div>
+        // selectedAnnouncement == null &&
+        // <div className="new-announcements">
+        //   <h4>New Message</h4>
+        //   <form onSubmit={handleSubmit}>
+        //     <div className="form-group">
+        //       <label htmlFor="title"> Title</label>
+        //       <input
+        //         type="text"
+        //         id="title"
+        //         required
+        //         value={formData.title}
+        //         onChange={handleChange}
+        //         placeholder="Enter Message title"
+        //       />
+        //     </div>
 
-            <div className="form-group">
-              <label htmlFor="manager">Your Full Name</label>
-              <input
-                type="text"
-                id="fullName"
-                value={formData.fullName}
-                onChange={handleChange}
-                placeholder="Kushagra Kamal"
-              />
-            </div>
+        //     <div className="form-group">
+        //       <label htmlFor="manager">Your Full Name</label>
+        //       <input
+        //         type="text"
+        //         id="fullName"
+        //         value={formData.fullName}
+        //         onChange={handleChange}
+        //         placeholder="Kushagra Kamal"
+        //       />
+        //     </div>
 
-            <div className="form-group">
-              <label htmlFor="manager">Your Designation</label>
-              <input
-                type="text"
-                id="Designation"
-                value={formData.Designation}
-                onChange={handleChange}
-                placeholder="Assistant Manager - Accounts"
-              />
-            </div>
+        //     <div className="form-group">
+        //       <label htmlFor="manager">Your Designation</label>
+        //       <input
+        //         type="text"
+        //         id="Designation"
+        //         value={formData.Designation}
+        //         onChange={handleChange}
+        //         placeholder="Assistant Manager - Accounts"
+        //       />
+        //     </div>
 
      
 
     
 
-            <div className="form-group">
-              <label htmlFor="description">Description</label>
-              <textarea
-                id="description"
-                value={formData.description}
-                required
-                onChange={handleChange}
-                placeholder="Enter description"
-              ></textarea>
-            </div>
+        //     <div className="form-group">
+        //       <label htmlFor="description">Description</label>
+        //       <textarea
+        //         id="description"
+        //         value={formData.description}
+        //         required
+        //         onChange={handleChange}
+        //         placeholder="Enter description"
+        //       ></textarea>
+        //     </div>
 
-            <div className="form-group">
-              <label htmlFor="profile-image">Images  </label>
-              <input
-                type="file"
-                id="profile-image"
-                onChange={handleChange}
-                multiple={false} // Allow multiple file selection
-              />
-            </div>
-
-
-            <div className="row">
-              {selectedImages && selectedImages.length > 0 && selectedImages.map((image, index) => (
-                <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
-                  <div className="banner-card">
-                    <img
-                      src={image} // Use the URL from the selectedImages array
-                      alt={`Selected Banner ${index + 1}`}
-                      className="banner-image"
-                    />
-                    {/* Cross icon in the top-right corner */}
-                    <div
-                      className="delete-icon"
-                      onClick={() => removeImage(index)} // Remove the specific image
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <FaTimesCircle style={{ color: 'red', fontSize: '24px' }} />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+        //     <div className="form-group">
+        //       <label htmlFor="profile-image">Images  </label>
+        //       <input
+        //         type="file"
+        //         id="profile-image"
+        //         onChange={handleChange}
+        //         multiple={false} // Allow multiple file selection
+        //       />
+        //     </div>
 
 
-            <div className="form-actions">
-              <button type="submit" className="save-btn">
-                Save
-              </button>
-              <button type="reset" className="cancel-btn">
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
+        //     <div className="row">
+        //       {selectedImages && selectedImages.length > 0 && selectedImages.map((image, index) => (
+        //         <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
+        //           <div className="banner-card">
+        //             <img
+        //               src={image} // Use the URL from the selectedImages array
+        //               alt={`Selected Banner ${index + 1}`}
+        //               className="banner-image"
+        //             />
+        //             {/* Cross icon in the top-right corner */}
+        //             <div
+        //               className="delete-icon"
+        //               onClick={() => removeImage(index)} // Remove the specific image
+        //               style={{ cursor: 'pointer' }}
+        //             >
+        //               <FaTimesCircle style={{ color: 'red', fontSize: '24px' }} />
+        //             </div>
+        //           </div>
+        //         </div>
+        //       ))}
+        //     </div>
+
+
+        //     <div className="form-actions">
+        //       <button type="submit" className="save-btn">
+        //         Save
+        //       </button>
+        //       <button type="reset" className="cancel-btn">
+        //         Cancel
+        //       </button>
+        //     </div>
+        //   </form>
+        // </div>
       }
     </div >
   );
