@@ -53,7 +53,7 @@ export default function Home() {
           <BirthdayBox />
         </div>
         <div className="birthday-wish">
-          <WorkAnniversary />
+          {/* <WorkAnniversary /> */}
         </div>
         <div className="birthday-wish">
           <NewJoiners />

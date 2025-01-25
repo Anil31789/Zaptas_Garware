@@ -188,7 +188,7 @@ const [selectName,setSelectName]= useState(null)
                                 setSelectName(`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim())
                                 setShowPopup(true)
                               })}>
-                                Send Wish
+                                Comment
                               </button>
                               <SendEmailPopup
                                 show={showPopup}

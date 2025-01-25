@@ -82,7 +82,7 @@
     color: #f0231f;
 }
 
-/* Send Wish Button - Positioned partially outside the bottom */
+/* Comment Button - Positioned partially outside the bottom */
 .send-wish-btn {
     position: relative;
     top: 16px;

@@ -268,7 +268,7 @@ export default function LinkedInCard() {
                           style={{
                             width: "100%",
                             height: "100%",
-                            objectFit: "cover", // Ensures the image fills the container
+                            // objectFit: "cover", // Ensures the image fills the container
                           }}
                         />
                       ) : post.multimedia.type === "video" ? (
@@ -280,7 +280,7 @@ export default function LinkedInCard() {
                           style={{
                             width: "100%",
                             height: "100%",
-                            objectFit: "cover", // Ensures the video fills the container
+                            // objectFit: "cover", // Ensures the video fills the container
                           }}
                         >
                           <source src={post.multimedia.url} type="video/mp4" />
@@ -402,7 +402,7 @@ export default function LinkedInCard() {
                 style={{
                   maxWidth: "100%",
                   maxHeight: "400px",
-                  objectFit: "cover",
+                  // objectFit: "cover",
                 }}
               >
                 <source src={selectedPost.multimedia.url} type="video/mp4" />

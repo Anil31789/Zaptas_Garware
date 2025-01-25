@@ -69,6 +69,7 @@ export default function Headers() {
       },
     ],
   });
+  const [qlink,setqlink]=useState([])
 
   const fetchNotificationCount = async () => {
     try {
@@ -97,44 +98,32 @@ export default function Headers() {
     }
   };
 
+ 
   const fetchQuickLinks = async () => {
     try {
       const token = getTokenFromLocalStorage();
       const headers = {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       };
 
-      const response = await apiCall(
-        "GET",
-        `${ConnectMe.BASE_URL}/qlink/quick-links`,
-        headers
-      );
-
+      const response = await apiCall('GET', `${ConnectMe.BASE_URL}/qlink/quick-links`, headers);
       if (response.success) {
         const fetchedLinks = response?.data?.map((link) => ({
-          id: link._id, // Ensure unique ID for each link
+          id: link._id,  // Make sure to store the ID for each link
           title: link.title,
           link: link.url,
         }));
-        let dataSet = {
-          title: "Quick Links",
-          subMenu: fetchedLinks,
-        };
-
-        // Combine fetched links with the existing hardcoded links
-        setFormData((prevState) => ({
-          ...prevState,
-          links: [...prevState.links, dataSet],
-        }));
+        setFormData({ links: fetchedLinks });
       } else {
-        console.error("Error fetching quick links.");
+        console.error('Error fetching quick links.');
       }
     } catch (error) {
-      console.error("Error fetching quick links:", error);
-      alert("Error fetching quick links");
+      console.error('Error fetching quick links:', error);
+      alert('Error fetching quick links');
     }
   };
+
 
   const renderThirdLevelSubMenu = (thirdLevelSubMenu) => {
     return (
@@ -260,7 +249,7 @@ export default function Headers() {
                 className="dropdown-menu"
                 aria-labelledby="quicklinksDropdown"
               >
-                {formData.links.map((link) => (
+                {formData?.links.map((link) => (
                   <li key={link.id} className="dropdown-submenu">
                     <a
                       className="dropdown-item"
@@ -297,7 +286,7 @@ export default function Headers() {
                 ))}
               </ul>
             </li>
-            {/* <li className="nav-item dropdown">
+            <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle d-flex align-items-center"
                 href="#"
@@ -307,16 +296,14 @@ export default function Headers() {
                 aria-expanded="false"
               >
                 <span className="d-flex flex-column align-items-center">
-                  <FaUserTie className="navbar-icon me-1" />
-                  <span>Accounts</span>
+                  <RiLink className="navbar-icon me-1" />
+                  <span>Quicklinks </span>
                 </span>
               </a>
-              <ul
-                className="dropdown-menu"
-                aria-labelledby="quicklinksDropdown"
-              >
+              <ul className="dropdown-menu" aria-labelledby="quicklinksDropdown">
+                {/* Dynamically render quick links from state */}
                 {formData.links.map((link) => (
-                  <li key={link.id} className="dropdown-submenu">
+                  <li key={link.id}>
                     <a
                       className="dropdown-item"
                       href={link.link}
@@ -324,34 +311,11 @@ export default function Headers() {
                       rel="noopener noreferrer"
                     >
                       {link.title}
-                      {link.subMenu && (
-                        <FiChevronDown className="submenu-arrow" />
-                      )}
                     </a>
-                    {link.subMenu && (
-                      <ul className="dropdown-menu">
-                        {link.subMenu.map((subLink, index) => (
-                          <li key={index} className="dropdown-submenu">
-                            <a
-                              className="dropdown-item"
-                              href={subLink.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {subLink.title}
-                            </a>
-                            {subLink.thirdLevelSubMenu &&
-                              renderThirdLevelSubMenu(
-                                subLink.thirdLevelSubMenu
-                              )}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
                   </li>
                 ))}
               </ul>
-            </li> */}
+            </li>
           </ul>
 
           <div className="d-flex social-icons">

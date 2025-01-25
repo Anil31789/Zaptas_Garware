@@ -459,7 +459,7 @@ console.log(selectedImages,'abcdef')
                   onChange={handleInputChange}
                 />
               </div>
-              <div className="mb-3">
+                   {/* <div className="mb-3">
                 <label htmlFor="manager" className="form-label">Your Full Name</label>
                 <input
                   type="text"
@@ -483,7 +483,7 @@ console.log(selectedImages,'abcdef')
                   value={selectedAnnouncement.Designation}
                   onChange={handleInputChange}
                 />
-              </div>
+              </div> */}
 
 
               <div className="mb-3">
@@ -650,6 +650,7 @@ console.log(selectedImages,'abcdef')
               />
             </div>
 
+           {/* 
             <div className="form-group">
               <label htmlFor="manager">Your Full Name</label>
               <input
@@ -659,9 +660,9 @@ console.log(selectedImages,'abcdef')
                 onChange={handleChange}
                 placeholder="Kushagra Kamal"
               />
-            </div>
+            </div> */}
 
-            <div className="form-group">
+              {/* <div className="form-group">
               <label htmlFor="manager">Your Designation</label>
               <input
                 type="text"
@@ -670,7 +671,7 @@ console.log(selectedImages,'abcdef')
                 onChange={handleChange}
                 placeholder="Assistant Manager - Accounts"
               />
-            </div>
+            </div> */}
 
             <div className="form-group">
               <label htmlFor="date">Announcement Date</label>

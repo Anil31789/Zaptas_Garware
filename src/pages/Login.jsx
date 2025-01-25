@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Form, Button, Alert, Spinner } from "react-bootstrap";
 import { FaEnvelope, FaLock, FaKey } from "react-icons/fa";
 import showToast from "../utils/toastHelper";
@@ -15,6 +15,35 @@ const Login = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+
+
+
+  // useEffect(() => {
+  //   // AutoLogin()
+
+  // }, [])
+
+
+  const AutoLogin = async () => {
+    const url = `${ConnectMe.BASE_URL}/sso/login`;
+    const headers = { "Content-Type": "application/json" };
+    const response = await apiCall("POST", url, headers);
+
+
+    if (response.success) {
+      localStorage.setItem("userDetails", JSON.stringify(response?.data?.user));
+      addTokenToLocalStorage(response?.data?.token);
+      showToast("Login successful!", "success");
+      navigate("/"); // Redirect to the home page or any other route
+    } else {
+      showToast(response.message || "Login failed. Please try again.", "error");
+    }
+  }
+
+
+
+
   const handleSendOtp = async () => {
     if (!emailOrPhone) {
       showToast("Please enter your email address.", "error");

@@ -57,7 +57,12 @@ export default function Banner() {
   }
 
   return (
-    <div id="bannerCarousel" className="carousel slide" data-bs-ride="carousel">
+    <div
+      id="bannerCarousel"
+      className="carousel slide"
+      data-bs-ride="carousel"
+      data-bs-interval="3000" // Set the auto-slide interval to 3 seconds
+    >
       {/* Carousel Indicators */}
       <div className="carousel-indicators">
         {banners.map((banner, index) => (
@@ -68,7 +73,7 @@ export default function Banner() {
             data-bs-slide-to={index}
             className={index === 0 ? "active" : ""}
             aria-current={index === 0 ? "true" : "false"}
-            aria-label={`Slide ${index + 3}`}
+            aria-label={`Slide ${index + 1}`}
           ></button>
         ))}
       </div>

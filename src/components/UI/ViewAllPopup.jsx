@@ -171,13 +171,13 @@ export default function ViewAllPage() {
                         </a>
                       )}
                       <br />
-                      <span>Location: {post.location}</span> &nbsp;
+                      {/* <span>Location: {post.location}</span> &nbsp; */}
                       <span>
                         Date:{" "}
                         {new Date(post.AnnouncementDate).toLocaleDateString()}
                       </span>
                     </div>
-                    <p
+                    {/* <p
                       className="like-section"
                       onClick={(e) => {
                         e.stopPropagation(); // Prevent triggering `handleShow`
@@ -191,7 +191,7 @@ export default function ViewAllPage() {
                         }}
                       />{" "}
                       {post?.likes?.length}
-                    </p>
+                    </p> */}
                   </div>
                 </div>
 

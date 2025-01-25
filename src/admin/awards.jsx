@@ -467,7 +467,7 @@ export default function AwardsPage() {
                   onChange={handleInputChange}
                 />
               </div>
-              <div className="mb-3">
+              {/* <div className="mb-3">
                 <label htmlFor="manager" className="form-label">Your Full Name</label>
                 <input
                   type="text"
@@ -491,9 +491,9 @@ export default function AwardsPage() {
                   value={selectedAnnouncement.Designation}
                   onChange={handleInputChange}
                 />
-              </div>
+              </div> */}
 
-              <div className="form-group">
+              {/* <div className="form-group">
               <label htmlFor="manager">Whom to Award His/Her full name</label>
               <input
                 type="text"
@@ -503,8 +503,8 @@ export default function AwardsPage() {
                 onChange={handleInputChange}
                 placeholder="Kushagra kamal"
               />
-            </div>
-            <div className="form-group">
+            </div> */}
+            {/* <div className="form-group">
               <label htmlFor="manager">Person Designation</label>
               <input
                 type="text"
@@ -514,7 +514,7 @@ export default function AwardsPage() {
                 onChange={handleInputChange}
                 placeholder="Assistant Manager - Accounts"
               />
-            </div>
+            </div> */}
 
 
               <div className="mb-3">
@@ -640,7 +640,8 @@ export default function AwardsPage() {
                 placeholder="Enter Award title"
               />
             </div>
-
+{/* 
+           {/* 
             <div className="form-group">
               <label htmlFor="manager">Your Full Name</label>
               <input
@@ -650,9 +651,9 @@ export default function AwardsPage() {
                 onChange={handleChange}
                 placeholder="Kushagra Kamal"
               />
-            </div>
+            </div> */} 
 
-            <div className="form-group">
+            {/* <div className="form-group">
               <label htmlFor="manager">Your Designation</label>
               <input
                 type="text"
@@ -661,8 +662,8 @@ export default function AwardsPage() {
                 onChange={handleChange}
                 placeholder="Assistant Manager - Accounts"
               />
-            </div>
-            <div className="form-group">
+            </div> */}
+            {/* <div className="form-group">
               <label htmlFor="manager">Whom to Award His/Her full name</label>
               <input
                 type="text"
@@ -671,8 +672,8 @@ export default function AwardsPage() {
                 onChange={handleChange}
                 placeholder="Kushagra kamal"
               />
-            </div>
-            <div className="form-group">
+            </div> */}
+            {/* <div className="form-group">
               <label htmlFor="manager">Person Designation</label>
               <input
                 type="text"
@@ -681,7 +682,7 @@ export default function AwardsPage() {
                 onChange={handleChange}
                 placeholder="Assistant Manager - Accounts"
               />
-            </div>
+            </div> */}
 
             <div className="form-group">
               <label htmlFor="date">Award Date</label>

@@ -53,7 +53,7 @@
 }
 
 .celebrating-text {
-  background: linear-gradient(90deg, red, orange, yellow, red);
+  background: linear-gradient(90deg, red, orange, red);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: shimmer 3s infinite linear;

@@ -464,7 +464,7 @@ export default function IndustryPage() {
                   onChange={handleInputChange}
                 />
               </div>
-              <div className="mb-3">
+                   {/* <div className="mb-3">
                 <label htmlFor="manager" className="form-label">Your Full Name</label>
                 <input
                   type="text"
@@ -488,7 +488,7 @@ export default function IndustryPage() {
                   value={selectedAnnouncement.Designation}
                   onChange={handleInputChange}
                 />
-              </div>
+              </div> */}
 
 
               <div className="mb-3">
@@ -655,6 +655,7 @@ export default function IndustryPage() {
               />
             </div>
 
+           {/* 
             <div className="form-group">
               <label htmlFor="manager">Your Full Name</label>
               <input
@@ -664,9 +665,9 @@ export default function IndustryPage() {
                 onChange={handleChange}
                 placeholder="Kushagra Kamal"
               />
-            </div>
+            </div> */}
 
-            <div className="form-group">
+              {/* <div className="form-group">
               <label htmlFor="manager">Your Designation</label>
               <input
                 type="text"
@@ -675,7 +676,7 @@ export default function IndustryPage() {
                 onChange={handleChange}
                 placeholder="Assistant Manager - Accounts"
               />
-            </div>
+            </div> */}
 
             <div className="form-group">
               <label htmlFor="date">News Date</label>

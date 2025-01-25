@@ -457,7 +457,7 @@ console.log(selectedImages,'abcdef')
                   onChange={handleInputChange}
                 />
               </div>
-              <div className="mb-3">
+                   {/* <div className="mb-3">
                 <label htmlFor="manager" className="form-label">Your Full Name</label>
                 <input
                   type="text"
@@ -481,7 +481,7 @@ console.log(selectedImages,'abcdef')
                   value={selectedAnnouncement.Designation}
                   onChange={handleInputChange}
                 />
-              </div>
+              </div> */}
 
 
               <div className="mb-3">

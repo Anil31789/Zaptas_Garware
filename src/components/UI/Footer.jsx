@@ -14,7 +14,7 @@ export default function Footer() {
       {/* Social Media Icons */}
       <div className="footer-social-icons text-center mb-3">
         <a
-          href="https://facebook.com"
+          href="https://www.facebook.com/Garwarehitechfilms"
           target="_blank"
           rel="noopener noreferrer"
           className="social-icon mx-2"
@@ -22,7 +22,7 @@ export default function Footer() {
           <FaFacebookF size={20} />
         </a>
         <a
-          href="https://twitter.com"
+          href="https://x.com/garwarehitech"
           target="_blank"
           rel="noopener noreferrer"
           className="social-icon mx-2"
@@ -30,7 +30,7 @@ export default function Footer() {
           <FaSquareXTwitter size={20} />
         </a>
         <a
-          href="https://instagram.com"
+          href="https://www.instagram.com/garwarehitechfilms/"
           target="_blank"
           rel="noopener noreferrer"
           className="social-icon mx-2"
@@ -38,7 +38,7 @@ export default function Footer() {
           <FaInstagram size={20} />
         </a>
         <a
-          href="https://linkedin.com"
+          href="https://www.linkedin.com/company/garware-hitech-films-limited/"
           target="_blank"
           rel="noopener noreferrer"
           className="social-icon mx-2"

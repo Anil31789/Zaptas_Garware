@@ -176,7 +176,7 @@ export default function AnnouncementCard() {
                   </div>
 
                   <div className="d-flex justify-content-between mt-3">
-                    <p
+                    {/* <p
                       className="like-section"
                       onClick={(e) => {
                         e.stopPropagation(); // Prevent triggering `handleShow`
@@ -193,19 +193,20 @@ export default function AnnouncementCard() {
                         }}
                       />{" "}
                       {announcement?.likes?.length}
-                    </p>
+                    </p> */}
                     {/* Date Badge */}
                     <div className="date-badge-container">
                       <span className="date">
                         {new Date(announcement?.AnnouncementDate)?.getDate() || ""}
                         {" "}
-                        {new Date(announcement?.AnnouncementDate)?.toLocaleString("default", { month: "short" }) || ""}'
-                        {new Date(announcement?.AnnouncementDate)?.getFullYear().toString().slice(2) || ""}
+                        {new Date(announcement?.AnnouncementDate)?.toLocaleString("default", { month: "short" }) || ""}
+                        {" "}
+                        {new Date(announcement?.AnnouncementDate)?.getFullYear().toString() || ""}
                       </span>
-                      <span className="location">
+                      {/* <span className="location">
                         <FaMapMarkerAlt className="location-icon" />
                         {announcement?.location}
-                      </span>
+                      </span> */}
                     </div>
 
                   </div>
@@ -220,28 +221,27 @@ export default function AnnouncementCard() {
       {selectedAnnouncement && (
         <Modal show={show} onHide={handleClose} centered>
           <Modal.Header closeButton>
-            <Modal.Title>{selectedAnnouncement.title}</Modal.Title>
+            <Modal.Title className="card-text text-danger fw-bold celebrating-text">{selectedAnnouncement.title}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div className="d-flex justify-content-between align-items-center mb-4">
+            {/* <div className="d-flex justify-content-between align-items-center mb-4"> */}
               {/* Left Div */}
-              <div>
+              {/* <div>
                 <h6 className="mb-1">{selectedAnnouncement.fullName}</h6>
                 <p className="mb-0 text-muted">
                   {selectedAnnouncement.Designation}
                 </p>
-              </div>
+              </div> */}
               {/* Right Div */}
-              <div>
+              {/* <div>
                 <img
                   src={"./user.png"}
                   alt="User"
                   className="rounded-circle"
                   style={{ width: "50px", height: "50px" }}
-                 
                 />
               </div>
-            </div>
+            </div> */}
 
             {/* Description */}
             <div
@@ -291,9 +291,9 @@ export default function AnnouncementCard() {
               </div>
             ))}
 
-            <p className="mt-3">
+            {/* <p className="mt-3">
               Location: <strong>{selectedAnnouncement.location} </strong>
-            </p>
+            </p> */}
 
             <p className="mt-3">
               Date:{" "}
@@ -317,65 +317,65 @@ export default function AnnouncementCard() {
                         src={`${ConnectMe.img_URL}${image}`} // Display the existing image
                         alt={`Selected Banner ${index + 1}`}
                         className="modelcard-image"
-                      onClick={() => {
-    handleClose(); // Close the modal or menu
-    setSelectedImage(`${ConnectMe.img_URL}${image}`); // Set the selected image for preview
-  }}
-   style={{
-    width: "100%",
-    height: "200px",
-    objectFit: "cover",
-    position: "relative",
-  }}
-  onMouseEnter={(e) => {
-    // Check if hover text already exists
-    if (e.target.parentElement.querySelector(".hover-text")) return;
+                        onClick={() => {
+                          handleClose(); // Close the modal or menu
+                          setSelectedImage(`${ConnectMe.img_URL}${image}`); // Set the selected image for preview
+                        }}
+                        style={{
+                          width: "100%",
+                          height: "200px",
+                          objectFit: "cover",
+                          position: "relative",
+                        }}
+                        onMouseEnter={(e) => {
+                          // Check if hover text already exists
+                          if (e.target.parentElement.querySelector(".hover-text")) return;
 
-    const hoverText = document.createElement("div");
-    hoverText.innerText = "Click here to view";
-    hoverText.style.position = "absolute";
-    hoverText.style.top = "50%";
-    hoverText.style.left = "50%";
-    hoverText.style.transform = "translate(-50%, -50%)";
-    hoverText.style.color = "white";
-    hoverText.style.backgroundColor = "rgba(0, 0, 0, 0.75)";
-    hoverText.style.padding = "10px 20px";
-    hoverText.style.borderRadius = "8px";
-    hoverText.style.fontFamily = "Arial, sans-serif";
-    hoverText.style.fontSize = "16px";
-    hoverText.style.fontWeight = "bold";
-    hoverText.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.2)";
-    hoverText.style.transition = "opacity 0.3s ease, transform 0.3s ease";
-    hoverText.style.opacity = "0";
-    hoverText.style.pointerEvents = "none";
-    hoverText.style.zIndex = "10";
-    hoverText.classList.add("hover-text");
+                          const hoverText = document.createElement("div");
+                          hoverText.innerText = "Click here to view";
+                          hoverText.style.position = "absolute";
+                          hoverText.style.top = "50%";
+                          hoverText.style.left = "50%";
+                          hoverText.style.transform = "translate(-50%, -50%)";
+                          hoverText.style.color = "white";
+                          hoverText.style.backgroundColor = "rgba(0, 0, 0, 0.75)";
+                          hoverText.style.padding = "10px 20px";
+                          hoverText.style.borderRadius = "8px";
+                          hoverText.style.fontFamily = "Arial, sans-serif";
+                          hoverText.style.fontSize = "16px";
+                          hoverText.style.fontWeight = "bold";
+                          hoverText.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.2)";
+                          hoverText.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+                          hoverText.style.opacity = "0";
+                          hoverText.style.pointerEvents = "none";
+                          hoverText.style.zIndex = "10";
+                          hoverText.classList.add("hover-text");
 
-    // Ensure container has relative positioning
-    e.target.parentElement.style.position = "relative";
-    e.target.parentElement.appendChild(hoverText);
+                          // Ensure container has relative positioning
+                          e.target.parentElement.style.position = "relative";
+                          e.target.parentElement.appendChild(hoverText);
 
-    // Add transition effect
-    setTimeout(() => {
-      hoverText.style.opacity = "1";
-      hoverText.style.transform = "translate(-50%, -50%) scale(1.1)";
-    }, 10);
-  }}
-  onMouseLeave={(e) => {
-    const hoverText = e.target.parentElement.querySelector(".hover-text");
+                          // Add transition effect
+                          setTimeout(() => {
+                            hoverText.style.opacity = "1";
+                            hoverText.style.transform = "translate(-50%, -50%) scale(1.1)";
+                          }, 10);
+                        }}
+                        onMouseLeave={(e) => {
+                          const hoverText = e.target.parentElement.querySelector(".hover-text");
 
-    if (hoverText) {
-      // Smooth fade-out effect
-      hoverText.style.opacity = "0";
-      hoverText.style.transform = "translate(-50%, -50%) scale(0.9)";
+                          if (hoverText) {
+                            // Smooth fade-out effect
+                            hoverText.style.opacity = "0";
+                            hoverText.style.transform = "translate(-50%, -50%) scale(0.9)";
 
-      // Ensure cleanup after transition ends
-      setTimeout(() => {
-        if (hoverText.parentElement) hoverText.remove();
-      }, 300); // Matches the transition duration
-    }
-  }}
-/>
+                            // Ensure cleanup after transition ends
+                            setTimeout(() => {
+                              if (hoverText.parentElement) hoverText.remove();
+                            }, 300); // Matches the transition duration
+                          }
+                        }}
+                      />
                       {/* Cross icon in the top-right corner */}
                     </div>
                   </div>
@@ -383,7 +383,7 @@ export default function AnnouncementCard() {
             </div>
 
             {/* Like Button */}
-            <div className="d-flex align-items-center">
+            {/* <div className="d-flex align-items-center">
               <FaThumbsUp
                 onClick={() =>
                   handleLikedisslike(
@@ -396,10 +396,10 @@ export default function AnnouncementCard() {
                   cursor: "pointer",
                   marginRight: "8px",
                 }}
-              />
-              <span> {selectedAnnouncement?.likes?.length} Likes</span>{" "}
-              {/* Display likes count */}
-            </div>
+              /> */}
+            {/* <span> {selectedAnnouncement?.likes?.length} Likes</span>{" "} */}
+            {/* Display likes count */}
+            {/* </div> */}
           </Modal.Body>
         </Modal>
       )}

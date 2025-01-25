@@ -139,7 +139,7 @@ export default function BirthdayBox() {
                                 setSelectName(`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim())
                                 setShowPopup(true)
                               })}>
-                                Send Wish
+                                Comment
                               </button>
                               <SendEmailPopup
                                 show={showPopup}

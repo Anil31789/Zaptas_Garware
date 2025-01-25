@@ -179,10 +179,10 @@ export default function AnnouncementCard() {
                   className="announcement-disc pb-2"
                 
                 >
-                  <p className="card-text"   >
+                  {/* <p className="card-text"   >
                     {announcement.AwardierName} (
                     {announcement.PersonDesignation})
-                  </p>
+                  </p> */}
                   <p className="card-text text-danger fw-bold celebrating-text" onClick={handleCelebration}>
                     {announcement.title} 🥳
                   </p>
@@ -194,8 +194,8 @@ export default function AnnouncementCard() {
                   <div className="d-flex mt-2 align-items-center justify-content-between">
                     {" "}
                     {/* Add `align-items-center` for vertical alignment */}
-                    <div className="d-flex align-items-center">
-                      <p
+                    {/* <div className="d-flex align-items-center"> */}
+                      {/* <p
                         className="like-section me-3" // Add `me-3` for spacing
                         onClick={(e) => {
                           e.stopPropagation(); // Prevent triggering `handleShow`
@@ -212,9 +212,9 @@ export default function AnnouncementCard() {
                           }}
                         />{" "}
                         {announcement?.likes?.length}
-                      </p>
+                      </p> */}
                       {/* Add the mail icon */}
-                      <p
+                      {/* <p
                         className="mail-section"
                         onClick={(e) => {
                           e.stopPropagation(); // Prevent triggering `handleShow`
@@ -224,19 +224,20 @@ export default function AnnouncementCard() {
                       >
                         <FaPaperPlane style={{ color: "gray" }} />
                         
-                      </p>
-                    </div>
+                      </p> */}
+                    {/* </div> */}
                     <div className="date-badge-container">
                       <span className="date">
                         {new Date(announcement?.AnnouncementDate)?.getDate() || ""}
                         {" "}
-                        {new Date(announcement?.AnnouncementDate)?.toLocaleString("default", { month: "short" }) || ""}'
-                        {new Date(announcement?.AnnouncementDate)?.getFullYear().toString().slice(2) || ""}
+                        {new Date(announcement?.AnnouncementDate)?.toLocaleString("default", { month: "short" }) || ""}
+                        {" "}
+                        {new Date(announcement?.AnnouncementDate)?.getFullYear().toString() || ""}
                       </span>
-                      <span className="location">
+                      {/* <span className="location">
                         <FaMapMarkerAlt className="location-icon" />
                         {announcement?.location}
-                      </span>
+                      </span> */}
                     </div>
                   </div>
                 </div>
@@ -250,19 +251,19 @@ export default function AnnouncementCard() {
       {selectedAnnouncement && (
         <Modal show={show} onHide={handleClose} centered>
           <Modal.Header closeButton>
-            <Modal.Title>{selectedAnnouncement.title}</Modal.Title>
+            <Modal.Title className="card-text text-danger fw-bold celebrating-text">{selectedAnnouncement.title}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div className="d-flex justify-content-between align-items-center mb-4">
+            {/* <div className="d-flex justify-content-between align-items-center mb-4"> */}
               {/* Left Div */}
-              <div>
+              {/* <div>
                 <h6 className="mb-1">{selectedAnnouncement.AwardierName}</h6>
                 <p className="mb-0 text-muted">
                   {selectedAnnouncement.PersonDesignation}
                 </p>
-              </div>
+              </div> */}
               {/* Right Div */}
-              <div>
+              {/* <div>
                 <img
                   src={"./user.png"}
                   alt="User"
@@ -270,12 +271,12 @@ export default function AnnouncementCard() {
                   style={{ width: "50px", height: "50px" }}
                 />
               </div>
-            </div>
+            </div> */}
 
             {/* Description */}
             <div
               style={{
-                maxHeight: "200px",
+                maxHeight: "500px",
                 overflowY: "auto",
                 border: "1px solid #ddd",
                 padding: "10px",
@@ -283,7 +284,7 @@ export default function AnnouncementCard() {
               }}
             >
               <div className="card-text fs-6">
-                <PostCard post={selectedAnnouncement.description} size={180} />
+                <PostCard post={selectedAnnouncement.description} size={230} />
               </div>
             </div>
 
@@ -320,9 +321,9 @@ export default function AnnouncementCard() {
               </div>
             ))}
 
-            <p className="mt-3">
+            {/* <p className="mt-3">
               Location: <strong>{selectedAnnouncement.location} </strong>
-            </p>
+            </p> */}
 
             <p className="mt-3">
               Date:{" "}
@@ -412,7 +413,7 @@ export default function AnnouncementCard() {
             </div>
 
             {/* Like Button */}
-            <div className="d-flex align-items-center">
+                  {/* <div className="d-flex align-items-center">
               <FaThumbsUp
                 onClick={() =>
                   handleLikedisslike(
@@ -425,10 +426,10 @@ export default function AnnouncementCard() {
                   cursor: "pointer",
                   marginRight: "8px",
                 }}
-              />
-              <span> {selectedAnnouncement?.likes?.length} Likes</span>{" "}
+              /> */}
+              {/* <span> {selectedAnnouncement?.likes?.length} Likes</span>{" "} */}
               {/* Display likes count */}
-            </div>
+            {/* </div> */}
               </Modal.Body>
         </Modal>
       )}

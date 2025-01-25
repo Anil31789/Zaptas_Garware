@@ -27,6 +27,7 @@ const PostCard = ({ post, size = 108 }) => {
   const handleTextClick = (e) => {
     // Check if the clicked element has the `toggle-text` class
     if (e.target.classList.contains("toggle-text")) {
+      e.stopPropagation(); // Prevent event propagation when clicking on "Read more" or "Show less"
       toggleText();
     }
   };
@@ -34,12 +35,16 @@ const PostCard = ({ post, size = 108 }) => {
   return (
     <div
       onClick={(e) => {
-        e.stopPropagation(); // Prevent propagation to parent
+        // Only stop propagation if the target is "Read more" or "Show less"
         handleTextClick(e); // Call the function
       }}
     >
       <div
         className="card-text fs-6"
+        style={{
+          textAlign: "justify", // Align text to both left and right
+          wordWrap: "break-word", // Ensure long words break properly
+        }}
         dangerouslySetInnerHTML={{
           __html: renderText(post),
         }}
