@@ -112,7 +112,7 @@ export default function GalleryCard() {
           <FaCameraRetro className="me-2" />
           <h5 className="mb-0">Photo/Video Gallery</h5>
         </div>
-        <a href="#" className="text-decoration-none">
+        <a href="/photos" Name="text-decoration-none">
           View All <HiArrowCircleRight />
         </a>
       </div>

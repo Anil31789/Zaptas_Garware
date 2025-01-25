@@ -12,6 +12,7 @@ import CalendarViewAll from "./components/UI/CalendarViewAll";
 import ServiceTypePage from "./admin/ItReqedit";
 import ServiceRequestPage from "./pages/serviceRequest";
 import UserProfile from "./components/UI/Profile";
+// import PhotoGallery from "./components/UI/PhotoGallery";
 
 const CsrPage = lazy(() => import("./admin/csr"));
 const IndustryPage = lazy(() => import("./admin/Industry"));
@@ -26,6 +27,7 @@ const AdminPanel = lazy(() => import("./admin/AdminPanel"));
 const UploadBanners = lazy(() => import("./admin/UploadBanners"));
 const Announcements = lazy(() => import("./admin/Announcements"));
 const ViewAllPosts = lazy(() => import("./components/UI/ViewAllPosts"));
+const PhotoGallery = lazy(() => import("./components/UI/PhotoGallery"));
 
 export const routes = [
   {
@@ -46,9 +48,9 @@ export const routes = [
       { path: "ITService", element: <ITServiceRequestForm /> },
       { path: "/gallery/:id", element: <GalleryDetails /> },
       { path: "/calendar-view-all", element: <CalendarViewAll /> },
-      { path: "/service",element:<ServiceRequestPage/>},
-      { path: "/profile",element:<UserProfile/>}
-      
+      { path: "/service", element: <ServiceRequestPage /> },
+      { path: "/profile", element: <UserProfile /> },
+      { path: "/photos", element: <PhotoGallery /> },
     ],
   },
   {

@@ -90,3 +90,23 @@ a.dropdown-item {
     background-color: transparent;
     border-color: #6d6f72;
 }
+
+.user-profile-dropdown {
+    position: relative;
+}
+
+.user-profile-dropdown .dropdown-menu {
+    width: 250px;
+    left: -170px !important;
+}
+
+span.profile-name {
+    font-size: 18px;
+}
+
+img.profile-img {
+    width: 40px;
+    height: 40px;
+    background: antiquewhite;
+    border: 2px solid #ccc;
+}
