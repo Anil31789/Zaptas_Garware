@@ -401,10 +401,19 @@ export default function Headers() {
                     onClick={() => {
                       navigate("/profile");
                     }}
+                    style={{ cursor: "pointer" }}
                   />
 
                   <div className="d-flex flex-column ms-3">
-                    <span className="profile-name">Kushagra Kamal</span>
+                    <span
+                      className="profile-name"
+                      onClick={() => {
+                        navigate("/profile");
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Kushagra Kamal
+                    </span>
                     <span className="profile-degree">
                       Sr. Software specialist
                     </span>
