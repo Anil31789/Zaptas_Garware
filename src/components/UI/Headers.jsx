@@ -328,7 +328,7 @@ export default function Headers() {
             </li>
           </ul>
 
-          <div className="d-flex social-icons">
+          <div className="d-flex social-icons align-items-center">
             {/* <a
               href="https://facebook.com"
               target="_blank"
