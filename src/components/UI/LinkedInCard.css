@@ -90,3 +90,10 @@ button.btn-close {
     margin-top: 8px;
     margin-left: 8px;
 }
+
+.like-section {
+    background: #fff;
+    padding: 10px 15px;
+    border-top: 1px solid #ddd;
+    text-align: center;
+}

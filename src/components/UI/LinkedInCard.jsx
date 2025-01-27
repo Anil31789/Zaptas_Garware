@@ -30,7 +30,7 @@ export default function LinkedInCard() {
   ]);
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
-  const [loginRequired, setloginRequired] = useState(false)
+  const [loginRequired, setloginRequired] = useState(false);
   const [loading, setLoading] = useState(false); // Loader state
   const currentRequest = useRef(null);
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ export default function LinkedInCard() {
 
       if (response.success) {
         setPosts(response?.data?.posts);
-        setloginRequired(response?.data?.requiredLogin)
+        setloginRequired(response?.data?.requiredLogin);
       } else {
         if (!response.success && response.errorMessage === "loginRequired") {
           setLoggin(true);
@@ -73,10 +73,9 @@ export default function LinkedInCard() {
 
   const handleLikeToggle = async (postId, method, name = null) => {
     try {
-
       if (loginRequired) {
-        showToast("Need To Login First", "error")
-        return
+        showToast("Need To Login First", "error");
+        return;
       }
       setLoadingPostIds((prevIds) => [...prevIds, postId]); // Add post ID to loading state
 
@@ -107,8 +106,8 @@ export default function LinkedInCard() {
                 method === "likepost"
                   ? prevPost.likeCount.totalLikes + 1
                   : method === "disslike"
-                    ? prevPost.likeCount.totalLikes - 1
-                    : prevPost.likeCount.totalLikes,
+                  ? prevPost.likeCount.totalLikes - 1
+                  : prevPost.likeCount.totalLikes,
             },
           };
         });
@@ -117,17 +116,17 @@ export default function LinkedInCard() {
           prevPosts.map((post) =>
             post.id === postId
               ? {
-                ...post,
-                fetchUserLikesStatus: method === "likepost" ? true : false,
-                likeCount: {
-                  totalLikes:
-                    method === "likepost"
-                      ? post.likeCount.totalLikes + 1
-                      : method === "disslike"
+                  ...post,
+                  fetchUserLikesStatus: method === "likepost" ? true : false,
+                  likeCount: {
+                    totalLikes:
+                      method === "likepost"
+                        ? post.likeCount.totalLikes + 1
+                        : method === "disslike"
                         ? post.likeCount.totalLikes - 1
                         : post.likeCount.totalLikes,
-                },
-              }
+                  },
+                }
               : post
           )
         );
@@ -298,16 +297,8 @@ export default function LinkedInCard() {
                   </div>
 
                   {/* Footer Section with Fixed Like Button */}
-                  <div
-                    className="footer-section"
-                    style={{
-                      background: "#fff", // Background to separate it visually
-                      padding: "10px 15px",
-                      borderTop: "1px solid #ddd", // Add a border for separation
-                      textAlign: "center", // Center align the footer content
-                    }}
-                  >
-                    <div className="d-flex justify-content-center align-items-center my-3">
+                  <div className="like-section">
+                    <div className="d-flex  align-items-center my-3">
                       {loginRequired ? (
                         // If loginRequired, show "Login with LinkedIn" button
                         <button
@@ -316,7 +307,7 @@ export default function LinkedInCard() {
                           style={{
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "center",
+
                             padding: "10px 20px",
                             fontSize: "16px",
                             fontWeight: "bold",
@@ -326,7 +317,11 @@ export default function LinkedInCard() {
                           <img
                             src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
                             alt="LinkedIn"
-                            style={{ width: "20px", height: "20px", marginRight: "10px" }}
+                            style={{
+                              width: "20px",
+                              height: "20px",
+                              marginRight: "10px",
+                            }}
                           />
                           Login with LinkedIn
                         </button>
@@ -337,24 +332,32 @@ export default function LinkedInCard() {
                           style={{
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "center",
+
                             cursor: "pointer",
                           }}
                           onClick={(event) => {
                             event.stopPropagation(); // Prevent other interactions
                             handleLikeToggle(
                               post.id,
-                              post?.fetchUserLikesStatus ? "disslike" : "likepost"
+                              post?.fetchUserLikesStatus
+                                ? "disslike"
+                                : "likepost"
                             );
                           }}
                         >
                           <FaThumbsUp
-                            className={`like-icon ${loadingPostIds.includes(post.id) ? "loading" : ""}`}
+                            className={`like-icon ${
+                              loadingPostIds.includes(post.id) ? "loading" : ""
+                            }`}
                             style={{
-                              color: post?.fetchUserLikesStatus ? "blue" : "gray",
+                              color: post?.fetchUserLikesStatus
+                                ? "blue"
+                                : "gray",
                             }}
                           />
-                          <span style={{ marginLeft: "5px" }}>{post?.likeCount?.totalLikes}</span>
+                          <span style={{ marginLeft: "5px" }}>
+                            {post?.likeCount?.totalLikes}
+                          </span>
                         </p>
                       )}
                     </div>
@@ -364,9 +367,6 @@ export default function LinkedInCard() {
             ))}
           </Carousel>
         </div>
-
-
-
       )}
 
       {/* Modal for LinkedIn Post */}
@@ -409,7 +409,9 @@ export default function LinkedInCard() {
                 Your browser does not support the video tag.
               </video>
             ) : (
-              <p className="text-muted">No multimedia available for this post.</p>
+              <p className="text-muted">
+                No multimedia available for this post.
+              </p>
             )}
           </div>
 
@@ -417,55 +419,59 @@ export default function LinkedInCard() {
           <div className="d-flex justify-content-between align-items-center border-top pt-3">
             {/* Like Button */}
             <div className="d-flex align-items-center justify-content-center my-3">
-  {loginRequired ? (
-    // If login is required, display the LinkedIn login button
-    <button
-      onClick={handleLinkedInCallback}
-      className="btn btn-primary btn-lg d-flex align-items-center"
-      style={{
-        padding: "10px 20px",
-        fontSize: "16px",
-        fontWeight: "bold",
-        borderRadius: "5px",
-        display: "flex",
-      }}
-    >
-      <img
-        src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
-        alt="LinkedIn"
-        style={{
-          width: "20px",
-          height: "20px",
-          marginRight: "10px",
-        }}
-      />
-      Login with LinkedIn
-    </button>
-  ) : (
-    // If logged in, display the like button
-    <div className="d-flex align-items-center">
-      <FaThumbsUp
-        className={`like-icon fs-5 ${
-          loadingPostIds.includes(selectedPost?.id) ? "loading" : ""
-        }`}
-        style={{
-          color: selectedPost?.fetchUserLikesStatus ? "blue" : "gray",
-          cursor: "pointer",
-        }}
-        onClick={() =>
-          handleLikeToggle(
-            selectedPost.id,
-            selectedPost?.fetchUserLikesStatus ? "disslike" : "likepost",
-            "modelBox"
-          )
-        }
-      />
-      <span className="ms-2 text-secondary">
-        {selectedPost?.likeCount?.totalLikes || 0} Likes
-      </span>
-    </div>
-  )}
-</div>
+              {loginRequired ? (
+                // If login is required, display the LinkedIn login button
+                <button
+                  onClick={handleLinkedInCallback}
+                  className="btn btn-primary btn-lg d-flex align-items-center"
+                  style={{
+                    padding: "10px 20px",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    borderRadius: "5px",
+                    display: "flex",
+                  }}
+                >
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
+                    alt="LinkedIn"
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      marginRight: "10px",
+                    }}
+                  />
+                  Login with LinkedIn
+                </button>
+              ) : (
+                // If logged in, display the like button
+                <div className="d-flex align-items-center">
+                  <FaThumbsUp
+                    className={`like-icon fs-5 ${
+                      loadingPostIds.includes(selectedPost?.id) ? "loading" : ""
+                    }`}
+                    style={{
+                      color: selectedPost?.fetchUserLikesStatus
+                        ? "blue"
+                        : "gray",
+                      cursor: "pointer",
+                    }}
+                    onClick={() =>
+                      handleLikeToggle(
+                        selectedPost.id,
+                        selectedPost?.fetchUserLikesStatus
+                          ? "disslike"
+                          : "likepost",
+                        "modelBox"
+                      )
+                    }
+                  />
+                  <span className="ms-2 text-secondary">
+                    {selectedPost?.likeCount?.totalLikes || 0} Likes
+                  </span>
+                </div>
+              )}
+            </div>
 
             {/* Comment Section */}
             {/* <div

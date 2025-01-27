@@ -347,7 +347,7 @@ export default function Headers() {
             </li>
           </ul>
 
-          <div className="d-flex social-icons">
+          <div className="d-flex social-icons align-items-center">
             {/* <a
               href="https://facebook.com"
               target="_blank"
@@ -422,7 +422,7 @@ export default function Headers() {
 
                   />
 
-                  <div className="d-flex flex-column ms-3">
+                  <div className="d-flex flex-column ms-3"  style={{ cursor: "pointer" }}>
                     <span className="profile-name">{userDetails?.name}</span>
                     <span className="profile-degree">
                     {userDetails?.jobTitle}

@@ -6,20 +6,20 @@ export default function PhotoGallery() {
 
   const data = {
     announcements: [
-      { type: "image", src: "/images/announcement1.jpg" },
-      { type: "video", src: "/videos/announcement1.mp4" },
-      { type: "image", src: "/images/announcement2.jpg" },
-      { type: "image", src: "/images/announcement3.jpg" },
+      { type: "image", src: "https://picsum.photos/200" },
+      { type: "video", src: "/videos/csr1.mp4" },
+      { type: "image", src: "https://picsum.photos/200" },
+      { type: "image", src: "https://picsum.photos/200" },
     ],
     csr: [
-      { type: "image", src: "/images/csr1.jpg" },
+      { type: "image", src: "https://picsum.photos/200" },
       { type: "video", src: "/videos/csr1.mp4" },
-      { type: "image", src: "/images/csr2.jpg" },
+      { type: "image", src: "https://picsum.photos/200" },
     ],
     awards: [
-      { type: "image", src: "/images/award1.jpg" },
-      { type: "video", src: "/videos/award1.mp4" },
-      { type: "image", src: "/images/award2.jpg" },
+      { type: "image", src: "https://picsum.photos/200" },
+      { type: "video", src: "/videos/csr1.mp4" },
+      { type: "image", src: "https://picsum.photos/200" },
     ],
   };
 
