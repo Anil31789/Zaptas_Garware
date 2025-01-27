@@ -29,7 +29,7 @@ export default function AnnouncementCard() {
     setSelectedImage(null);
   };
 
-  const fetchAnnouncements = async (page = 1, limit = 3) => {
+  const fetchAnnouncements = async (page = 1, limit = 5) => {
     try {
       setLoading(true); // Show loader while fetching
       const url = `${ConnectMe.BASE_URL}/csr/latest?page=${page}&limit=${limit}`;

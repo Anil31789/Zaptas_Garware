@@ -3,7 +3,7 @@ import { Button, Form, Container, Row, Col, Image, Card, Spinner } from 'react-b
 import { FaCamera, FaTrash } from 'react-icons/fa';
 import showToast from '../../utils/toastHelper';
 import ConnectMe from '../../config/connect';
-import { apiCall, getTokenFromLocalStorage } from '../../utils/apiCall';
+import { addTokenToLocalStorage, apiCall, getTokenFromLocalStorage } from '../../utils/apiCall';
 import UpdatePassword from './updatePassComponent';
 
 const UserProfile = () => {
@@ -12,34 +12,21 @@ const UserProfile = () => {
     const [updatedPhoto, setUpdatedPhoto] = useState(null);
     const [loading, setLoading] = useState(true);
  
-   
 
-    const fetchWorkAnniversaries = async () => {
-        try {
-            setLoading(true); // Show loader while fetching
-            const url = `${ConnectMe.BASE_URL}/hrms/userProfile`; // Replace with actual URL
-             const token = getTokenFromLocalStorage(); // Assuming the token is stored in localStorage
-            const headers = {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            };
+  const [userDetailslocal, setUserDetailslocal] = useState(null);
 
-            const response = await apiCall("GET", url, headers);
-            if (response.success) {
-                setUserDetails(response?.data);
-            }
-        } catch (err) {
-            showToast("Error fetching work anniversaries. Showing sample data.", "error");
-            // Set sample data in case of error
+  useEffect(() => {
+    // Check if 'userDetails' is available in localStorage
+    const storedUserDetails = localStorage.getItem("userDetails");
 
-        } finally {
-            setLoading(false); // Hide loader after fetching
-        }
-    };
+    // If found, set it in the state
+    if (storedUserDetails) {
+        setUserDetailslocal(JSON.parse(storedUserDetails));
+    }
 
-    useEffect(() => {
-        fetchWorkAnniversaries();
-    }, []);
+    // Optionally, if the data needs to be reloaded, you can clear localStorage
+    // and set new data if needed.
+  }, []);
 
     // Handle profile picture update
     const handlePhotoChange = (e) => {
@@ -99,6 +86,11 @@ const UserProfile = () => {
             // Handle the response
             if (response.success) {
                 alert('User profile image updated successfully!');
+                localStorage.removeItem("userDetails");
+
+                // Set the new user details in localStorage
+                localStorage.setItem("userDetails", JSON.stringify(response?.data));
+              
 
             } else {
                 showToast(response.message, 'error');
@@ -141,15 +133,15 @@ const UserProfile = () => {
             };
             const response = await apiCall('POST', url, headers, formData);
             if (response.success) {
-                showToast('Banner uploaded successfully!', 'success')
-                console.log(response)
+                showToast('uploaded successfully!', 'success')
+               
                 return response
             } else {
-                showToast("Failed to upload banner", 'error')
+                showToast("Failed to upload ", 'error')
             }
         } catch (error) {
-            console.error('Error uploading banner:', error.message);
-            showToast(`Error uploading banner: ${error.message || 'An unexpected error occurred'}`, 'error');
+            console.error('Error uploading :', error.message);
+            showToast(`Error uploading : ${error.message || 'An unexpected error occurred'}`, 'error');
         }
     };
     return (
@@ -159,7 +151,7 @@ const UserProfile = () => {
                     <div className="text-center">
                         {/* Display Profile Photo */}
                         <Image
-                            src={updatedPhoto || `${ConnectMe.img_URL}${userDetails?.user?.images?.imagePath}` || "./user.png"} // Default fallback image
+                            src={updatedPhoto || `${ConnectMe.img_URL}${userDetailslocal?.images?.imagePath}` || "./user.png"} // Default fallback image
                             roundedCircle
                             width="150"
                             height="150"
@@ -183,7 +175,11 @@ const UserProfile = () => {
                                     <FaTrash size={16} /> Remove Photo
                                 </Button>
                             )}
+                            
                         </div>
+                        <Button variant="success" type="button" className="mt-4" onClick={handleSubmit}>
+                            Save
+                        </Button>
                     </div>
 
                     {/* Display User Details */}
@@ -191,45 +187,43 @@ const UserProfile = () => {
                         {/* Full Name */}
                         <div className="mb-3">
                             <strong>Full Name:</strong> <br />
-                            {`${userDetails?.employeeDetails?.FirstName || ""} ${userDetails?.employeeDetails?.MiddleName || ""} ${userDetails?.employeeDetails?.LastName || ""}`.trim()}
+                          {userDetailslocal?.name}
                         </div>
 
                         {/* Email */}
                         <div className="mb-3">
                             <strong>Email:</strong> <br />
-                            {userDetails?.user?.email || "N/A"}
+                            {userDetailslocal?.email || "N/A"}
                         </div>
                         {/* Employee Code */}
-                        {userDetails?.employeeDetails?.EmployeeCode && (
+                        {userDetailslocal?.employeeCode && (
                             <div className="mb-3">
                                 <strong>Employee Code:</strong> <br />
-                                {userDetails.employeeDetails.EmployeeCode}
+                                {userDetailslocal?.employeeCode}
                             </div>
                         )}
                         {/* Employee ID */}
-                        {userDetails?.user?.EmployeeID && (
+                        {userDetailslocal?.EmployeeID && (
                             <div className="mb-3">
                                 <strong>Employee ID:</strong> <br />
-                                {userDetails?.user?.EmployeeID}
+                                {userDetailslocal?.EmployeeID}
                             </div>
                         )}
 
                         {/* CustomField6 */}
-                        {userDetails?.employeeDetails?.CustomField6 && (
+                        {userDetailslocal?.jobTitle && (
                             <div className="mb-3">
                                 <strong>Designation:</strong> <br />
-                                {userDetails.employeeDetails.CustomField6}
+                                {userDetailslocal?.jobTitle}
                             </div>
                         )}
 
                         {/* Update Button */}
-                        <Button variant="success" type="button" className="mt-4" onClick={handleSubmit}>
-                            Update Profile Photo
-                        </Button>
+                       
                     </div>
                 </Col>
             </Row>
-            <UpdatePassword email={userDetails?.user?.email}/>
+            <UpdatePassword email={userDetailslocal?.email}/>
         </Container>
     );
 };

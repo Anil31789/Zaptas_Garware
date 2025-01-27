@@ -11,8 +11,8 @@ export default function WorkAnniversary() {
   const [error, setError] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
-  const [selectEmail,setSelectEmail]= useState(null)
-const [selectName,setSelectName]= useState(null)
+  const [selectEmail, setSelectEmail] = useState(null)
+  const [selectName, setSelectName] = useState(null)
   const sampleData = [
     {
       FirstName: "John",
@@ -56,7 +56,7 @@ const [selectName,setSelectName]= useState(null)
     try {
       setLoading(true); // Show loader while fetching
       const url = `${ConnectMe.BASE_URL}/hrms/work-anniversary`; // Replace with actual URL
-       const token = getTokenFromLocalStorage(); // Assuming the token is stored in localStorage
+      const token = getTokenFromLocalStorage(); // Assuming the token is stored in localStorage
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -95,10 +95,10 @@ const [selectName,setSelectName]= useState(null)
     const joinDateObj = new Date(joinDate);
     const years = today.getFullYear() - joinDateObj.getFullYear();
     const months = today.getMonth() - joinDateObj.getMonth();
-  
+
     // Calculate the total number of months passed
     const totalMonths = years * 12 + months;
-  
+
     if (totalMonths < 12) {
       // If less than a year, display the months
       if (totalMonths >= 3 && totalMonths <= 5) {
@@ -107,7 +107,7 @@ const [selectName,setSelectName]= useState(null)
         return "0 years of excellence"; // For less than 3 months
       }
     }
-  
+
     // If the number of months exceeds 12, return the years
     return `${years} years of excellence`;
   };
@@ -162,7 +162,7 @@ const [selectName,setSelectName]= useState(null)
 
                         }}>
                           <div className="user-image">
-                          <img
+                            <img
                               src={wish?.images?.imagePath ? `${ConnectMe.img_URL}${wish?.images?.imagePath}` : "./user.png"} // Check if `userImage` exists, else fallback to default
                               alt="User"
                               className="rounded-circle"
@@ -178,30 +178,32 @@ const [selectName,setSelectName]= useState(null)
                             <div className="info">
                               <span className="date">
                                 <FaAward className="icon" />{calculateYearsOfExcellence(wish.JoinDate)}
-                               
+
                               </span>
                             </div>
                             <div className="d-flex justify-content-center">
                               {" "}
-                              <button className="send-wish-btn" onClick={(()=>{
-                                setSelectEmail(wish?.OfficalEmailID)
-                                setSelectName(`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim())
+                              <button className="send-wish-btn" onClick={(() => {
+                                setSelectEmail(wish)
+                                 setSelectName(`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim())
                                 setShowPopup(true)
                               })}>
                                 Comment
                               </button>
-                              <SendEmailPopup
-                                show={showPopup}
-                                 handleClose={() => setShowPopup(false)}
-                                recipient={selectEmail}
-                                personalName={selectName}
-                                // personalName={`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim()}
-                              />
+
                             </div>
                           </div>
                         </div>
                       </div>
                     ))}
+
+                  {showPopup && <SendEmailPopup
+                    show={showPopup}
+                    handleClose={() => setShowPopup(false)}
+                    recipient={selectEmail}
+                    personalName={selectName}
+                  // personalName={`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim()}
+                  />}
                 </div>
               </div>
             </>

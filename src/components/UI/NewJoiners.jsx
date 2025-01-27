@@ -11,8 +11,8 @@ export default function NewJoiners() {
   const [error, setError] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
-  const [selectEmail,setSelectEmail]= useState(null)
-const [selectName,setSelectName]= useState(null)
+  const [selectEmail, setSelectEmail] = useState(null)
+  const [selectName, setSelectName] = useState(null)
   const handleNext = () => {
     if ((currentIndex + 1) * 3 < workAnniversaries.length) {
       setCurrentIndex(currentIndex + 1);
@@ -29,7 +29,7 @@ const [selectName,setSelectName]= useState(null)
     try {
       setLoading(true); // Show loader while fetching
       const url = `${ConnectMe.BASE_URL}/hrms/joined-today`; // Replace with actual URL
-       const token = getTokenFromLocalStorage(); // Assuming the token is stored in localStorage
+      const token = getTokenFromLocalStorage(); // Assuming the token is stored in localStorage
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -139,25 +139,26 @@ const [selectName,setSelectName]= useState(null)
                             </div>
                             <div className="d-flex justify-content-center">
                               {" "}
-                              <button className="send-wish-btn" onClick={(()=>{
-                                setSelectEmail(wish?.OfficalEmailID)
-                                setSelectName(`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim())
+                              <button className="send-wish-btn" onClick={(() => {
+                                setSelectEmail(wish)
+                                 setSelectName(`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim())
                                 setShowPopup(true)
                               })}>
                                 Comment
                               </button>
-                              <SendEmailPopup
-                                show={showPopup}
-                                 handleClose={() => setShowPopup(false)}
-                                recipient={selectEmail}
-                                personalName={selectName}
-                                // personalName={`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim()}
-                              />
+
                             </div>
                           </div>
                         </div>
                       </div>
                     ))}
+                  {showPopup && <SendEmailPopup
+                    show={showPopup}
+                    handleClose={() => setShowPopup(false)}
+                    recipient={selectEmail}
+                    personalName={selectName}
+                  // personalName={`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim()}
+                  />}
                 </div>
               </div>
             </>

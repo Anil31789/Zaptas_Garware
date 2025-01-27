@@ -263,14 +263,7 @@ export default function ViewAllPage() {
                       </button>
                     </div>
                   </div>
-                ) : (
-                  <img
-                    src={`./logo.png`}
-                    alt={`slie`}
-                    className="d-block w-100 slider-image"
-                    onClick={() => setSelectedImage("./logo.png")} // Set the selected image for preview
-                  />
-                )}
+                ) : []}
               </React.Fragment>
             ))}
           </div>

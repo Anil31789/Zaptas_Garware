@@ -134,24 +134,26 @@ export default function BirthdayBox() {
                             <div className="d-flex justify-content-center">
 
                               <button className="send-wish-btn" onClick={(() => {
-                                setSelectEmail(wish?.OfficalEmailID)
-                                // setSelectName(`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim())
+                                setSelectEmail(wish)
                                 setSelectName(`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim())
+                               // setSelectName(`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim())
                                 setShowPopup(true)
                               })}>
                                 Comment
                               </button>
-                              <SendEmailPopup
-                                show={showPopup}
-                                handleClose={() => setShowPopup(false)}
-                                recipient={selectEmail}
-                                personalName={selectName}
-                              />
+
                             </div>
                           </div>
                         </div>
                       </div>
                     ))}
+                  {showPopup && <SendEmailPopup
+                    show={showPopup}
+                    handleClose={() => setShowPopup(false)}
+                    recipient={selectEmail}
+                    personalName={selectName}
+                  // personalName={`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim()}
+                  />}
                 </div>
               </div>
             </>

@@ -23,10 +23,53 @@ import { FaSquareXTwitter } from "react-icons/fa6";
 export default function Headers() {
   const navigate = useNavigate();
   const [notificationCount, setNotificationCount] = useState(0);
+  const [serviceTypes, setServiceTypes] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [userDetails, setUserDetails] = useState(null);
+
+  useEffect(() => {
+    // Check if 'userDetails' is available in localStorage
+    const storedUserDetails = localStorage.getItem("userDetails");
+
+    // If found, set it in the state
+    if (storedUserDetails) {
+      setUserDetails(JSON.parse(storedUserDetails));
+    }
+
+    // Optionally, if the data needs to be reloaded, you can clear localStorage
+    // and set new data if needed.
+  }, []);
 
   useEffect(() => {
     fetchQuickLinks();
     fetchNotificationCount();
+  }, []);
+
+
+  // Fetch service types on component mount
+  useEffect(() => {
+    const fetchServiceTypes = async () => {
+      setIsLoading(true);
+      try {
+        const url = `${ConnectMe.BASE_URL}/it/api/service-types`;
+        const token = getTokenFromLocalStorage();
+        const headers = { Authorization: `Bearer ${token}` };
+        const response = await apiCall("GET", url, headers);
+
+        if (response && response.data) {
+          setServiceTypes(response.data);
+        } else {
+          console.error("Failed to fetch service types");
+        }
+      } catch (error) {
+        console.error("Error fetching service types:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchServiceTypes();
   }, []);
 
   // Hardcoded data with third-level submenus
@@ -147,9 +190,6 @@ export default function Headers() {
     );
   };
 
-  const profileImage = notificationCount?.image?.images?.imagePath
-    ? `${ConnectMe.img_URL}${notificationCount?.image?.images?.imagePath}`
-    : "public/user.png";
 
   return (
     <header className="navbar navbar-expand-lg bg-main">
@@ -256,7 +296,7 @@ export default function Headers() {
                 className="dropdown-menu"
                 aria-labelledby="quicklinksDropdown"
               >
-                {formData?.links.map((link) => (
+                {serviceTypes && serviceTypes.map((link) => (
                   <li key={link.id} className="dropdown-submenu">
                     <a
                       className="dropdown-item"
@@ -264,31 +304,10 @@ export default function Headers() {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {link.title}
-                      {link.subMenu && (
-                        <FiChevronDown className="submenu-arrow" />
-                      )}
+                      {link.name}
+
                     </a>
-                    {link.subMenu && (
-                      <ul className="dropdown-menu">
-                        {link.subMenu.map((subLink, index) => (
-                          <li key={index} className="dropdown-submenu">
-                            <a
-                              className="dropdown-item"
-                              href={subLink.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {subLink.title}
-                            </a>
-                            {subLink.thirdLevelSubMenu &&
-                              renderThirdLevelSubMenu(
-                                subLink.thirdLevelSubMenu
-                              )}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+                
                   </li>
                 ))}
               </ul>
@@ -384,7 +403,7 @@ export default function Headers() {
                 aria-expanded="false"
               >
                 <img
-                  src={profileImage}
+                  src={userDetails?.images?.imagePath ? `${ConnectMe.img_URL}${userDetails?.images?.imagePath}` : "./user.png"}
                   alt="Profile"
                   className="profile-img img-fluid rounded-circle border border-2 shadow-sm"
                 />
@@ -393,20 +412,20 @@ export default function Headers() {
                 className="dropdown-menu p-3"
                 aria-labelledby="dropdownMenuButton"
               >
-                <li className="d-flex align-items-center mb-3">
+                <li className="d-flex align-items-center mb-3" onClick={() => {
+                  navigate("/profile");
+                }}>
                   <img
-                    src={profileImage}
+                    src={userDetails?.images?.imagePath ? `${ConnectMe.img_URL}${userDetails?.images?.imagePath}` : "./user.png"}
                     alt="Profile"
                     className="profile-img img-fluid rounded-circle border border-2 shadow-sm"
-                    onClick={() => {
-                      navigate("/profile");
-                    }}
+
                   />
 
                   <div className="d-flex flex-column ms-3">
-                    <span className="profile-name">Kushagra Kamal</span>
+                    <span className="profile-name">{userDetails?.name}</span>
                     <span className="profile-degree">
-                      Sr. Software specialist
+                    {userDetails?.jobTitle}
                     </span>
                   </div>
                 </li>

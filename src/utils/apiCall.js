@@ -4,11 +4,12 @@ const cache = {};
 const cacheExpiry = {};
 const cooldownTimers = {}; // To track cooldown per endpoint or action
 
-const apiCall = async (method, url, headers = {}, data = null, cooldown = 2000) => {
+const apiCall = async (method, url, headers = {}, data = null, cooldown = 2000,cacheAllow = true) => {
   const cacheKey = `${method}_${url}_${JSON.stringify(data)}`;
 
   // Check if cached data is valid
-  if (
+  if ( 
+    cacheAllow &&
     method === "GET" &&
     cache[cacheKey] &&
     Date.now() < cacheExpiry[cacheKey]

@@ -33,7 +33,7 @@ export default function AnnouncementCard() {
     });
   };
 
-  const fetchAnnouncements = async (page = 1, limit = 3) => {
+  const fetchAnnouncements = async (page = 1, limit = 6) => {
     try {
       setLoading(true); // Show loader while fetching
       const url = `${ConnectMe.BASE_URL}/awards/latest?page=${page}&limit=${limit}`;

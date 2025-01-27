@@ -30,15 +30,26 @@ const Login = () => {
     const headers = { "Content-Type": "application/json" };
     const response = await apiCall("POST", url, headers);
 
-
     if (response.success) {
+      // Remove previous user details from localStorage if any
+      localStorage.removeItem("userDetails");
+
+      // Set the new user details in localStorage
       localStorage.setItem("userDetails", JSON.stringify(response?.data?.user));
+
+      // Add the token to localStorage
       addTokenToLocalStorage(response?.data?.token);
+
+      // Show a success message
       showToast("Login successful!", "success");
-      navigate("/"); // Redirect to the home page or any other route
+
+      // Redirect to the home page or any other route
+      navigate("/");
     } else {
+      // Show an error message if login fails
       showToast(response.message || "Login failed. Please try again.", "error");
     }
+
   }
 
 
@@ -84,6 +95,10 @@ const Login = () => {
       const response = await apiCall("POST", url, headers, payload);
 
       if (response.success) {
+        // Remove previous user details from localStorage if any
+        localStorage.removeItem("userDetails");
+
+        // Set the new user details in localStorage
         localStorage.setItem("userDetails", JSON.stringify(response?.data?.user));
         addTokenToLocalStorage(response?.data?.token);
         showToast("Login successful!", "success");
