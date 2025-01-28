@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./Announcements.css";
 import { apiCall, getTokenFromLocalStorage } from "../utils/apiCall";
 import ConnectMe from "../config/connect";
@@ -259,25 +259,19 @@ export default function CsrPage() {
   };
 
   // Load more announcements on scroll
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.scrollHeight &&
-      !loading &&
-      hasMore
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
+  const handleScroll = useCallback(
+    (e) => {
+      const { scrollLeft, scrollWidth, clientWidth } = e.target;
+      if (scrollLeft + clientWidth >= scrollWidth - 10 && !loading && hasMore) {
+        setPage((prev) => prev + 1);
+      }
+    },
+    [loading, hasMore]
+  );
 
   useEffect(() => {
     fetchExistingAnnouncements(page);
-  }, [page]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loading, hasMore]);
+  }, [page]);;
 
 
   const handleUpdateClick = (announcement) => {
@@ -404,10 +398,9 @@ console.log(selectedImages,'abcdef')
 
 
   return (
-    <div className="admin-announcements">
-      <div className="container mt-4">
-        {/* <h2> Current Announcements</h2> */}
-        <div className="old-announcements border p-3">
+     <div className="admin-announcements">
+    <div className="container mt-4">
+  <div className="border p-3">
           <h4>Current Message </h4>
           <ul className="list-group">
             {existingAnnouncements.map((announcement) => (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./Announcements.css";
 import { apiCall, getTokenFromLocalStorage } from "../utils/apiCall";
 import ConnectMe from "../config/connect";
@@ -136,25 +136,19 @@ export default function CalenderHoliday() {
   };
 
   // Load more announcements on scroll
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.scrollHeight &&
-      !loading &&
-      hasMore
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
+  const handleScroll = useCallback(
+    (e) => {
+      const { scrollLeft, scrollWidth, clientWidth } = e.target;
+      if (scrollLeft + clientWidth >= scrollWidth - 10 && !loading && hasMore) {
+        setPage((prev) => prev + 1);
+      }
+    },
+    [loading, hasMore]
+  );
 
   useEffect(() => {
     fetchExistingAnnouncements(page);
-  }, [page]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loading, hasMore]);
+  }, [page]);;
 
 
   const handleUpdateClick = (announcement) => {
@@ -270,32 +264,52 @@ export default function CalenderHoliday() {
 
 
   return (
-    <div className="admin-announcements">
-      <div className="container mt-4">
-        {/* <h2> Current Announcements</h2> */}
-        <div className="old-announcements border p-3">
+     <div className="admin-announcements">
+    <div className="container mt-4">
+  <div className="border p-3">
           <h4>Current Holidays</h4>
-          <ul className="list-group">
-            {existingAnnouncements.map((announcement) => (
-              <li
-                className="list-group-item"
-                key={announcement._id}
-                style={{ cursor: "pointer" }}
+      {error && <div className="alert alert-danger">{error}</div>}
+    <div
+      className="d-flex"
+      style={{
+        overflowX: "auto",  // Ensures horizontal scrolling
+        maxWidth: "100%",    // Ensures the parent container doesn't exceed available width
+        flexWrap: "nowrap",  // Prevents wrapping of cards, keeping them in a single row
+      }}
+      onScroll={handleScroll}
+    >
+      {existingAnnouncements.map((announcement) => (
+        <div
+          className="card me-3"
+          key={announcement._id}
+          style={{
+            minWidth: "300px", // Set width of each card
+            flexShrink: 0,     // Prevents shrinking of cards
+          }}
+        >
+          <div className="card-body">
+            <h5 className="card-title">{announcement.title}</h5>
+            <div className="mt-2">
+              <button
+                className="btn btn-primary btn-sm me-2"
+                onClick={() => handleUpdateClick(announcement)}
               >
-                {announcement.title}
-                <div className="mt-2">
-                  <button
-                    className="btn btn-primary btn-sm me-2"
-                    onClick={() => handleUpdateClick(announcement)}
-                  >
-                    Update
-                  </button>
-                  <button className="btn btn-danger btn-sm me-2" onClick={() => deleteAnnouncemnt(announcement)}>Delete</button>
-                </div>
-              </li>
-            ))}
-          </ul>
+                Update
+              </button>
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={() => deleteAnnouncemnt(announcement)}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
+        ))}
+        {loading && <p className="text-muted ms-3">Loading more...</p>}
+       {!hasMore && <p className="text-muted ms-3">No more announcements.</p>}
+     </div>
+   </div>
 
         {selectedAnnouncement && (
           <div className="mt-4">

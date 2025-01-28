@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./BirthdayBox.css";
 import { FaAward, FaBirthdayCake, FaMapMarkerAlt } from "react-icons/fa";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";

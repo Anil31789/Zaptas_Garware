@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./Announcements.css";
 import { apiCall, getTokenFromLocalStorage } from "../utils/apiCall";
 import ConnectMe from "../config/connect";
@@ -7,6 +7,7 @@ import { FaPlusCircle, FaTimesCircle } from 'react-icons/fa';
 export default function AwardsPage() {
   const [selectedImages, setSelectedImages] = useState([]); // Initializing the state for selected images
   const [existingAnnouncements, setExistingAnnouncements] = useState([]);
+  const [limit] = useState(3); // Fixed number of items per page
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -17,8 +18,8 @@ export default function AwardsPage() {
     title: "",
     location: "",
     description: "",
-    AwardierName:"",
-    PersonDesignation:"",
+    AwardierName: "",
+    PersonDesignation: "",
     images: [],
     fullName: "",
     Designation: "",
@@ -56,10 +57,10 @@ export default function AwardsPage() {
   };
 
 
-  const removeImage = (index,name=null) => {
+  const removeImage = (index, name = null) => {
 
 
-    if(name=='update'){
+    if (name == 'update') {
       setSelectedAnnouncement((prev) => ({
         ...prev,
         images: prev.images.filter((_, i) => i !== index), // Remove the specific file from form data
@@ -67,7 +68,7 @@ export default function AwardsPage() {
       }));
 
     }
-    else{
+    else {
       setSelectedImages((prev) => prev.filter((_, i) => i !== index)); // Remove the specific image URL
       setFormData((prev) => ({
         ...prev,
@@ -91,8 +92,8 @@ export default function AwardsPage() {
     const dataToSave = {
       fullName: formData.fullName,
       title: formData.title,
-      AwardierName:formData?.AwardierName,
-      PersonDesignation:formData?.PersonDesignation,
+      AwardierName: formData?.AwardierName,
+      PersonDesignation: formData?.PersonDesignation,
       location: formData.location,
       description: formData.description,
       Designation: formData.Designation,
@@ -122,8 +123,8 @@ export default function AwardsPage() {
         images: [],
         fullName: "",
         Designation: "",
-        AwardierName:"",
-        PersonDesignation:"",
+        AwardierName: "",
+        PersonDesignation: "",
         name: 'awards',
         links: [{ linkTitle: '', link: '' }],
         AnnouncementDate: ''
@@ -238,7 +239,7 @@ export default function AwardsPage() {
   };
 
 
-  const fetchExistingAnnouncements = async (page = 1, limit = 3) => {
+  const fetchExistingAnnouncements = async (page) => {
     try {
       setLoading(true); // Show loader while fetching
       const url = `${ConnectMe.BASE_URL}/awards/latest?page=${page}&limit=${limit}`;
@@ -251,8 +252,7 @@ export default function AwardsPage() {
       const response = await apiCall("GET", url, headers);
       if (response.success) {
         if (response.data.announcements.length > 0) {
-          setExistingAnnouncements(response.data.announcements);
-
+          setExistingAnnouncements((prev) => [...prev, ...response.data.announcements]); // Append new data
         } else {
           setHasMore(false); // No more data to load
         }
@@ -266,26 +266,20 @@ export default function AwardsPage() {
     }
   };
 
-  // Load more announcements on scroll
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.scrollHeight &&
-      !loading &&
-      hasMore
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
+  const handleScroll = useCallback(
+    (e) => {
+      const { scrollLeft, scrollWidth, clientWidth } = e.target;
+      if (scrollLeft + clientWidth >= scrollWidth - 10 && !loading && hasMore) {
+        setPage((prev) => prev + 1);
+      }
+    },
+    [loading, hasMore]
+  );
 
   useEffect(() => {
     fetchExistingAnnouncements(page);
   }, [page]);
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loading, hasMore]);
 
 
   const handleUpdateClick = (announcement) => {
@@ -345,8 +339,8 @@ export default function AwardsPage() {
           title: selectedAnnouncement.title,
           location: selectedAnnouncement.location,
           description: selectedAnnouncement.description,
-          AwardierName:selectedAnnouncement.AwardierName,
-          PersonDesignation:selectedAnnouncement.PersonDesignation,
+          AwardierName: selectedAnnouncement.AwardierName,
+          PersonDesignation: selectedAnnouncement.PersonDesignation,
           Designation: selectedAnnouncement.Designation,
           name: selectedAnnouncement.name,
           links: selectedAnnouncement.links?.filter(
@@ -415,210 +409,158 @@ export default function AwardsPage() {
 
   return (
     <div className="admin-announcements">
-      <div className="container mt-4">
-        {/* <h2> Current Announcements</h2> */}
-        <div className="old-announcements border p-3">
-          <h4>Current Awards</h4>
-          <ul className="list-group">
-            {existingAnnouncements.map((announcement) => (
-              <li
-                className="list-group-item"
-                key={announcement._id}
-                style={{ cursor: "pointer" }}
+    <div className="container mt-4">
+  <div className="border p-3">
+   {error && <div className="alert alert-danger">{error}</div>}
+    <div
+      className="d-flex"
+      style={{
+        overflowX: "auto",  // Ensures horizontal scrolling
+        maxWidth: "100%",    // Ensures the parent container doesn't exceed available width
+        flexWrap: "nowrap",  // Prevents wrapping of cards, keeping them in a single row
+      }}
+      onScroll={handleScroll}
+    >
+      {existingAnnouncements.map((announcement) => (
+        <div
+          className="card me-3"
+          key={announcement._id}
+          style={{
+            minWidth: "300px", // Set width of each card
+            flexShrink: 0,     // Prevents shrinking of cards
+          }}
+        >
+          <div className="card-body">
+            <h5 className="card-title">{announcement.title}</h5>
+            <div className="mt-2">
+              <button
+                className="btn btn-primary btn-sm me-2"
+                onClick={() => handleUpdateClick(announcement)}
               >
-                {announcement.title}
-                <div className="mt-2">
-                  <button
-                    className="btn btn-primary btn-sm me-2"
-                    onClick={() => handleUpdateClick(announcement)}
-                  >
-                    Update
-                  </button>
-                  <button className="btn btn-danger btn-sm me-2" onClick={() => deleteAnnouncemnt(announcement)}>Delete</button>
-                </div>
-              </li>
-            ))}
-          </ul>
+                Update
+              </button>
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={() => deleteAnnouncemnt(announcement)}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+      {loading && <p className="text-muted ms-3">Loading more...</p>}
+      {!hasMore && <p className="text-muted ms-3">No more announcements.</p>}
+    </div>
+  </div>
+
+  {selectedAnnouncement && (
+    <div className="mt-4">
+      <div className="d-flex justify-content-between align-items-center" style={{ fontSize: '20px' }}>
+        <span>Edit Awards</span>
+        <div onClick={() => setSelectedAnnouncement(null)} style={{ cursor: 'pointer' }}>
+          <FaTimesCircle style={{ color: 'red' }} />
+        </div>
+      </div>
+      <form onSubmit={handleUpdateSubmit}>
+        <div className="mb-3">
+          <label htmlFor="title" className="form-label">Title</label>
+          <input
+            type="text"
+            className="form-control"
+            id="title"
+            name="title"
+            value={selectedAnnouncement.title}
+            onChange={handleInputChange}
+          />
         </div>
 
-        {selectedAnnouncement && (
-          <div className="mt-4">
-            <div
-              className="d-flex justify-content-between align-items-center" // Flexbox layout
-              style={{ fontSize: '20px' }}
-            >
-              <span>Edit Awards</span>
-              <div
-                onClick={() => setSelectedAnnouncement(null)}
-                style={{ cursor: 'pointer' }}
-              >
-                <FaTimesCircle style={{ color: 'red' }} />
+        <div className="mb-3">
+          <label htmlFor="description" className="form-label">Description</label>
+          <textarea
+            className="form-control"
+            id="description"
+            name="description"
+            rows="4"
+            value={selectedAnnouncement.description}
+            onChange={handleInputChange}
+            required
+          ></textarea>
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="AnnouncementDate" className="form-label">Award Date</label>
+          <input
+            type="date"
+            className="form-control"
+            id="AnnouncementDate"
+            name="AnnouncementDate"
+            value={selectedAnnouncement.AnnouncementDate.substring(0, 10)} // Only the date part
+            onChange={handleInputChange}
+          />
+        </div>
+
+        <div className="form-group">
+          {/* Render existing images if no new images are selected */}
+          {selectedImages.length === 0 && selectedAnnouncement.imagePath?.length > 0 &&
+            selectedAnnouncement.imagePath.map((el, index) => (
+              <div key={index} className="mb-2">
+                <label htmlFor="profile-image">Images</label>
+                <img
+                  src={`${ConnectMe.img_URL}${el}`} // Display the existing image
+                  alt={`Existing Banner ${index + 1}`}
+                  className="banner-image"
+                />
+                <div
+                  className="delete-icon"
+                  onClick={() => removeImage(index, 'update')} // Remove the specific image
+                  style={{ cursor: 'pointer' }}
+                >
+                  <FaTimesCircle style={{ color: 'red', fontSize: '24px' }} />
+                </div>
+              </div>
+            ))
+          }
+
+          {/* File input for selecting new images */}
+          <input
+            type="file"
+            id="profile-image"
+            onChange={handleChange}
+            multiple // Allow multiple file uploads
+            className="form-control"
+          />
+
+          ** Note: It will replace existing CSR Image
+        </div>
+
+        <div className="row">
+          {selectedImages && selectedImages.length > 0 && selectedImages.map((image, index) => (
+            <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
+              <div className="banner-card">
+                <img
+                  src={image} // Use the URL from the selectedImages array
+                  alt={`Selected Banner ${index + 1}`}
+                  className="banner-image"
+                />
+                {/* Cross icon in the top-right corner */}
+                <div
+                  className="delete-icon"
+                  onClick={() => removeImage(index)} // Remove the specific image
+                  style={{ cursor: 'pointer' }}
+                >
+                  <FaTimesCircle style={{ color: 'red', fontSize: '24px' }} />
+                </div>
               </div>
             </div>
-            <form onSubmit={handleUpdateSubmit}>
-              <div className="mb-3">
-                <label htmlFor="title" className="form-label">Title</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  name="title"
-                  value={selectedAnnouncement.title}
-                  onChange={handleInputChange}
-                />
-              </div>
-              {/* <div className="mb-3">
-                <label htmlFor="manager" className="form-label">Your Full Name</label>
-                <input
-                  type="text"
-                  id="fullName"
-                  name="fullName"
-                  className="form-control"
-                  required
-                  value={selectedAnnouncement.fullName}
-                  onChange={handleInputChange}
-                />
-              </div>
+          ))}
+        </div>
+        <button type="submit" className="btn btn-success">Save Changes</button>
+      </form>
+    </div>
+  )}
+</div>
 
-              <div className="mb-3">
-
-                <label htmlFor="manager" className="form-label">Your Designation</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="Designation"
-                  name="Designation"
-                  value={selectedAnnouncement.Designation}
-                  onChange={handleInputChange}
-                />
-              </div> */}
-
-              {/* <div className="form-group">
-              <label htmlFor="manager">Whom to Award His/Her full name</label>
-              <input
-                type="text"
-                id="AwardierName"
-                name="AwardierName"
-                value={selectedAnnouncement.AwardierName}
-                onChange={handleInputChange}
-                placeholder="Kushagra kamal"
-              />
-            </div> */}
-            {/* <div className="form-group">
-              <label htmlFor="manager">Person Designation</label>
-              <input
-                type="text"
-                id="PersonDesignation"
-                name="PersonDesignation"
-                value={selectedAnnouncement.PersonDesignation}
-                onChange={handleInputChange}
-                placeholder="Assistant Manager - Accounts"
-              />
-            </div> */}
-
-
-              <div className="mb-3">
-                <label htmlFor="description" className="form-label">Description</label>
-                <textarea
-                  className="form-control"
-                  id="description"
-                  name="description"
-                  rows="4"
-                  value={selectedAnnouncement.description}
-                  onChange={handleInputChange}
-                  required
-                ></textarea>
-              </div>
-              {/* <div className="mb-3">
-                <label htmlFor="location" className="form-label">Location</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="location"
-                  name="location"
-                  value={selectedAnnouncement.location}
-                  onChange={handleInputChange}
-                />
-              </div> */}
-              <div className="mb-3">
-                <label htmlFor="AnnouncementDate" className="form-label">Award Date</label>
-                <input
-                  type="date"
-                  className="form-control"
-                  id="AnnouncementDate"
-                  name="AnnouncementDate"
-                  value={selectedAnnouncement.AnnouncementDate.substring(0, 10)} // Only the date part
-                  onChange={handleInputChange}
-                />
-              </div>
-
-
-
-           
-
-              <div className="form-group">
-                {/* Render existing images if no new images are selected */}
-                {selectedImages.length == 0 && selectedAnnouncement.imagePath?.length > 0 &&
-                  selectedAnnouncement.imagePath.map((el, index) => (
-                    <div key={index} className="mb-2">
-                      <label htmlFor="profile-image">Images</label>
-                      <img
-                        src={`${ConnectMe.img_URL}${el}`} // Display the existing image
-                        alt={`Existing Banner ${index + 1}`}
-                        className="banner-image"
-                      />
-                      <div
-                        className="delete-icon"
-                        onClick={() => removeImage(index,'update')} // Remove the specific image
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <FaTimesCircle style={{ color: 'red', fontSize: '24px' }} />
-                      </div>
-                    </div>
-                  ))
-                }
-
-                {/* File input for selecting new images */}
-                <input
-                  type="file"
-                  id="profile-image"
-                  onChange={handleChange}
-                  multiple // Allow multiple file uploads
-                  className="form-control"
-                />
-
-                ** Note It will replace existing CSR Image
-              </div>
-
-
-
-              <div className="row">
-                {selectedImages && selectedImages.length > 0 && selectedImages.map((image, index) => (
-                  <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
-                    <div className="banner-card">
-                      <img
-                        src={image} // Use the URL from the selectedImages array
-                        alt={`Selected Banner ${index + 1}`}
-                        className="banner-image"
-                      />
-                      {/* Cross icon in the top-right corner */}
-                      <div
-                        className="delete-icon"
-                        onClick={() => removeImage(index)} // Remove the specific image
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <FaTimesCircle style={{ color: 'red', fontSize: '24px' }} />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <button type="submit" className="btn btn-success">Save Changes</button>
-            </form>
-          </div >
-        )
-        }
-      </div >
 
       <hr></hr>
       {/* New Announcements Section */}
@@ -640,7 +582,7 @@ export default function AwardsPage() {
                 placeholder="Enter Award title"
               />
             </div>
-{/* 
+            {/* 
            {/* 
             <div className="form-group">
               <label htmlFor="manager">Your Full Name</label>
@@ -651,7 +593,7 @@ export default function AwardsPage() {
                 onChange={handleChange}
                 placeholder="Kushagra Kamal"
               />
-            </div> */} 
+            </div> */}
 
             {/* <div className="form-group">
               <label htmlFor="manager">Your Designation</label>
@@ -747,7 +689,7 @@ export default function AwardsPage() {
             </div>
 
 
-      
+
             <div className="form-actions">
               <button type="submit" className="save-btn">
                 Save

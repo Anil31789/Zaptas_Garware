@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./Announcements.css";
 import { apiCall, getTokenFromLocalStorage } from "../utils/apiCall";
 import ConnectMe from "../config/connect";
@@ -59,10 +59,10 @@ export default function IndustryPage() {
   };
 
 
-  const removeImage = (index,name=null) => {
+  const removeImage = (index, name = null) => {
 
 
-    if(name=='update'){
+    if (name == 'update') {
       setSelectedAnnouncement((prev) => ({
         ...prev,
         images: prev.images.filter((_, i) => i !== index), // Remove the specific file from form data
@@ -70,7 +70,7 @@ export default function IndustryPage() {
       }));
 
     }
-    else{
+    else {
       setSelectedImages((prev) => prev.filter((_, i) => i !== index)); // Remove the specific image URL
       setFormData((prev) => ({
         ...prev,
@@ -266,25 +266,19 @@ export default function IndustryPage() {
   };
 
   // Load more announcements on scroll
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.scrollHeight &&
-      !loading &&
-      hasMore
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
+  const handleScroll = useCallback(
+    (e) => {
+      const { scrollLeft, scrollWidth, clientWidth } = e.target;
+      if (scrollLeft + clientWidth >= scrollWidth - 10 && !loading && hasMore) {
+        setPage((prev) => prev + 1);
+      }
+    },
+    [loading, hasMore]
+  );
 
   useEffect(() => {
     fetchExistingAnnouncements(page);
-  }, [page]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loading, hasMore]);
+  }, [page]);;
 
 
   const handleUpdateClick = (announcement) => {
@@ -413,31 +407,51 @@ export default function IndustryPage() {
   return (
     <div className="admin-announcements">
       <div className="container mt-4">
-        {/* <h2> Current Announcements</h2> */}
-        <div className="old-announcements border p-3">
+        <div className="border p-3">
           <h4>Current News</h4>
-          <ul className="list-group">
+          <h4 className="mb-3">Current Awards</h4>
+          {error && <div className="alert alert-danger">{error}</div>}
+          <div
+            className="d-flex"
+            style={{
+              overflowX: "auto",  // Ensures horizontal scrolling
+              maxWidth: "100%",    // Ensures the parent container doesn't exceed available width
+              flexWrap: "nowrap",  // Prevents wrapping of cards, keeping them in a single row
+            }}
+            onScroll={handleScroll}
+          >
             {existingAnnouncements.map((announcement) => (
-              <li
-                className="list-group-item"
+              <div
+                className="card me-3"
                 key={announcement._id}
-                style={{ cursor: "pointer" }}
+                style={{
+                  minWidth: "300px", // Set width of each card
+                  flexShrink: 0,     // Prevents shrinking of cards
+                }}
               >
-                {announcement.title}
-                <div className="mt-2">
-                  <button
-                    className="btn btn-primary btn-sm me-2"
-                    onClick={() => handleUpdateClick(announcement)}
-                  >
-                    Update
-                  </button>
-                  <button className="btn btn-danger btn-sm me-2" onClick={() => deleteAnnouncemnt(announcement)}>Delete</button>
+                <div className="card-body">
+                  <h5 className="card-title">{announcement.title}</h5>
+                  <div className="mt-2">
+                    <button
+                      className="btn btn-primary btn-sm me-2"
+                      onClick={() => handleUpdateClick(announcement)}
+                    >
+                      Update
+                    </button>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => deleteAnnouncemnt(announcement)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
-              </li>
+              </div>
             ))}
-          </ul>
+            {loading && <p className="text-muted ms-3">Loading more...</p>}
+            {!hasMore && <p className="text-muted ms-3">No more announcements.</p>}
+          </div>
         </div>
-
         {selectedAnnouncement && (
           <div className="mt-4">
             <div
@@ -464,7 +478,7 @@ export default function IndustryPage() {
                   onChange={handleInputChange}
                 />
               </div>
-                   {/* <div className="mb-3">
+              {/* <div className="mb-3">
                 <label htmlFor="manager" className="form-label">Your Full Name</label>
                 <input
                   type="text"
@@ -583,7 +597,7 @@ export default function IndustryPage() {
                       />
                       <div
                         className="delete-icon"
-                        onClick={() => removeImage(index,'update')} // Remove the specific image
+                        onClick={() => removeImage(index, 'update')} // Remove the specific image
                         style={{ cursor: 'pointer' }}
                       >
                         <FaTimesCircle style={{ color: 'red', fontSize: '24px' }} />
@@ -655,7 +669,7 @@ export default function IndustryPage() {
               />
             </div>
 
-           {/* 
+            {/* 
             <div className="form-group">
               <label htmlFor="manager">Your Full Name</label>
               <input
@@ -667,7 +681,7 @@ export default function IndustryPage() {
               />
             </div> */}
 
-              {/* <div className="form-group">
+            {/* <div className="form-group">
               <label htmlFor="manager">Your Designation</label>
               <input
                 type="text"

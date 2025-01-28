@@ -11,6 +11,9 @@ import {
   FaUserTie,
   FaBell,
   FaCaretDown,
+  FaBox,
+  FaFolder,
+  FaTag,
 } from "react-icons/fa";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +22,20 @@ import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 import { IoIosNotifications, IoIosPerson } from "react-icons/io";
 import { FaSquareXTwitter } from "react-icons/fa6";
+import { AiOutlineUser } from "react-icons/ai";
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default function Headers() {
   const navigate = useNavigate();
@@ -113,7 +130,282 @@ export default function Headers() {
       },
     ],
   });
-  const [qlink, setqlink] = useState([]);
+  const [qlink, setqlink] = useState([
+  ]);
+
+
+
+
+  
+  function QuickLinksMenu() {
+    const addresses = [
+      {
+        type: "Registered Office",
+        data: "Naigaon, Post- Waluj, Chhatrapati Sambhajinagar-431133 Maharashtra, India +91 240 2567400, info@garwarehitech.com"
+      },
+      {
+        type: "Corporate Office",
+        data: "Garware House, 50-A, Swami Nityanand Marg, Vile Parle (East) Mumbai-400057, Maharashtra +91 22 66988000, info@garwarehitech.com"
+      },
+      {
+        type: "Sales Office",
+        data: "Old No. 37, New No. 55, Ambercrest, 4th Floor, Pantheon Rd.Lane, Egmore, Chennai- 600008"
+      },
+      {
+        data: "Address: 8B, Atma Ram House, 1, Tolstoy Rd, Connaught Place, New Delhi, Delhi- 110001"
+      },
+      {
+        type: "Get In Touch!",
+        Email: "info@garwarehitech.com",
+        ContactNumber: "+91 9689968996"
+      }
+    ];
+    return (
+      <li className="nav-item dropdown">
+        <a
+           className="nav-link dropdown-toggle d-flex align-items-center"
+          href="#"
+          id="quicklinksDropdown"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+       <span className="d-flex flex-column align-items-center">
+            <RiLink className="navbar-icon me-1" />
+            <span>Quicklinks</span>
+          </span>
+        </a>
+        <ul className="dropdown-menu" aria-labelledby="quicklinksDropdown">
+          {addresses.map((address, index) => (
+            <li key={index} className="dropdown-item">
+              {/* Render the type of office if available */}
+              {address.type && <strong>{address.type}</strong>}
+              <p>{address.data}</p>
+              {/* Optionally, display email and contact number for "Get In Touch!" */}
+              {address.Email && <p>Email: {address.Email}</p>}
+              {address.ContactNumber && <p>Contact: {address.ContactNumber}</p>}
+            </li>
+          ))}
+        </ul>
+      </li>
+    );
+  }
+
+
+  const ProductsIcon = () => {
+    const links = [
+      {
+        id: "1",
+        title: "Polyester Films(BOPET)",
+        subMenu: [
+          { title: "Shrink PET Films", link: "https://www.garwarehitechfilms.com/polyester-films/shrink-pet-films" },
+          { title: "Lidding", link: "https://www.garwarehitechfilms.com/polyester-films/lidding-films" },
+          { title: "Liner", link: "https://www.garwarehitechfilms.com/polyester-films/liner" },
+          { title: "Electrical & Electronics", link: "https://www.garwarehitechfilms.com/polyester-films/electrical-and-electronics" },
+          { title: "Metallized Films", link: "https://www.garwarehitechfilms.com/polyester-films/metallized-films" },
+          { title: "Graphics", link: "https://www.garwarehitechfilms.com/polyester-films/graphics-films" },
+          { title: "Thermal", link: "https://www.garwarehitechfilms.com/polyester-films/thermal-films" },
+          { title: "Packaging", link: "https://www.garwarehitechfilms.com/polyester-films/packaging-films" },
+        ],
+      },
+      {
+        id: "2",
+        title: "Paint Protection Films",
+        subMenu: [
+          { title: "Plus PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/plus-ppf" },
+          { title: "Premium PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/premium-ppf" },
+          { title: "Matte PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/matte-ppf" },
+          { title: "Black PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/black-ppf" },
+          { title: "White PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/white-ppf" },
+          { title: "Titanium PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/titanium-ppf" },
+        ],
+      },
+      {
+        id: "3",
+        title: "Architectural Films",
+        subMenu: [
+          { title: "Platina Films", link: "https://www.garwarehitechfilms.com/architectural-films" },
+          { title: "Premium Films", link: "https://www.garwarehitechfilms.com/architectural-films" },
+          { title: "Classic Films", link: "https://www.garwarehitechfilms.com/architectural-films" },
+        ],
+      },
+      {
+        id: "4",
+        title: "Sun Control Films",
+        subMenu: [
+          { title: "Ice Cool Elite SG", link: "https://www.garwarehitechfilms.com/sun-control-films/ice-cool-elite-sg" },
+          { title: "Artic Cool SG", link: "https://www.garwarehitechfilms.com/sun-control-films/artic-cool-sg" },
+          { title: "Ice Cool Shield SG", link: "https://www.garwarehitechfilms.com/sun-control-films/ice-cool-shield-sg" },
+        ],
+      },
+    ];
+  
+    return (
+      <li className="nav-item dropdown">
+        <a
+          className="nav-link dropdown-toggle d-flex align-items-center"
+          href="#"
+          id="productsDropdown"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+                 <span className="d-flex flex-column align-items-center">
+            <FaTag className="navbar-icon me-1" />
+            <span>Our Products</span>
+          </span>
+        
+        </a>
+        <ul className="dropdown-menu" aria-labelledby="productsDropdown">
+          {links.map((link) => (
+            <li key={link.id} className="dropdown-submenu">
+              <a
+                className="dropdown-item dropdown-toggle"
+                href="#"
+                data-bs-toggle="dropdown"
+              >
+                {link.title}
+              </a>
+              <ul className="dropdown-menu">
+                {link.subMenu.map((subItem, index) => (
+                  <li key={index}>
+                    <a
+                      className="dropdown-item"
+                      href={subItem.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {subItem.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </li>
+    );
+  };
+  
+
+
+  const AccountsIcon = () => {
+    const links = [
+      {
+        id: "1",
+        title: "Reimbursement Form Formats:",
+        subMenu: [
+          {
+            title: "Fuel",
+            link: `${ConnectMe.img_URL}/uploads/forms/FUELCLAIMFORMAT.xls`,
+          },
+          {
+            title: "Travelling Expenses",
+            link: `${ConnectMe.img_URL}/uploads/forms/TESformat.xls`,
+          },
+          {
+            title: "Cash Voucher",
+            link: `${ConnectMe.img_URL}/uploads/forms/CASHPAYMENTVOUCHER(003).xlsx`,
+          },
+        ],
+      },
+      {
+        id: "2",
+        title: "Income Tax-Related Forms:",
+        subMenu: [
+          {
+            title:
+              "Income Tax Declaration proposed investment (Proposed tax-saving investment declarations and regime selection at the beginning of the year).",
+            link: `${ConnectMe.img_URL}/uploads/forms/INCOMETAXSAVINGSTATEMENTFORFY2024-25_updated.xls`,
+          },
+          {
+            title:
+              "Submission of actual investment proofs at the end of the year (physical copies required).",
+            link: `${ConnectMe.img_URL}/uploads/forms/form12BAA.docx`,
+          },
+        ],
+      },
+      {
+        id: "3",
+        title: "LTA Forms:",
+        subMenu: [
+          {
+            title: "Formats for Leave Travel Allowance (LTA).",
+            link: `${ConnectMe.img_URL}/uploads/forms/LTAFORM.xls`,
+          },
+        ],
+      },
+      {
+        id: "4",
+        title: "Insurance-Related Forms:",
+        subMenu: [
+          {
+            title: "Group Personal Accident (GPA) Claim Form",
+            link: `${ConnectMe.img_URL}/uploads/forms/PAClaimform.pdf`,
+          },
+          {
+            title: "Group Mediclaim (GMC) Claim Form",
+            link: `${ConnectMe.img_URL}/uploads/forms/GMCStandard-Cashless-Request-Form.pdf`,
+          },
+          {
+            title: "Group Mediclaim (GMC) Manual for understanding the policy",
+            link: `${ConnectMe.img_URL}/uploads/forms/GMCEmployeesUserManual2024-25.pdf`,
+          },
+        ],
+      },
+    ];
+    
+  
+    return (
+      <li className="nav-item dropdown">
+        <a
+          className="nav-link dropdown-toggle d-flex align-items-center"
+          href="#"
+          id="productsDropdown"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+                 <span className="d-flex flex-column align-items-center">
+            <AiOutlineUser className="navbar-icon me-1" />
+            <span>Accounts</span>
+          </span>
+        
+        </a>
+        <ul className="dropdown-menu" aria-labelledby="productsDropdown">
+          {links.map((link) => (
+            <li key={link.id} className="dropdown-submenu">
+              <a
+                className="dropdown-item dropdown-toggle"
+                href="#"
+                data-bs-toggle="dropdown"
+              >
+                {link.title}
+              </a>
+              <ul className="dropdown-menu">
+                {link.subMenu.map((subItem, index) => (
+                  <li key={index}>
+                    <a
+                      className="dropdown-item"
+                      href={subItem.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {subItem.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </li>
+    );
+  };
+  
+
+  
+
 
   const fetchNotificationCount = async () => {
     try {
@@ -297,54 +589,27 @@ export default function Headers() {
                 aria-labelledby="quicklinksDropdown"
               >
                 {serviceTypes && serviceTypes.map((link) => (
-                  <li key={link.id} className="dropdown-submenu">
-                    <a
-                      className="dropdown-item"
-                      href={link.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {link.name}
-
-                    </a>
-                
-                  </li>
+       
+                    <li key={link.id} className="dropdown-submenu">
+                      <a
+                        className="dropdown-item"
+                        href={link.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => {
+                          // Pass link._id while navigating to the new page
+                          navigate("/ITService", { state: { id: link._id } });
+                        }}
+                      >
+                        {link.name}
+                      </a>
+                    </li>
                 ))}
               </ul>
             </li>
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle d-flex align-items-center"
-                href="#"
-                id="quicklinksDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <span className="d-flex flex-column align-items-center">
-                  <RiLink className="navbar-icon me-1" />
-                  <span>Quicklinks </span>
-                </span>
-              </a>
-              <ul
-                className="dropdown-menu"
-                aria-labelledby="quicklinksDropdown"
-              >
-                {/* Dynamically render quick links from state */}
-                {formData.links.map((link) => (
-                  <li key={link.id}>
-                    <a
-                      className="dropdown-item"
-                      href={link.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {link.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </li>
+           <QuickLinksMenu/>
+     <ProductsIcon/>
+          < AccountsIcon/>
           </ul>
 
           <div className="d-flex social-icons align-items-center">
@@ -422,10 +687,10 @@ export default function Headers() {
 
                   />
 
-                  <div className="d-flex flex-column ms-3"  style={{ cursor: "pointer" }}>
+                  <div className="d-flex flex-column ms-3" style={{ cursor: "pointer" }}>
                     <span className="profile-name">{userDetails?.name}</span>
                     <span className="profile-degree">
-                    {userDetails?.jobTitle}
+                      {userDetails?.jobTitle}
                     </span>
                   </div>
                 </li>

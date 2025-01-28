@@ -291,7 +291,7 @@ export default function LinkedInCard() {
                     {/* Post Text Section */}
                     <div className="announcement-disc col-sm-12 mt-2">
                       <div className="card-text fs-6">
-                        <PostCard post={post.text} size={180} />
+                        <PostCard post={post.text} size={280} />
                       </div>
                     </div>
                   </div>

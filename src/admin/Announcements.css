@@ -16,6 +16,8 @@ h2, h3 {
     display: flex;
     flex-direction: row;
     gap: 20px;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    overflow-x: auto; /* Enable horizontal scrolling if needed */
 }
 
 .old-announcements ul li {
@@ -24,6 +26,8 @@ h2, h3 {
     border: 1px solid #ddd;
     margin-bottom: 5px;
     border-radius: 4px;
+    flex-shrink: 0;
+    min-width: 300px; /* Set a minimum width for each card */
 }
 
 .new-announcements form {
@@ -94,6 +98,7 @@ textarea {
 .announcement-item p {
     margin: 0;
     font-size: 14px;
+    text-align: left; /* Ensure consistent alignment */
 }
 
 .announcement-actions {
@@ -137,4 +142,29 @@ textarea {
 .like-btn {
     background-color: #e83e8c;
     color: #fff;
+}
+
+/* Custom horizontal scrollbar */
+.old-announcements ul::-webkit-scrollbar {
+    height: 8px;
+}
+
+.old-announcements ul::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+}
+
+.old-announcements ul::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+/* Button hover effects */
+.save-btn:hover,
+.cancel-btn:hover,
+.update-btn:hover,
+.delete-btn:hover,
+.activate-btn:hover,
+.deactivate-btn:hover,
+.like-btn:hover {
+    opacity: 0.8;
 }

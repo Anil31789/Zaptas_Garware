@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Col, Spinner } from "react-bootstrap";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
+import { useLocation } from "react-router-dom";
 
 const ITServiceRequestForm = () => {
+  const location = useLocation();
+  const { id } = location.state || {}; // Access the passed _id
   const [formData, setFormData] = useState({
 
-    typeOfService: "",
+    typeOfService: id,
     fieldsData: {}, // Dynamically populated fields based on service type
   });
 
