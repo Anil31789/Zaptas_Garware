@@ -17,12 +17,13 @@ import {
 } from "react-icons/fa";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
-import { FiChevronDown } from "react-icons/fi";
+import { FiChevronDown, FiCode, FiMonitor } from "react-icons/fi";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 import { IoIosNotifications, IoIosPerson } from "react-icons/io";
 import { FaSquareXTwitter } from "react-icons/fa6";
-import { AiOutlineUser } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineUser } from "react-icons/ai";
+import { HiOutlineDesktopComputer, HiOutlineServer, HiOutlineShoppingBag, HiOutlineUserGroup } from "react-icons/hi";
 
 
 
@@ -251,7 +252,7 @@ export default function Headers() {
           aria-expanded="false"
         >
                  <span className="d-flex flex-column align-items-center">
-            <FaTag className="navbar-icon me-1" />
+            <HiOutlineShoppingBag className="navbar-icon me-1" />
             <span>Our Products</span>
           </span>
         
@@ -508,7 +509,7 @@ export default function Headers() {
             <li className="nav-item">
               <a className="nav-link" onClick={() => navigate("/")}>
                 <div className="d-flex flex-column align-items-center">
-                  <FaHome className="navbar-icon" />
+                  <AiOutlineHome className="navbar-icon" />
                   <span>Home</span>
                 </div>
               </a>
@@ -525,7 +526,7 @@ export default function Headers() {
                 aria-expanded="false"
               >
                 <span className="d-flex flex-column align-items-center">
-                  <FaUsers className="navbar-icon me-1" />
+                  <HiOutlineUserGroup className="navbar-icon me-1" />
                   <span>HR</span>
                 </span>
               </a>
@@ -580,7 +581,7 @@ export default function Headers() {
                 aria-expanded="false"
               >
                 <span className="d-flex flex-column align-items-center">
-                  <FaLaptopCode className="navbar-icon me-1" />
+                  <FiMonitor className="navbar-icon me-1" />
                   <span>IT</span>
                 </span>
               </a>

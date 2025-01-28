@@ -9,10 +9,24 @@ import ConnectMe from "../../config/connect";
 import showToast from "../../utils/toastHelper";
 import { useNavigate } from "react-router-dom";
 
+const GARWARE_QUOTES = [
+  "Innovation drives the future of industries.",
+  "Garware believes in empowering individuals for growth.",
+  "Sustainability is not an option; it's our responsibility.",
+  "Teamwork is the foundation of our success.",
+  "Leading the way in engineering excellence.",
+  "Our values define our actions and achievements.",
+  "Quality is at the heart of everything we do.",
+  "Think big, act responsibly, and achieve greatness.",
+  "Garware: Bridging tradition with innovation.",
+  "Passion fuels our purpose every day."
+];
+
 export default function CalendarCard() {
   const [date, setDate] = useState(new Date());
   const [events, setEvents] = useState([]);
   const [selectedDateEvents, setSelectedDateEvents] = useState([]);
+  const [randomQuotes, setRandomQuotes] = useState([]);
   const navigate = useNavigate();
 
   const fetchEvents = async (month, year) => {
@@ -35,12 +49,6 @@ export default function CalendarCard() {
     }
   };
 
-  useEffect(() => {
-    const currentMonth = date.getMonth() + 1; // JavaScript months are 0-based
-    const currentYear = date.getFullYear();
-    fetchEvents(currentMonth, currentYear);
-  }, [date]);
-
   const getEventsForDate = (date) => {
     return events.filter(
       (event) => new Date(event.date).toDateString() === date.toDateString()
@@ -51,7 +59,29 @@ export default function CalendarCard() {
     setDate(selectedDate);
     const eventsForDate = getEventsForDate(selectedDate);
     setSelectedDateEvents(eventsForDate);
+
+    if (eventsForDate.length === 0) {
+      displayRandomQuotes();
+    }
   };
+
+  const displayRandomQuotes = () => {
+    const shuffledQuotes = GARWARE_QUOTES.sort(() => 0.5 - Math.random());
+    setRandomQuotes(shuffledQuotes.slice(0, 2)); // Select 2 random quotes
+  };
+
+  useEffect(() => {
+    const currentMonth = date.getMonth() + 1; // JavaScript months are 0-based
+    const currentYear = date.getFullYear();
+    fetchEvents(currentMonth, currentYear);
+
+    // Display events for today or random quotes if no events
+    const todayEvents = getEventsForDate(date);
+    setSelectedDateEvents(todayEvents);
+    if (todayEvents.length === 0) {
+      displayRandomQuotes();
+    }
+  }, [date]);
 
   const tileContent = ({ date, view }) => {
     if (view === "month") {
@@ -107,7 +137,7 @@ export default function CalendarCard() {
           tileContent={tileContent}
           onActiveStartDateChange={handleActiveStartDateChange}
         />
-        {selectedDateEvents.length > 0 && (
+        {selectedDateEvents.length > 0 ? (
           <div className="event-list mt-3">
             <h6>Events on {date.toDateString()}:</h6>
             <ul>
@@ -115,6 +145,17 @@ export default function CalendarCard() {
                 <li key={index}>
                   <strong>{event.title}</strong> -{" "}
                   <span className="text-danger"> {event.type} </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className="quote-list mt-3">
+            <h6>No events for {date.toDateString()}:</h6>
+            <ul>
+              {randomQuotes.map((quote, index) => (
+                <li key={index} className="text-primary">
+                  "{quote}"
                 </li>
               ))}
             </ul>
