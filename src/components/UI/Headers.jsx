@@ -660,6 +660,8 @@ export default function Headers() {
               )}
             </a>
 
+            <span className="horizontal-line"></span>
+
             <div className="user-profile-dropdown dropdown">
               <button
                 className="btn btn-link dropdown-toggle"
