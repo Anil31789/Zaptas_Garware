@@ -24,17 +24,7 @@ import { IoIosNotifications, IoIosPerson } from "react-icons/io";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { AiOutlineHome, AiOutlineUser } from "react-icons/ai";
 import { HiOutlineDesktopComputer, HiOutlineServer, HiOutlineShoppingBag, HiOutlineUserGroup } from "react-icons/hi";
-
-
-
-
-
-
-
-
-
-
-
+import SendEmailPopup from "./sendMailPopup";
 
 
 
@@ -136,61 +126,81 @@ export default function Headers() {
 
 
 
-
-  
-  function QuickLinksMenu() {
+const QuickLinksMenu = () => {
     const addresses = [
       {
-        type: "Registered Office",
-        data: "Naigaon, Post- Waluj, Chhatrapati Sambhajinagar-431133 Maharashtra, India +91 240 2567400, info@garwarehitech.com"
+        id: "1",
+        title: "Locations",
+        submenu: [
+          {
+            type: "Registered Office",
+            address: "Naigaon, Post- Waluj, Chhatrapati Sambhajinagar-431133, Maharashtra, India",
+            contact: "+91 240 2567400",
+            email: "info@garwarehitech.com",
+          },
+          {
+            type: "Corporate Office",
+            address: "Garware House, 50-A, Swami Nityanand Marg, Vile Parle (East), Mumbai-400057, Maharashtra",
+            contact: "+91 22 66988000",
+            email: "info@garwarehitech.com",
+          },
+          {
+            type: "Sales Office",
+            address: "Old No. 37, New No. 55, Ambercrest, 4th Floor, Pantheon Rd.Lane, Egmore, Chennai- 600008",
+          },
+          {
+            type: "Sales Office",
+            address: "8B, Atma Ram House, 1, Tolstoy Rd, Connaught Place, New Delhi, Delhi- 110001",
+          },
+          {
+            type: "Get In Touch!",
+            email: "info@garwarehitech.com",
+            contact: "+91 9689968996",
+          },
+        ],
       },
-      {
-        type: "Corporate Office",
-        data: "Garware House, 50-A, Swami Nityanand Marg, Vile Parle (East) Mumbai-400057, Maharashtra +91 22 66988000, info@garwarehitech.com"
-      },
-      {
-        type: "Sales Office",
-        data: "Old No. 37, New No. 55, Ambercrest, 4th Floor, Pantheon Rd.Lane, Egmore, Chennai- 600008"
-      },
-      {
-        data: "Address: 8B, Atma Ram House, 1, Tolstoy Rd, Connaught Place, New Delhi, Delhi- 110001"
-      },
-      {
-        type: "Get In Touch!",
-        Email: "info@garwarehitech.com",
-        ContactNumber: "+91 9689968996"
-      }
     ];
+
     return (
       <li className="nav-item dropdown">
         <a
-           className="nav-link dropdown-toggle d-flex align-items-center"
+          className="nav-link dropdown-toggle d-flex align-items-center"
           href="#"
           id="quicklinksDropdown"
           role="button"
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-       <span className="d-flex flex-column align-items-center">
+          <span className="d-flex flex-column align-items-center">
             <RiLink className="navbar-icon me-1" />
             <span>Quicklinks</span>
           </span>
         </a>
         <ul className="dropdown-menu" aria-labelledby="quicklinksDropdown">
-          {addresses.map((address, index) => (
-            <li key={index} className="dropdown-item">
-              {/* Render the type of office if available */}
-              {address.type && <strong>{address.type}</strong>}
-              <p>{address.data}</p>
-              {/* Optionally, display email and contact number for "Get In Touch!" */}
-              {address.Email && <p>Email: {address.Email}</p>}
-              {address.ContactNumber && <p>Contact: {address.ContactNumber}</p>}
+          {addresses.map((location) => (
+            <li key={location.id} className="dropdown-submenu">
+              <a className="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                {location.title}
+              </a>
+              <ul className="dropdown-menu">
+                {location.submenu.map((item, index) => (
+                  <li key={index} className="dropdown-item" style={{ borderBottom: '1px solid #f0f0f0', paddingBottom: '10px', marginBottom: '10px' }}>
+                    {item.type && <strong>{item.type}</strong>}
+                    {item.address && <p>{item.address}</p>}
+                    {item.contact && <p>Contact: {item.contact}</p>}
+                    {item.email && <p>Email: <a href={`mailto:${item.email}`}>{item.email}</a></p>}
+                  </li>
+                ))}
+              </ul>
             </li>
           ))}
         </ul>
       </li>
     );
-  }
+    
+  };
+
+
 
 
   const ProductsIcon = () => {
@@ -240,7 +250,7 @@ export default function Headers() {
         ],
       },
     ];
-  
+
     return (
       <li className="nav-item dropdown">
         <a
@@ -251,11 +261,11 @@ export default function Headers() {
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-                 <span className="d-flex flex-column align-items-center">
+          <span className="d-flex flex-column align-items-center">
             <HiOutlineShoppingBag className="navbar-icon me-1" />
             <span>Our Products</span>
           </span>
-        
+
         </a>
         <ul className="dropdown-menu" aria-labelledby="productsDropdown">
           {links.map((link) => (
@@ -287,7 +297,7 @@ export default function Headers() {
       </li>
     );
   };
-  
+
 
 
   const AccountsIcon = () => {
@@ -355,8 +365,8 @@ export default function Headers() {
         ],
       },
     ];
-    
-  
+
+
     return (
       <li className="nav-item dropdown">
         <a
@@ -367,11 +377,11 @@ export default function Headers() {
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-                 <span className="d-flex flex-column align-items-center">
+          <span className="d-flex flex-column align-items-center">
             <AiOutlineUser className="navbar-icon me-1" />
             <span>Accounts</span>
           </span>
-        
+
         </a>
         <ul className="dropdown-menu" aria-labelledby="productsDropdown">
           {links.map((link) => (
@@ -403,9 +413,131 @@ export default function Headers() {
       </li>
     );
   };
+
+  const NotificationIcon = ({ notificationCount, userDetails }) => {
+    const navigate = useNavigate();
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupType, setPopupType] = useState("");
+  
+    const notifications = [];
+  
+    // Create the list of notifications based on the counts
+    if (notificationCount?.comment?.totalUnseenBDayComments > 0) {
+      notifications.push({
+        message: `You have ${notificationCount.comment.totalUnseenBDayComments} new birthday comment(s).`,
+        type: "🎂 Birthday",
+        popupType: "BDaycomments",
+      });
+    }
+    if (notificationCount?.comment?.totalUnseenWorkAnnComments > 0) {
+      notifications.push({
+        message: `You have ${notificationCount.comment.totalUnseenWorkAnnComments} new work anniversary comment(s).`,
+        type: "🏆 Work Anniversary",
+        popupType: "WorkAnnComments",
+      });
+    }
+    if (notificationCount?.comment?.totalUnseenJoinComments > 0) {
+      notifications.push({
+        message: `You have ${notificationCount.comment.totalUnseenJoinComments} new join comment(s).`,
+        type: "👋 New Joiner",
+        popupType: "joinComments",
+      });
+    }
+    if (notificationCount?.Itcount > 0) {
+      notifications.push({
+        message: `You have ${notificationCount.Itcount} pending IT request(s).`,
+        type: "💻 IT Request",
+        popupType: null, // No popup for IT request
+      });
+    }
+  
+    // Calculate total notifications
+    const totalNotifications =
+      (notificationCount?.comment?.totalUnseenBDayComments || 0) +
+      (notificationCount?.comment?.totalUnseenWorkAnnComments || 0) +
+      (notificationCount?.comment?.totalUnseenJoinComments || 0) +
+      (notificationCount?.Itcount || 0);
+  
+    // Handle notification click (open popup only if it has a popupType)
+    const handleNotificationClick = (notification) => {
+      if (notification.popupType) {
+        setPopupType(notification.popupType);
+        setShowPopup(true); // Only show popup for certain notifications
+      } else {
+        navigate("/service"); // Navigate if no popup is associated
+      }
+    };
+  
+    return (
+      <div className="position-relative d-inline-block cursor-pointer">
+        {/* Notification Icon */}
+        <a
+          onClick={() => setShowDropdown(!showDropdown)}
+          className="text-dark position-relative cursor-pointer"
+        >
+          <IoIosNotifications size={25} className="mx-2 cursor-pointer" />
+          {totalNotifications > 0 && (
+            <span className="badge bg-danger rounded-circle position-absolute top-0 start-100 translate-middle">
+              {totalNotifications}
+            </span>
+          )}
+        </a>
+    
+        {/* Dropdown Notifications */}
+        {showDropdown && (
+          <div
+            className="dropdown-menu show p-2 position-absolute end-0 mt-2 shadow-lg rounded cursor-pointer"
+            style={{
+              minWidth: "250px",
+              zIndex: 1050,
+              backgroundColor: "#fff",
+              border: "1px solid #ddd",
+            }}
+          >
+            <h6 className="dropdown-header text-primary fw-bold cursor-pointer">
+              🔔 Notifications
+            </h6>
+            {notifications.length > 0 ? (
+              notifications.map((note, index) => (
+                <button
+                key={index}
+                className="dropdown-item d-flex align-items-start "
+                onClick={() => handleNotificationClick(note)} // Handle click to open the popup
+              >
+                <span className="me-2">{note.type}</span>
+                <div className="flex-grow-1">
+                  <p className="mb-0 small text-dark ">{note.message}</p> {/* Add cursor-pointer here */}
+                </div>
+              </button>
+              
+              
+              ))
+            ) : (
+              <p className="text-center text-muted small m-2">
+                No new notifications
+              </p>
+            )}
+          </div>
+        )}
+    
+        {/* Send Email Popup */}
+        {showPopup && (
+          <SendEmailPopup
+            show={showPopup} // Popup will only show if showPopup is true
+            handleClose={() => setShowPopup(false)} // Close the popup when triggered
+            recipient={userDetails}
+            personalName={userDetails?.name}
+            type={popupType}
+          />
+        )}
+      </div>
+    );
+    
+  };
   
 
-  
+
 
 
   const fetchNotificationCount = async () => {
@@ -487,7 +619,9 @@ export default function Headers() {
   return (
     <header className="navbar navbar-expand-lg bg-main">
       <div className="container-fluid">
-        <a className="navbar-brand" href="/">
+        <a className="navbar-brand" onClick={(() => {
+          navigate('/')
+        })}>
           <img src="./logo.png" alt="Logo" />
         </a>
 
@@ -590,27 +724,29 @@ export default function Headers() {
                 aria-labelledby="quicklinksDropdown"
               >
                 {serviceTypes && serviceTypes.map((link) => (
-       
-                    <li key={link.id} className="dropdown-submenu">
-                      <a
-                        className="dropdown-item"
-                        href={link.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => {
-                          // Pass link._id while navigating to the new page
-                          navigate("/ITService", { state: { id: link._id } });
-                        }}
-                      >
-                        {link.name}
-                      </a>
-                    </li>
+
+                  <li key={link.id} className="dropdown-submenu">
+                    <a
+                      className="dropdown-item"
+                      href={link.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => {
+                        // Pass link._id while navigating to the new page
+                        navigate("/ITService", { state: { id: link._id } });
+                      }}
+                    >
+                      {link.name}
+                    </a>
+                  </li>
                 ))}
               </ul>
             </li>
-           <QuickLinksMenu/>
-     <ProductsIcon/>
-          < AccountsIcon/>
+            < AccountsIcon />
+            <ProductsIcon />
+            <QuickLinksMenu />
+         
+           
           </ul>
 
           <div className="d-flex social-icons align-items-center">
@@ -646,19 +782,7 @@ export default function Headers() {
             >
               <FaLinkedinIn size={20} />
             </a> */}
-            <a
-              onClick={() => {
-                navigate("/service");
-              }}
-              className="mx-2"
-            >
-              <IoIosNotifications size={20} />
-              {notificationCount?.count > 0 && (
-                <span className="notification-count">
-                  {notificationCount?.count}
-                </span>
-              )}
-            </a>
+            <NotificationIcon notificationCount={notificationCount} userDetails={userDetails} />
 
             <div className="user-profile-dropdown dropdown">
               <button

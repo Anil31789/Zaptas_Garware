@@ -19,10 +19,10 @@ const Login = () => {
 
 
 
-  // useEffect(() => {
-  //   // AutoLogin()
+  useEffect(() => {
+    // AutoLogin()
 
-  // }, [])
+  }, [])
 
 
   const AutoLogin = async () => {

@@ -14,24 +14,28 @@ export default function GalleryCard() {
     Awards: [],
   });
 
+  console.log(data,'ol')
+
   useEffect(() => {
     fetchData("Announcements");
-    fetchData("CsrType");
+    fetchData("CSR");
     fetchData("Awards");
   }, []);
 
   const fetchData = async (type) => {
     try {
-      const url = `${ConnectMe.BASE_URL}/photosVideos/${type}?limit=3&page=1`; // Fetch multiple items for carousel
+      const url = `${ConnectMe.BASE_URL}/photosVideos/${type}?limit=3&page=1`;
       const token = getTokenFromLocalStorage();
       const headers = { Authorization: `Bearer ${token}` };
-
+  
       const response = await apiCall("GET", url, headers);
       if (response.success) {
-        setData((prevData) => ({
-          ...prevData,
-          [type]: response.data?.data || [],
-        }));
+    
+          setData((prevData) => ({
+            ...prevData,
+            [type]: response.data?.data || [],
+          }));
+        
       } else {
         showToast(`Failed to load ${type}`, "error");
       }
@@ -40,53 +44,106 @@ export default function GalleryCard() {
       showToast(`Error fetching ${type}`, "error");
     }
   };
+  
 
   const handleTitleClick = (item) => {
-    navigate(`/gallery/${item.id}`, { state: item });
+    navigate(`/photos`, { state: item });
   };
-
   const renderCarousel = (items, section) => {
     if (!items || items.length === 0) return <p>No {section} available</p>;
-
+  
     return (
-      <div
-        id={`${section}-carousel`}
-        className="carousel slide"
-        data-bs-ride="carousel"
-      >
+      <div id={`${section}-carousel`} className="carousel slide" data-bs-ride="carousel">
         <div className="carousel-inner">
-          {items.map((item, index) => (
-            <div
-              key={item._id}
-              className={`carousel-item ${index === 0 ? "active" : ""}`}
-            >
-              <img
-                src={`${ConnectMe.img_URL}${item.imagePath}`}
-                className="d-block w-100 rounded"
-                alt={item.title}
-                style={{ maxHeight: "200px", objectFit: "cover" }}
-              />
-              <div className="carousel-caption d-none d-md-block">
-                <button
-                  className="btn btn-link text-white p-0"
-                  onClick={() => handleTitleClick(item)}
-                >
-                  {item.title}
-                </button>
-              </div>
-            </div>
-          ))}
+          {items.map((item, index) => {
+            // Check if there are images
+            if (!item.images || item.images.length === 0) {
+              return (
+                <div key={item._id} className={`carousel-item ${index === 0 ? "active" : ""}`}>
+                  <div className="card border-0 shadow-lg overflow-hidden h-100">
+                    <div className="card-body">
+                      <h5
+                        className="card-title text-center mb-3 text-primary"
+                        onClick={() => handleTitleClick(item?.title)}
+                        style={{ cursor: "pointer" }} // Ensure pointer cursor
+                      >
+                        {item.title}
+                      </h5>
+                      <p className="card-text text-center text-muted">
+                        {item.AnnouncementDate ? (
+                          <span className="d-block">
+                            <strong>Announcement Date:</strong> {new Date(item.AnnouncementDate).toLocaleDateString()}
+                          </span>
+                        ) : item.updatedAt ? (
+                          <span className="d-block">
+                            <strong>Updated On:</strong> {new Date(item.updatedAt).toLocaleDateString()}
+                          </span>
+                        ) : item.createdAt ? (
+                          <span className="d-block">
+                            <strong>Created On:</strong> {new Date(item.createdAt).toLocaleDateString()}
+                          </span>
+                        ) : null}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+  
+            // Loop through images and create carousel items for each
+            return item?.images?.map((image, imgIndex) => {
+              const isActive = index === 0 && imgIndex === 0 ? "active" : "";
+              const imageUrl = `${ConnectMe.img_URL}${image.imagePath}`; // Use imagePath from the image object
+  
+              return (
+                <div key={`${item._id}-${imgIndex}`} className={`carousel-item ${isActive}`}>
+                  <div className="card border-0 shadow-lg overflow-hidden h-100">
+                    <img
+                      src={imageUrl}
+                      className="d-block w-100 rounded-3"
+                      alt={item.title}
+                      style={{ maxHeight: "400px", objectFit: "cover", cursor: "pointer" }} // Ensure pointer cursor
+                      onClick={() => handleTitleClick(item)} // Ensure onClick works for images as well
+                    />
+                    <div className="card-body">
+                      <h5
+                        className="card-title text-center mb-3 text-primary"
+                        onClick={() => handleTitleClick(item?.title)}
+                        style={{ cursor: "pointer" }} // Ensure pointer cursor
+                      >
+                        {item.title}
+                      </h5>
+                      <p className="card-text text-center text-muted">
+                        {item.AnnouncementDate ? (
+                          <span className="d-block">
+                            <strong>Announcement Date:</strong> {new Date(item.AnnouncementDate).toLocaleDateString()}
+                          </span>
+                        ) : item.updatedAt ? (
+                          <span className="d-block">
+                            <strong>Updated On:</strong> {new Date(item.updatedAt).toLocaleDateString()}
+                          </span>
+                        ) : item.createdAt ? (
+                          <span className="d-block">
+                            <strong>Created On:</strong> {new Date(item.createdAt).toLocaleDateString()}
+                          </span>
+                        ) : null}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            });
+          })}
         </div>
+  
+        {/* Carousel Controls */}
         <button
           className="carousel-control-prev"
           type="button"
           data-bs-target={`#${section}-carousel`}
           data-bs-slide="prev"
         >
-          <span
-            className="carousel-control-prev-icon"
-            aria-hidden="true"
-          ></span>
+          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Previous</span>
         </button>
         <button
@@ -95,16 +152,16 @@ export default function GalleryCard() {
           data-bs-target={`#${section}-carousel`}
           data-bs-slide="next"
         >
-          <span
-            className="carousel-control-next-icon"
-            aria-hidden="true"
-          ></span>
+          <span className="carousel-control-next-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Next</span>
         </button>
       </div>
     );
   };
-
+  
+  
+  
+  
   return (
     <div className="card mb-3">
       <div className="card-header d-flex justify-content-between align-items-center">
@@ -112,29 +169,39 @@ export default function GalleryCard() {
           <FaCameraRetro className="me-2" />
           <h5 className="mb-0">Photo/Video Gallery</h5>
         </div>
-        <a href="/photos" Name="text-decoration-none">
+        <a className="text-decoration-none" onClick={(()=>{
+          navigate("/photos");
+        })}>
           View All <HiArrowCircleRight />
         </a>
       </div>
       <div className="card-body card-scroll">
-        <div className="row d-flex flex-column justify-content-center align-content-center">
-          {/* Carousel for Announcements */}
-          <div className="col text-center mb-3 border-bottom  h-bg">
-            <h5>Announcements</h5>
-            {renderCarousel(data.Announcements, "Announcements")}
-          </div>
-          {/* Carousel for CSR */}
-          <div className="col text-center mb-3 border-bottom h-bg">
-            <h5>CSR</h5>
-            {renderCarousel(data.CsrType, "CSR")}
-          </div>
-          {/* Carousel for Awards */}
-          <div className="col text-center  h-bg">
-            <h5>Awards</h5>
-            {renderCarousel(data.Awards, "Awards")}
-          </div>
-        </div>
+  <div className="row d-flex flex-column justify-content-center align-content-center">
+    {/* Announcements Section */}
+    {data.Announcements && data.Announcements.length > 0 && (
+      <div className="col text-center mb-3 border-bottom h-bg" style={{ height: '400px' }}>
+        {renderCarousel(data.Announcements, "Announcements")}
       </div>
+    )}
+
+    {/* CSR Section */}
+    {data.CSR && data.CSR.length > 0 && (
+      <div className="col text-center mb-3 border-bottom h-bg" style={{ height: '400px' }}>
+        {renderCarousel(data.CSR, "CSR")}
+      </div>
+    )}
+
+    {/* Awards Section */}
+    {data.Awards && data.Awards.length > 0 && (
+      <div className="col text-center h-bg" style={{ height: '400px' }}>
+        {renderCarousel(data.Awards, "Awards")}
+      </div>
+    )}
+  </div>
+</div>
+
     </div>
   );
+  
+  
 }

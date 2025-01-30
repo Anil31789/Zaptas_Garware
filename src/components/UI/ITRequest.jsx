@@ -11,21 +11,19 @@ export default function ITRequest() {
   return (
     <div
       className="card mb-3 "
-      onClick={() => {
-        navigate("/ITService");
-      }}
+      // onClick={() => {
+      //   navigate("/ITService");
+      // }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{ cursor: "pointer", borderRadius: "10px" }}
     >
       <div className="card-header d-flex justify-content-between align-items-center ">
         <div className="d-flex align-items-center">
-          <FaUsersGear className="me-2" size={24} />
+          {/* <FaUsersGear className="me-2" size={24} /> */}
           {/* <h5 className="mb-0">IT Request</h5> */}
         </div>
-        <a href="#" className="text-decoration-none">
-          View All <HiArrowCircleRight />
-        </a>
+      
       </div>
       <div
         className={`card-body d-flex justify-content-center align-items-center ${

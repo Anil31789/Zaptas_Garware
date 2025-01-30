@@ -4,7 +4,7 @@ import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import PostCard from "./postDisplay";
 
-const SendEmailPopup = ({ show, handleClose, personalName, recipient }) => {
+const SendEmailPopup = ({ show, handleClose, personalName, recipient,type }) => {
 
 
     const [comments, setComments] = useState([]);
@@ -47,7 +47,7 @@ const SendEmailPopup = ({ show, handleClose, personalName, recipient }) => {
         setError("");
 
         try {
-            const url = `${ConnectMe.BASE_URL}/comment/bday/comment?employeeCode=${recipient?.EmployeeCode}&page=${pageNumber}&limit=${limit}`;
+            const url = `${ConnectMe.BASE_URL}/comment/bday/comment?employeeCode=${recipient?.EmployeeCode || recipient?.employeeCode}&page=${pageNumber}&limit=${limit}&type=${type}`;
             const token = getTokenFromLocalStorage();
             const headers = {
                 Authorization: `Bearer ${token}`,
@@ -74,14 +74,14 @@ const SendEmailPopup = ({ show, handleClose, personalName, recipient }) => {
         setLoading(true);
         setError("");
         try {
-            const url = `${ConnectMe.BASE_URL}/comment/bday/comment`;
+            const url = `${ConnectMe.BASE_URL}/comment/bday/comment?type=${type}`;
             const token = getTokenFromLocalStorage();
             const headers = {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             };
             const data = {
-                employeeCode: recipient?.EmployeeCode,
+                employeeCode: recipient?.EmployeeCode || recipient?.employeeCode,
                 comment: newComment,
             };
 
