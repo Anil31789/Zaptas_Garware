@@ -6,6 +6,17 @@
 .banners-section {
     margin-bottom: 30px;
 }
+.cropper-header {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .fixed-height-info {
+    font-size: 14px;
+    color: #666;
+    font-weight: bold;
+  }
+  
 
 .banners-row {
 

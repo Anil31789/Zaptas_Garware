@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import "./UploadBanners.css";
@@ -8,15 +8,15 @@ import showToast from "../utils/toastHelper";
 
 export default function UploadBanners() {
   const [banners, setBanners] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(null);
-  const [isBannerUpdated, setIsBannerUpdated] = useState(''); // Track banner update
   const [cropper, setCropper] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null); // Store the currently selected file for cropping
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [croppedImage, setCroppedImage] = useState(null);
+  const [cropDimensions, setCropDimensions] = useState({ width: 0, height: 0 });
   const fileInputRef = React.createRef();
 
   useEffect(() => {
     fetchBanners();
-  }, [isBannerUpdated]); // Only re-fetch when isBannerUpdated changes
+  }, []);
 
   const fetchBanners = async () => {
     try {
@@ -37,7 +37,7 @@ export default function UploadBanners() {
       }
     } catch (error) {
       setBanners([]);
-      console.error("Error fetching banners:", error.message);
+      showToast("Error fetching banners", "error");
     }
   };
 
@@ -53,26 +53,36 @@ export default function UploadBanners() {
       const response = await apiCall("DELETE", url, headers);
 
       if (response.success) {
-        showToast("Deleted", "success");
-        fetchBanners();
+        showToast("Banner deleted successfully", "success");
+        await fetchBanners();  // ✅ Await fetchBanners to ensure the state updates properly
       } else {
         showToast("Failed to delete banner", "error");
       }
     } catch (error) {
-      console.error("Error deleting banner:", error.message);
+      showToast("Error deleting banner", "error");
     }
   };
 
-  const uploadBanner = async () => {
+  const saveCroppedImage = () => {
     if (!cropper) {
-      showToast("Please crop the image before uploading", "error");
+      showToast("Please crop the image before saving", "error");
+      return;
+    }
+    cropper.getCroppedCanvas().toBlob((blob) => {
+      setCroppedImage(blob);
+      showToast("Image cropped successfully!", "success");
+    });
+  };
+
+  const uploadBanner = async () => {
+    if (!croppedImage) {
+      showToast("Please save the cropped image before uploading", "error");
       return;
     }
 
     try {
-      const croppedImageBlob = await cropper.getCroppedCanvas().toBlob();
       const formData = new FormData();
-      formData.append("files", croppedImageBlob, "banner.png");
+      formData.append("files", croppedImage, "banner.png");
       formData.append("name", "Banners");
 
       const url = `${ConnectMe.BASE_URL}/file/upload`;
@@ -83,28 +93,23 @@ export default function UploadBanners() {
 
       if (response.success) {
         showToast("Banner uploaded successfully!", "success");
-        setSelectedFile(null); // Clear the selected file
-        setIsBannerUpdated(!isBannerUpdated); // Trigger re-fetch
+        setSelectedFile(null);
+        setCroppedImage(null);
         fileInputRef.current.value = null;
+        fetchBanners();
       } else {
         showToast("Failed to upload banner", "error");
       }
     } catch (error) {
-      console.error("Error uploading banner:", error.message);
+      showToast("Error uploading banner", "error");
     }
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const fileURL = URL.createObjectURL(file);
-      setSelectedFile(fileURL); // Pass the file to the cropper
+  const handleCropperChange = () => {
+    if (cropper) {
+      const data = cropper.getData();
+      setCropDimensions({ width: data.width, height: data.height });
     }
-  };
-
-  const handleCancel = () => {
-    setSelectedFile(null);
-    fileInputRef.current.value = null;
   };
 
   return (
@@ -113,12 +118,12 @@ export default function UploadBanners() {
         <h4>Current Banners</h4>
         <div className="row">
           {banners.length > 0 ? (
-            banners.map((banner, index) => (
+            banners.map((banner) => (
               <div key={banner._id} className="col-6 col-sm-3 mb-4">
                 <div className="banner-card">
                   <img
                     src={`${ConnectMe.img_URL}${banner.imagePath}`}
-                    alt={`Banner ${index + 1}`}
+                    alt="Banner"
                     className="banner-image"
                   />
                 </div>
@@ -144,7 +149,20 @@ export default function UploadBanners() {
         <input
           type="file"
           className="form-control upload-input mb-3"
-          onChange={handleFileChange}
+          accept=".png,.jpg,.jpeg"
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (file) {
+              const allowedTypes = ["image/png", "image/jpg", "image/jpeg"];
+              if (!allowedTypes.includes(file.type)) {
+                showToast("Only PNG, JPG, or JPEG files are allowed", "error");
+                fileInputRef.current.value = null;
+                return;
+              }
+              setSelectedFile(URL.createObjectURL(file));
+              setCroppedImage(null);
+            }
+          }}
           ref={fileInputRef}
         />
 
@@ -152,24 +170,38 @@ export default function UploadBanners() {
           <div className="cropper-container">
             <Cropper
               src={selectedFile}
-              style={{ height: 400, width: "100%" }}
-              initialAspectRatio={16 / 9}
-              aspectRatio={16 / 9}
-              guides={false}
-              cropBoxResizable={true}
-              viewMode={1}
-              onInitialized={(instance) => setCropper(instance)}
+              style={{ height: "500px", width: "auto" }}
+              aspectRatio={16 / 9}   // Maintain the aspect ratio
+              viewMode={1}           // Keeps the crop box fixed and doesn't allow it to be moved
+              minHeight={500}        // Minimum height fixed to 500px
+       
+              onInitialized={setCropper}
+              onCrop={handleCropperChange} // Listen for crop changes
             />
+
+            <div className="crop-dimensions">
+              <p>Width: {cropDimensions.width}px</p>
+              <p>Height: {cropDimensions.height}px</p>
+            </div>
+
             <div className="d-flex justify-content-between mt-3">
+              <button className="btn btn-primary btn-sm" onClick={saveCroppedImage}>
+                Save
+              </button>
               <button
                 className="btn btn-success btn-sm"
                 onClick={uploadBanner}
+                disabled={!croppedImage}
               >
                 Upload
               </button>
               <button
                 className="btn btn-danger btn-sm"
-                onClick={handleCancel}
+                onClick={() => {
+                  setSelectedFile(null);
+                  setCroppedImage(null);
+                  fileInputRef.current.value = null;
+                }}
               >
                 Cancel
               </button>

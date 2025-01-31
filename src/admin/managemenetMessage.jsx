@@ -519,7 +519,8 @@ console.log(selectedImages,'abcdef')
 
                 {/* File input for selecting new images */}
                 <input
-                  type="file"
+                  type="file"  
+ accept=".png,.jpg,.jpeg"
                   id="profile-image"
                   onChange={handleChange}
                   multiple={false} // Allow multiple file uploads
