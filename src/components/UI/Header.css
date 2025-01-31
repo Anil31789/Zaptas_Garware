@@ -15,6 +15,9 @@
 .navbar-icon {
     font-size: 1.5rem;
 }
+.companylogo{
+    width: 150px;
+}
 
 ul.navbar-nav li.nav-item {
     margin: 0 12px;

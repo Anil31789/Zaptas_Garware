@@ -622,7 +622,7 @@ const QuickLinksMenu = () => {
         <a className="navbar-brand" onClick={(() => {
           navigate('/')
         })}>
-          <img src="./logo.png" alt="Logo" />
+          <img className="companylogo" src="./public/logo.png" alt="Logo" />
         </a>
 
         <button
