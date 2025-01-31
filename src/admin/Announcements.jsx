@@ -27,37 +27,48 @@ export default function CsrPage() {
 
 
 
-  const handleChange = (e) => {
-    const { id, value, type } = e.target;
+const handleChange = (e) => {
+  const { id, value, type } = e.target;
 
-    // If the input is a file input, handle it separately
-    if (type === "file") {
-      const files = Array.from(e.target.files); // Convert FileList to an array
-      const fileUrls = files.map((file) => URL.createObjectURL(file)); // Generate preview URLs
+  // If the input is a file input, handle it separately
+  if (type === "file") {
+    const files = Array.from(e.target.files); // Convert FileList to an array
 
+    // Define the allowed file types
+    const allowedTypes = ["image/png", "image/jpg", "image/jpeg"];
+    
+    // Filter out files that don't match the allowed types
+    const invalidFiles = files.filter(file => !allowedTypes.includes(file.type));
 
-      setFormData((prev) => ({
-        ...prev,
-        images: [...(prev.images || []), ...files], // Append new files to existing images
-      }));
-
-
-      setSelectedImages((prev) => [...prev, ...fileUrls]); // Append new URLs to existing selected images
-    } else {
-      // Handle regular text inputs
-      setFormData({
-        ...formData,
-        [id]: value, // Update value for regular text inputs
-      });
+    if (invalidFiles.length > 0) {
+      // Show toast if there are invalid files
+      showToast("Only PNG, JPG, or JPEG files are allowed", "error");
+      return; // Exit the function early to prevent invalid files from being processed
     }
 
-  };
+    // Generate preview URLs for valid files
+    const fileUrls = files.map((file) => URL.createObjectURL(file));
+
+    setFormData((prev) => ({
+      ...prev,
+      images: [...(prev.images || []), ...files], // Append new files to existing images
+    }));
+
+    setSelectedImages((prev) => [...prev, ...fileUrls]); // Append new URLs to existing selected images
+  } else {
+    // Handle regular text inputs
+    setFormData({
+      ...formData,
+      [id]: value, // Update value for regular text inputs
+    });
+  }
+};
 
 
-  const removeImage = (index,name=null) => {
+  const removeImage = (index, name = null) => {
 
 
-    if(name=='update'){
+    if (name == 'update') {
       setSelectedAnnouncement((prev) => ({
         ...prev,
         images: prev.images.filter((_, i) => i !== index), // Remove the specific file from form data
@@ -65,7 +76,7 @@ export default function CsrPage() {
       }));
 
     }
-    else{
+    else {
       setSelectedImages((prev) => prev.filter((_, i) => i !== index)); // Remove the specific image URL
       setFormData((prev) => ({
         ...prev,
@@ -315,7 +326,7 @@ export default function CsrPage() {
 
   const handleUpdateSubmit = async (e) => {
     e.preventDefault()
-console.log(selectedImages,'abcdef')
+    console.log(selectedImages, 'abcdef')
     try {
       let imageId = null;
 
@@ -400,52 +411,52 @@ console.log(selectedImages,'abcdef')
 
 
   return (
-     <div className="admin-announcements">
-    <div className="container mt-4">
-  <div className="border p-3">
+    <div className="admin-announcements">
+      <div className="container mt-4">
+        <div className="border p-3">
           <h4>Current Announcement</h4>
-      {error && <div className="alert alert-danger">{error}</div>}
-    <div
-      className="d-flex"
-      style={{
-        overflowX: "auto",  // Ensures horizontal scrolling
-        maxWidth: "100%",    // Ensures the parent container doesn't exceed available width
-        flexWrap: "nowrap",  // Prevents wrapping of cards, keeping them in a single row
-      }}
-      onScroll={handleScroll}
-    >
-      {existingAnnouncements.map((announcement) => (
-        <div
-          className="card me-3"
-          key={announcement._id}
-          style={{
-            minWidth: "300px", // Set width of each card
-            flexShrink: 0,     // Prevents shrinking of cards
-          }}
-        >
-          <div className="card-body">
-            <h5 className="card-title">{announcement.title}</h5>
-            <div className="mt-2">
-              <button
-                className="btn btn-primary btn-sm me-2"
-                onClick={() => handleUpdateClick(announcement)}
+          {error && <div className="alert alert-danger">{error}</div>}
+          <div
+            className="d-flex"
+            style={{
+              overflowX: "auto",  // Ensures horizontal scrolling
+              maxWidth: "100%",    // Ensures the parent container doesn't exceed available width
+              flexWrap: "nowrap",  // Prevents wrapping of cards, keeping them in a single row
+            }}
+            onScroll={handleScroll}
+          >
+            {existingAnnouncements.map((announcement) => (
+              <div
+                className="card me-3"
+                key={announcement._id}
+                style={{
+                  minWidth: "300px", // Set width of each card
+                  flexShrink: 0,     // Prevents shrinking of cards
+                }}
               >
-                Update
-              </button>
-              <button
-                className="btn btn-danger btn-sm"
-                onClick={() => deleteAnnouncemnt(announcement)}
-              >
-                Delete
-              </button>
-            </div>
+                <div className="card-body">
+                  <h5 className="card-title">{announcement.title}</h5>
+                  <div className="mt-2">
+                    <button
+                      className="btn btn-primary btn-sm me-2"
+                      onClick={() => handleUpdateClick(announcement)}
+                    >
+                      Update
+                    </button>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => deleteAnnouncemnt(announcement)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+            {loading && <p className="text-muted ms-3">Loading more...</p>}
+            {!hasMore && <p className="text-muted ms-3">No more announcements.</p>}
           </div>
         </div>
-   ))}
-       {loading && <p className="text-muted ms-3">Loading more...</p>}
-      {!hasMore && <p className="text-muted ms-3">No more announcements.</p>}
-    </div>
-  </div>
         {selectedAnnouncement && (
           <div className="mt-4">
             <div
@@ -472,7 +483,7 @@ console.log(selectedImages,'abcdef')
                   onChange={handleInputChange}
                 />
               </div>
-                   {/* <div className="mb-3">
+              {/* <div className="mb-3">
                 <label htmlFor="manager" className="form-label">Your Full Name</label>
                 <input
                   type="text"
@@ -591,7 +602,7 @@ console.log(selectedImages,'abcdef')
                       />
                       <div
                         className="delete-icon"
-                        onClick={() => removeImage(index,'update')} // Remove the specific image
+                        onClick={() => removeImage(index, 'update')} // Remove the specific image
                         style={{ cursor: 'pointer' }}
                       >
                         <FaTimesCircle style={{ color: 'red', fontSize: '24px' }} />
@@ -603,6 +614,7 @@ console.log(selectedImages,'abcdef')
                 {/* File input for selecting new images */}
                 <input
                   type="file"
+                  accept=".png,.jpg,.jpeg"
                   id="profile-image"
                   onChange={handleChange}
                   multiple // Allow multiple file uploads
@@ -663,7 +675,7 @@ console.log(selectedImages,'abcdef')
               />
             </div>
 
-           {/* 
+            {/* 
             <div className="form-group">
               <label htmlFor="manager">Your Full Name</label>
               <input
@@ -675,7 +687,7 @@ console.log(selectedImages,'abcdef')
               />
             </div> */}
 
-              {/* <div className="form-group">
+            {/* <div className="form-group">
               <label htmlFor="manager">Your Designation</label>
               <input
                 type="text"

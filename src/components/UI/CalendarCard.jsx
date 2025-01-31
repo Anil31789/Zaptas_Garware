@@ -95,6 +95,9 @@ export default function CalendarCard() {
               <span
                 key={index}
                 className={`event-dot ${event.type.toLowerCase()}`}
+                style={{
+                  backgroundColor: getDotColor(event.type), // Set background color of dot
+                }}
               />
             ))}
             {eventsForDate.length > 2 && (
@@ -132,6 +135,18 @@ export default function CalendarCard() {
       "Paid-Holiday": <IoGiftOutline className="event-icon" />, // Holiday icon for Paid-Holiday
     };
     return iconClass[eventType] || <FaRegClipboard className="event-icon" />;
+  };
+
+  // Function to return color based on event type
+  const getDotColor = (eventType) => {
+    const colorMap = {
+      CSR: "#007bff", // Blue for CSR
+      Award: "#28a745", // Green for Award
+      Announcement: "#ffc107", // Yellow for Announcement
+      "Paid-Holiday": "#17a2b8", // Info color for Paid-Holiday
+    };
+
+    return colorMap[eventType] || "#6c757d"; // Default color if no match
   };
 
   return (
@@ -173,7 +188,6 @@ export default function CalendarCard() {
                 </li>
               ))}
             </ul>
-
           </div>
         ) : (
           <div className="quote-list mt-3">

@@ -29,31 +29,42 @@ export default function CalenderHoliday() {
 
 
 
-  const handleChange = (e) => {
-    const { id, value, type } = e.target;
+const handleChange = (e) => {
+  const { id, value, type } = e.target;
 
-    // If the input is a file input, handle it separately
-    if (type === "file") {
-      const files = Array.from(e.target.files); // Convert FileList to an array
-      const fileUrls = files.map((file) => URL.createObjectURL(file)); // Generate preview URLs
+  // If the input is a file input, handle it separately
+  if (type === "file") {
+    const files = Array.from(e.target.files); // Convert FileList to an array
 
+    // Define the allowed file types
+    const allowedTypes = ["image/png", "image/jpg", "image/jpeg"];
+    
+    // Filter out files that don't match the allowed types
+    const invalidFiles = files.filter(file => !allowedTypes.includes(file.type));
 
-      setFormData((prev) => ({
-        ...prev,
-        images: [...(prev.images || []), ...files], // Append new files to existing images
-      }));
-
-
-      setSelectedImages((prev) => [...prev, ...fileUrls]); // Append new URLs to existing selected images
-    } else {
-      // Handle regular text inputs
-      setFormData({
-        ...formData,
-        [id]: value, // Update value for regular text inputs
-      });
+    if (invalidFiles.length > 0) {
+      // Show toast if there are invalid files
+      showToast("Only PNG, JPG, or JPEG files are allowed", "error");
+      return; // Exit the function early to prevent invalid files from being processed
     }
 
-  };
+    // Generate preview URLs for valid files
+    const fileUrls = files.map((file) => URL.createObjectURL(file));
+
+    setFormData((prev) => ({
+      ...prev,
+      images: [...(prev.images || []), ...files], // Append new files to existing images
+    }));
+
+    setSelectedImages((prev) => [...prev, ...fileUrls]); // Append new URLs to existing selected images
+  } else {
+    // Handle regular text inputs
+    setFormData({
+      ...formData,
+      [id]: value, // Update value for regular text inputs
+    });
+  }
+};
 
 
 
