@@ -173,7 +173,7 @@ const QuickLinksMenu = () => {
         >
           <span className="d-flex flex-column align-items-center">
             <RiLink className="navbar-icon me-1" />
-            <span>Quicklinks</span>
+            <span className="header1">Quicklinks</span>
           </span>
         </a>
         <ul className="dropdown-menu" aria-labelledby="quicklinksDropdown">
@@ -263,7 +263,7 @@ const QuickLinksMenu = () => {
         >
           <span className="d-flex flex-column align-items-center">
             <HiOutlineShoppingBag className="navbar-icon me-1" />
-            <span>Our Products</span>
+            <span className="header1">Our Products</span>
           </span>
 
         </a>
@@ -379,7 +379,7 @@ const QuickLinksMenu = () => {
         >
           <span className="d-flex flex-column align-items-center">
             <AiOutlineUser className="navbar-icon me-1" />
-            <span>Accounts</span>
+            <span className="header1">Accounts</span>
           </span>
 
         </a>
@@ -644,7 +644,7 @@ const QuickLinksMenu = () => {
               <a className="nav-link" onClick={() => navigate("/")}>
                 <div className="d-flex flex-column align-items-center">
                   <AiOutlineHome className="navbar-icon" />
-                  <span>Home</span>
+                  <span className="header1">Home</span>
                 </div>
               </a>
             </li>
@@ -661,7 +661,7 @@ const QuickLinksMenu = () => {
               >
                 <span className="d-flex flex-column align-items-center">
                   <HiOutlineUserGroup className="navbar-icon me-1" />
-                  <span>HR</span>
+                  <span className="header1">HR</span>
                 </span>
               </a>
               <ul
@@ -716,7 +716,7 @@ const QuickLinksMenu = () => {
               >
                 <span className="d-flex flex-column align-items-center">
                   <FiMonitor className="navbar-icon me-1" />
-                  <span>IT</span>
+                  <span className="header1 ">IT</span>
                 </span>
               </a>
               <ul

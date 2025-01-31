@@ -49,7 +49,7 @@ const PostCard = ({ post, size = 108 }) => {
         className="card-text"
         style={{
           fontWeight:"500",
-          // textAlign: "justify", // Align text to both left and right
+          textAlign: "justify", // Align text to both left and right
           wordWrap: "break-word",
           fontSize:'13px' // Ensure long words break properly
         }}

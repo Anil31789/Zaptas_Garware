@@ -13,11 +13,11 @@
 } */
 
 .navbar-icon {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
 }
 
 ul.navbar-nav li.nav-item {
-    margin: 0 10px;
+    margin: 0 12px;
 }
 
 .search-form input.form-control {
@@ -72,9 +72,9 @@ a.dropdown-item {
 }
 
 .social-icons a {
-    width: 40px;
-    height: 40px;
-    background: #6d6f72;
+    width: 35px;
+    height: 35px;
+    /* background: #6d6f72; */
     border-radius: 10px;
     color: #fff;
     text-align: center;
@@ -87,13 +87,17 @@ a.dropdown-item {
 
 .social-icons a:hover {
     color: #6d6f72;
-    background-color: transparent;
+    background-color:#6d6f72 ;
     border-color: #6d6f72;
 }
 
 .user-profile-dropdown {
     position: relative;
 }
+.header1{
+    font-size: 12px;
+}
+
 
 .user-profile-dropdown .dropdown-menu {
     width: 250px;
@@ -114,7 +118,7 @@ img.profile-img {
 .horizontal-line {
     flex-shrink: 0;
     width: 1.5%; /* Full-width horizontal line */
-    height: 30px; /* Adjust the height of the line */
+    height: 25px; /* Adjust the height of the line */
     background-color:rgba(109, 111, 114, 0.4);; /* Line color */
-    margin-left: 5px; /* Adjust spacing from the icon */
+    margin-left: 7px; /* Adjust spacing from the icon */
   }
