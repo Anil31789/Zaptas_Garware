@@ -117,7 +117,7 @@ export default function BirthdayBox() {
                               {`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim()}
                             </h5>
                             <p className="message">{wish.CustomField6 || "Support"}</p>
-                            <p className="message">{`Employee Code: ${wish.EmployeeCode}`}</p>
+                                 {/* <p className="message">{`Employee Code: ${wish.EmployeeCode}`}</p> */} 
                             <div className="info">
                               <span className="date">
                                 <FaBirthdayCake className="icon" />{" "}
@@ -152,6 +152,7 @@ export default function BirthdayBox() {
                     handleClose={() => setShowPopup(false)}
                     recipient={selectEmail}
                     personalName={selectName}
+                    type={`BDaycomments`}
                   // personalName={`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim()}
                   />}
                 </div>

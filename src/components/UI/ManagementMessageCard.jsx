@@ -147,9 +147,9 @@ export default function AnnouncementCard() {
             <AiOutlineMessage className="me-2" />
             <h5 className="mb-0">Legacy</h5>
           </div>
-          <a href="#" className="text-decoration-none">
+          {/* <a href="#" className="text-decoration-none">
             View All <HiArrowCircleRight />
-          </a>
+          </a> */}
         </div>
         <div className="card-body card-scroll">
           {announcements.map((announcement) => (

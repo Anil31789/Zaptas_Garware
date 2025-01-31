@@ -174,7 +174,7 @@ export default function WorkAnniversary() {
                             </h5>
                             <p className="message">{wish.CustomField6 || "Support"}</p>
                             {/* <p className="message">{wish.CustomField6}</p> */}
-                            <p className="message">{`Employee Code: ${wish.EmployeeCode}`}</p>
+                                 {/* <p className="message">{`Employee Code: ${wish.EmployeeCode}`}</p> */}
                             <div className="info">
                               <span className="date">
                                 <FaAward className="icon" />{calculateYearsOfExcellence(wish.JoinDate)}
@@ -202,6 +202,7 @@ export default function WorkAnniversary() {
                     handleClose={() => setShowPopup(false)}
                     recipient={selectEmail}
                     personalName={selectName}
+                    type={`WorkAnnComments`}
                   // personalName={`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim()}
                   />}
                 </div>

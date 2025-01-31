@@ -123,7 +123,7 @@ export default function NewJoiners() {
                               {`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim()}
                             </h5>
                             <p className="message">{wish.CustomField6 || "Support"}</p>
-                            <p className="message">{`Employee Code: ${wish.EmployeeCode}`}</p>
+                                 {/* <p className="message">{`Employee Code: ${wish.EmployeeCode}`}</p> */}
                             <div className="info">
                               <span className="date">
                                 <FaHandshake className="icon" />{" "}
@@ -157,6 +157,7 @@ export default function NewJoiners() {
                     handleClose={() => setShowPopup(false)}
                     recipient={selectEmail}
                     personalName={selectName}
+                    type={`joinComments`}
                   // personalName={`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim()}
                   />}
                 </div>

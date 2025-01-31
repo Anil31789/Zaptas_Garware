@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { HiArrowCircleRight } from "react-icons/hi";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import "./CalendarCard.css";
 import { SlCalender } from "react-icons/sl";
+import { FaBirthdayCake, FaAward, FaHandshake, FaRegClipboard } from "react-icons/fa";
+import { IoGiftOutline } from "react-icons/io5"; // New icon for Paid-Holiday
+import "./CalendarCard.css";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 import showToast from "../../utils/toastHelper";
@@ -112,6 +114,26 @@ export default function CalendarCard() {
     }
   };
 
+  const renderEventTypeBadge = (eventType) => {
+    const typeClass = {
+      CSR: "badge bg-primary",
+      Award: "badge bg-success",
+      Announcement: "badge bg-warning",
+      "Paid-Holiday": "badge bg-info",
+    };
+    return <span className={typeClass[eventType] || "badge bg-secondary"}>{eventType}</span>;
+  };
+
+  const renderEventIcon = (eventType) => {
+    const iconClass = {
+      CSR: <FaHandshake className="event-icon" />,
+      Award: <FaAward className="event-icon" />,
+      Announcement: <FaRegClipboard className="event-icon" />,
+      "Paid-Holiday": <IoGiftOutline className="event-icon" />, // Holiday icon for Paid-Holiday
+    };
+    return iconClass[eventType] || <FaRegClipboard className="event-icon" />;
+  };
+
   return (
     <div className="card mb-3 calendar-card">
       <div className="card-header d-flex justify-content-between align-items-center">
@@ -140,14 +162,18 @@ export default function CalendarCard() {
         {selectedDateEvents.length > 0 ? (
           <div className="event-list mt-3">
             <h6>Events on {date.toDateString()}:</h6>
-            <ul>
+            <ul className="list-group">
               {selectedDateEvents.map((event, index) => (
-                <li key={index}>
-                  <strong>{event.title}</strong> -{" "}
-                  <span className="text-danger"> {event.type} </span>
+                <li key={index} className="list-group-item d-flex align-items-center">
+                  {renderEventIcon(event.type)}
+                  <div className="ms-3 d-flex align-items-center" style={{ fontWeight: 'light', fontSize: '0.75rem' }}>
+                    <p className="text-dark mb-0" style={{ fontSize: '0.90rem' }}>{event.title}</p> -{" "}
+                    {renderEventTypeBadge(event.type)}
+                  </div>
                 </li>
               ))}
             </ul>
+
           </div>
         ) : (
           <div className="quote-list mt-3">
@@ -155,7 +181,7 @@ export default function CalendarCard() {
             <ul>
               {randomQuotes.map((quote, index) => (
                 <li key={index} className="text-primary">
-                  "{quote}"
+                  {quote}
                 </li>
               ))}
             </ul>
