@@ -72,15 +72,27 @@ export default function GalleryCard() {
                       <p className="card-text text-center text-muted">
                         {item.AnnouncementDate ? (
                           <span className="d-block">
-                            <strong>Announcement Date:</strong> {new Date(item.AnnouncementDate).toLocaleDateString()}
+                            <strong></strong> {new Date(item.AnnouncementDate).toLocaleDateString("en-GB", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+})}
                           </span>
                         ) : item.updatedAt ? (
                           <span className="d-block">
-                            <strong>Updated On:</strong> {new Date(item.updatedAt).toLocaleDateString()}
+                            <strong>Updated On:</strong> {new Date(item.updatedAt).toLocaleDateString("en-GB", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+})}
                           </span>
                         ) : item.createdAt ? (
                           <span className="d-block">
-                            <strong>Created On:</strong> {new Date(item.createdAt).toLocaleDateString()}
+                            <strong>Created On:</strong> {new Date(item.createdAt).toLocaleDateString("en-GB", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+})}
                           </span>
                         ) : null}
                       </p>
@@ -116,15 +128,27 @@ export default function GalleryCard() {
                       <p className="card-text text-center text-muted">
                         {item.AnnouncementDate ? (
                           <span className="d-block">
-                            <strong>Announcement Date:</strong> {new Date(item.AnnouncementDate).toLocaleDateString()}
+                            <strong></strong> {new Date(item.AnnouncementDate).toLocaleDateString("en-GB", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+})}
                           </span>
                         ) : item.updatedAt ? (
                           <span className="d-block">
-                            <strong>Updated On:</strong> {new Date(item.updatedAt).toLocaleDateString()}
+                            <strong>Updated On:</strong> {new Date(item.updatedAt).toLocaleDateString("en-GB", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+})}
                           </span>
                         ) : item.createdAt ? (
                           <span className="d-block">
-                            <strong>Created On:</strong> {new Date(item.createdAt).toLocaleDateString()}
+                            <strong>Created On:</strong> {new Date(item.createdAt).toLocaleDateString("en-GB", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+})}
                           </span>
                         ) : null}
                       </p>

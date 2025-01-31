@@ -174,7 +174,11 @@ export default function ViewAllPage() {
                       {/* <span>Location: {post.location}</span> &nbsp; */}
                       <span>
                         Date:{" "}
-                        {new Date(post.AnnouncementDate).toLocaleDateString()}
+                        {new Date(post.AnnouncementDate).toLocaleDateString("en-GB", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+})}
                       </span>
                     </div>
                     {/* <p
