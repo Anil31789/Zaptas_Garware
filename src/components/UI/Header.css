@@ -110,3 +110,11 @@ img.profile-img {
     background: antiquewhite;
     border: 2px solid #ccc;
 }
+
+.horizontal-line {
+    flex-shrink: 0;
+    width: 1.5%; /* Full-width horizontal line */
+    height: 30px; /* Adjust the height of the line */
+    background-color:rgba(109, 111, 114, 0.4);; /* Line color */
+    margin-left: 5px; /* Adjust spacing from the icon */
+  }

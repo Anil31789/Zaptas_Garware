@@ -784,6 +784,8 @@ const QuickLinksMenu = () => {
             </a> */}
             <NotificationIcon notificationCount={notificationCount} userDetails={userDetails} />
 
+            <span className="horizontal-line"></span>
+
             <div className="user-profile-dropdown dropdown">
               <button
                 className="btn btn-link dropdown-toggle"
