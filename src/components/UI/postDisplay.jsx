@@ -46,10 +46,12 @@ const PostCard = ({ post, size = 108 }) => {
       }}
     >
       <div
-        className="card-text fs-6"
+        className="card-text"
         style={{
-          textAlign: "justify", // Align text to both left and right
-          wordWrap: "break-word", // Ensure long words break properly
+          fontWeight:"500",
+          // textAlign: "justify", // Align text to both left and right
+          wordWrap: "break-word",
+          fontSize:'13px' // Ensure long words break properly
         }}
         dangerouslySetInnerHTML={{
           __html: renderText(post),
