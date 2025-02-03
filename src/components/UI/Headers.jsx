@@ -666,24 +666,20 @@ export default function Headers() {
       {
         id: 1,
         title: "Domestic Travel Policy",
-        url: "http://localhost:5173/login",
+        url: `${ConnectMe.img_URL}/uploads/policy/hr/hrpolicy.docx`,
       },
-      {
-        id: 2,
-        title: "Benefits",
-        url: "http://localhost:5173/benefits",
-      },
+    
       {
         id: 3,
-        title: "Leave Management",
-        url: "http://localhost:5173/leaves",
+        title: "Regional Holiday Calendar",
+        url: `${ConnectMe.img_URL}/uploads/leaves/Location-wiseHolidayCalendarfor2025.docx`,
       },
     ];
 
     const telcom = [
       {
         id: 1,
-        title: "Telecom",
+        title: "Telephone",
         subMenu: [
           {
             id: "1.1",
@@ -799,7 +795,7 @@ export default function Headers() {
         <a className="navbar-brand" onClick={(() => {
           navigate('/')
         })}>
-          <img className="companylogo" src="./public/logo.png" alt="Logo" />
+          <img className="companylogo" src="./logo.png" alt="Logo" />
         </a>
 
         <button

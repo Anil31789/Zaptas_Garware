@@ -179,58 +179,55 @@ export default function ViewAllPosts() {
                 )}
               </div>
             )}
-            <div className="d-flex justify-content-center align-items-center my-3">
-              {loginRequired ? (
-                // If loginRequired, show "Login with LinkedIn" button
-                <button
-                  onClick={handleLinkedInCallback}
-                  className="btn btn-primary btn-lg"
-                  style={{
-                    display: "flex",
-                    alignItems: "left",
-                    justifyContent: "left",
-                    padding: "10px 20px",
-                    fontSize: "16px",
-                    fontWeight: "bold",
-                    borderRadius: "5px",
-                  }}
-                >
-                  <img
-                    src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
-                    alt="LinkedIn"
-                    style={{ width: "20px", height: "20px", marginRight: "10px" }}
-                  />
-                  Login with LinkedIn
-                </button>
-              ) : (
-                // If logged in, show like button
-                <p
-                  className="card-like fs-6 m-0"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                    
-                  }}
-                  onClick={(event) => {
-                    event.stopPropagation(); // Prevent other interactions
-                    handleLikeToggle(
-                      post.id,
-                      post?.fetchUserLikesStatus ? "disslike" : "likepost"
-                    );
-                  }}
-                >
-                  <FaThumbsUp
-                    className={`like-icon ${loadingPostIds.includes(post.id) ? "loading" : ""}`}
-                    style={{
-                      color: post?.fetchUserLikesStatus ? "blue" : "gray",
-                    }}
-                  />
-                  <span style={{ marginLeft: "5px" }}>{post?.likeCount?.totalLikes}</span>
-                </p>
-              )}
-            </div>
+         <div className="d-flex justify-content-start align-items-center my-3">
+  {loginRequired ? (
+    // If loginRequired, show "Login with LinkedIn" button
+    <button
+      onClick={handleLinkedInCallback}
+      className="btn btn-primary btn-lg"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "left",
+        padding: "10px 20px",
+        fontSize: "16px",
+        fontWeight: "bold",
+        borderRadius: "5px",
+      }}
+    >
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
+        alt="LinkedIn"
+        style={{ width: "20px", height: "20px", marginRight: "10px" }}
+      />
+      Login with LinkedIn
+    </button>
+  ) : (
+    // If logged in, show like button
+    <p
+      className="card-like fs-6 m-0 d-flex align-items-center"
+      style={{
+        cursor: "pointer",
+      }}
+      onClick={(event) => {
+        event.stopPropagation(); // Prevent other interactions
+        handleLikeToggle(
+          post.id,
+          post?.fetchUserLikesStatus ? "disslike" : "likepost"
+        );
+      }}
+    >
+      <FaThumbsUp
+        className={`like-icon ${loadingPostIds.includes(post.id) ? "loading" : ""}`}
+        style={{
+          color: post?.fetchUserLikesStatus ? "blue" : "gray",
+        }}
+      />
+      <span style={{ marginLeft: "5px" }}>{post?.likeCount?.totalLikes}</span>
+    </p>
+  )}
+</div>
+
           </div>
         </div>
       ))}

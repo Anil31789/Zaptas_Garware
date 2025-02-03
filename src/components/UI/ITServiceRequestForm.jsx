@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Row, Col, Spinner } from "react-bootstrap";
+import { Form, Button, Row, Col, Spinner, Card, InputGroup } from "react-bootstrap";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 import { useLocation } from "react-router-dom";
+import { FaChevronDown } from "react-icons/fa"; // Bootstrap Icons
 
 const ITServiceRequestForm = () => {
   const location = useLocation();
   const { id } = location.state || {}; // Access the passed _id
-  const [formData, setFormData] = useState({
 
-    typeOfService: id,
+  const [formData, setFormData] = useState({
+    typeOfService: id || "",
     fieldsData: {}, // Dynamically populated fields based on service type
   });
 
@@ -79,11 +80,7 @@ const ITServiceRequestForm = () => {
 
       if (response && response.success) {
         alert("Service request submitted successfully!");
-        setFormData((prevData) => ({
-          ...prevData,
-          typeOfService: "",
-          fieldsData: {},
-        }));
+        setFormData({ typeOfService: "", fieldsData: {} });
       } else {
         console.error("Failed to submit the service request:", response.message);
         alert("Failed to submit the service request. Please try again.");
@@ -98,38 +95,22 @@ const ITServiceRequestForm = () => {
 
   return (
     <div className="container mt-5">
-      <h3 className="mb-4 text-center">IT Service Request Form</h3>
+      <Card className="shadow-lg border-0 p-4">
+        <Card.Body>
+          <h3 className="mb-4 text-center text-primary">IT Service Request Form</h3>
 
-      <Form onSubmit={handleSubmit}>
-        {/* Requester Details */}
-        <div className="mb-4">
-          {/* <h4 className="text-primary mb-3">Requester Details</h4> */}
-          {/* <Row>
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Request Date</Form.Label>
-                <Form.Control type="date" value={formData.requestDate} readOnly />
-              </Form.Group>
-            </Col>
-          </Row> */}
-        </div>
-
-        {/* Service Request Details */}
-        <div className="mb-4">
-          <h4 className="text-primary mb-3">Service Request Details</h4>
-          <Row>
-            <Col md={12}>
-              <Form.Group className="mb-3">
-                <Form.Label>Type of Service</Form.Label>
-                <Form.Control
-                  as="select"
+          <Form onSubmit={handleSubmit}>
+            {/* Service Type Selection */}
+            <div className="mb-4">
+              <h5 className="text-secondary">Select Type of Service</h5>
+              <InputGroup className="mb-3">
+                <Form.Select
                   name="typeOfService"
-                  id={formData._id}
+                  id="typeOfService"
                   value={formData.typeOfService}
-                  onChange={(e) =>
-                    setFormData({ ...formData, typeOfService: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, typeOfService: e.target.value })}
                   disabled={isLoading}
+                  className="form-select-lg"
                 >
                   <option value="" disabled>
                     {isLoading ? "Loading..." : "Select a service"}
@@ -139,60 +120,64 @@ const ITServiceRequestForm = () => {
                       {type.name}
                     </option>
                   ))}
-                </Form.Control>
-              </Form.Group>
-            </Col>
-
-          </Row>
-        </div>
-
-        {/* Dynamic Fields */}
-        {serviceTypes
-          .filter((type) => type._id === formData.typeOfService)
-          .map((type) => (
-            <div key={type._id}>
-              {type.fields.map((field) => (
-                <Row key={field._id} className="mb-3">
-                  <Col md={12}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>{field.fieldName}</Form.Label>
-                      {field.fieldType === "Boolean" ? (
-                        <Form.Check
-                          type="checkbox"
-                          id={field._id}
-                          checked={formData.fieldsData[field._id] || false}
-                          onChange={handleCheckboxChange}
-                        />
-                      ) : (
-                        <Form.Control
-                          type={field.fieldType === "text" ? "text" : "date"}
-                          id={field._id}
-                          value={formData.fieldsData[field._id] || ""}
-                          onChange={handleInputChange}
-                          required={field?.isRequired}
-                        />
-                      )}
-                    </Form.Group>
-                  </Col>
-                </Row>
-              ))}
+                </Form.Select>
+                <InputGroup.Text>
+                  <FaChevronDown />
+                </InputGroup.Text>
+              </InputGroup>
             </div>
-          ))}
 
-        {/* Submit Button */}
-        <div className="text-center mt-4">
-          <Button variant="primary" type="submit" disabled={isLoading}>
-            {isLoading ? (
-              <>
-                <Spinner animation="border" size="sm" />
-                <span className="ml-2">Submitting...</span>
-              </>
-            ) : (
-              "Submit Request"
-            )}
-          </Button>
-        </div>
-      </Form>
+            {/* Dynamic Fields */}
+            {serviceTypes
+              .filter((type) => type._id === formData.typeOfService)
+              .map((type) => (
+                <div key={type._id}>
+                  <h5 className="text-secondary mb-3">Fill in the Details</h5>
+                  {type.fields.map((field) => (
+                    <Row key={field._id} className="mb-3">
+                      <Col md={12}>
+                        <Form.Group>
+                          <Form.Label className="fw-bold">{field.fieldName}</Form.Label>
+                          {field.fieldType === "Boolean" ? (
+                            <Form.Check
+                              type="checkbox"
+                              id={field._id}
+                              checked={formData.fieldsData[field._id] || false}
+                              onChange={handleCheckboxChange}
+                              className="form-check-lg"
+                            />
+                          ) : (
+                            <Form.Control
+                              type={field.fieldType === "text" ? "text" : "date"}
+                              id={field._id}
+                              value={formData.fieldsData[field._id] || ""}
+                              onChange={handleInputChange}
+                              required={field?.isRequired}
+                              className="form-control-lg"
+                            />
+                          )}
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                  ))}
+                </div>
+              ))}
+
+            {/* Submit Button */}
+            <div className="text-center mt-4">
+              <Button variant="primary" type="submit" className="btn-lg" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Spinner animation="border" size="sm" /> Submitting...
+                  </>
+                ) : (
+                  "Submit Request"
+                )}
+              </Button>
+            </div>
+          </Form>
+        </Card.Body>
+      </Card>
     </div>
   );
 };
