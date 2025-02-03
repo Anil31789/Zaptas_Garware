@@ -36,6 +36,7 @@ export default function ITRequest() {
           src={`${ConnectMe.img_URL}/uploads/videocard/garware.mp4`}
           controls
           autoPlay
+          muted
           style={{
             maxWidth: "100%",
             height: "100%",

@@ -187,8 +187,8 @@ export default function ViewAllPosts() {
                   className="btn btn-primary btn-lg"
                   style={{
                     display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    alignItems: "left",
+                    justifyContent: "left",
                     padding: "10px 20px",
                     fontSize: "16px",
                     fontWeight: "bold",
@@ -211,6 +211,7 @@ export default function ViewAllPosts() {
                     alignItems: "center",
                     justifyContent: "center",
                     cursor: "pointer",
+                    
                   }}
                   onClick={(event) => {
                     event.stopPropagation(); // Prevent other interactions
