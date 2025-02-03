@@ -114,7 +114,7 @@ export default function GalleryCard() {
                       src={imageUrl}
                       className="d-block w-100 rounded-3"
                       alt={item.title}
-                      style={{ maxHeight: "400px", objectFit: "cover", cursor: "pointer" }} // Ensure pointer cursor
+                      style={{ maxHeight: "150px", cursor: "pointer"}} // Ensure pointer cursor
                       onClick={() => handleTitleClick(item)} // Ensure onClick works for images as well
                     />
                     <div className="card-body">
@@ -203,21 +203,21 @@ export default function GalleryCard() {
   <div className="row d-flex flex-column justify-content-center align-content-center">
     {/* Announcements Section */}
     {data.Announcements && data.Announcements.length > 0 && (
-      <div className="col text-center mb-3 border-bottom h-bg" style={{ height: '400px' }}>
+      <div className="col text-center mb-2  " style={{ height: '400px'}}>
         {renderCarousel(data.Announcements, "Announcements")}
       </div>
     )}
 
     {/* CSR Section */}
     {data.CSR && data.CSR.length > 0 && (
-      <div className="col text-center mb-3 border-bottom h-bg" style={{ height: '400px' }}>
+      <div className="col text-center mb-3 border-bottom" >
         {renderCarousel(data.CSR, "CSR")}
       </div>
     )}
 
     {/* Awards Section */}
     {data.Awards && data.Awards.length > 0 && (
-      <div className="col text-center h-bg" style={{ height: '400px' }}>
+      <div className="col text-center " style={{ height: '40px'}}>
         {renderCarousel(data.Awards, "Awards")}
       </div>
     )}
