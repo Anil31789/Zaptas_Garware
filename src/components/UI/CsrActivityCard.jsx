@@ -157,7 +157,7 @@ export default function AnnouncementCard() {
                 state: {
                   title: "View All Announcements",
                   type: "csr",
-                  bannerImg: "./bannerforusercsr.jpg",
+                  bannerImg: "./csr_banner.jpg",
                 },
               });
             }}

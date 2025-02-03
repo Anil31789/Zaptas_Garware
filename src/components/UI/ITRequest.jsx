@@ -43,7 +43,8 @@ export default function ITRequest() {
             display: "block",
             margin: "0px auto",
             objectFit: "contain", // Use "contain" if you want to fit without cropping
-            borderRadius: "5px"
+            borderRadius: "5px",
+            marginBottom:"180px"
           }}>
           Your browser does not support the video tag.
         </video>
