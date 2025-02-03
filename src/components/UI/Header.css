@@ -97,9 +97,11 @@ a.dropdown-item {
 .user-profile-dropdown {
     position: relative;
 }
-.header1{
+.header1 {
     font-size: 12px;
+    font-weight: bold;
 }
+
 
 
 .user-profile-dropdown .dropdown-menu {

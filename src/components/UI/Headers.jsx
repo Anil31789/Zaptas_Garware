@@ -668,11 +668,7 @@ export default function Headers() {
         title: "Domestic Travel Policy",
         url: `${ConnectMe.img_URL}/uploads/policy/hr/hrpolicy.docx`,
       },
-      {
-        id: 2,
-        title: "Benefits",
-        url: `${ConnectMe.img_URL}/uploads/policy/hr/hrpolicy.docx`,
-      },
+    
       {
         id: 3,
         title: "Regional Holiday Calendar",
@@ -683,7 +679,7 @@ export default function Headers() {
     const telcom = [
       {
         id: 1,
-        title: "Telecom",
+        title: "Telephone",
         subMenu: [
           {
             id: "1.1",
