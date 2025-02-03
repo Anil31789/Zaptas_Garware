@@ -84,17 +84,17 @@ export default function ViewAllPosts() {
         prevPosts.map((post) =>
           post.id === postId
             ? {
-                ...post,
-                fetchUserLikesStatus: method === "likepost" ? true : false,
-                likeCount: {
-                  totalLikes:
-                    method === "likepost"
-                      ? post.likeCount.totalLikes + 1
-                      : method === "disslike"
+              ...post,
+              fetchUserLikesStatus: method === "likepost" ? true : false,
+              likeCount: {
+                totalLikes:
+                  method === "likepost"
+                    ? post.likeCount.totalLikes + 1
+                    : method === "disslike"
                       ? post.likeCount.totalLikes - 1
                       : post.likeCount.totalLikes,
-                },
-              }
+              },
+            }
             : post
         )
       );
@@ -171,65 +171,65 @@ export default function ViewAllPosts() {
                     alt="LinkedIn Post"
                     style={{ width: "100%", height: "70%" }}
                   />
-                ) : post.multimedia.type === "video" ? (
+                ) : (
                   <video width="100%" height="70%" controls autoPlay muted loop>
                     <source src={post.multimedia.url} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
-                ) : null}
+                )}
               </div>
             )}
-              <div className="d-flex justify-content-center align-items-center my-3">
-                      {loginRequired ? (
-                        // If loginRequired, show "Login with LinkedIn" button
-                        <button
-                          onClick={handleLinkedInCallback}
-                          className="btn btn-primary btn-lg"
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            padding: "10px 20px",
-                            fontSize: "16px",
-                            fontWeight: "bold",
-                            borderRadius: "5px",
-                          }}
-                        >
-                          <img
-                            src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
-                            alt="LinkedIn"
-                            style={{ width: "20px", height: "20px", marginRight: "10px" }}
-                          />
-                          Login with LinkedIn
-                        </button>
-                      ) : (
-                        // If logged in, show like button
-                        <p
-                          className="card-like fs-6 m-0"
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            cursor: "pointer",
-                          }}
-                          onClick={(event) => {
-                            event.stopPropagation(); // Prevent other interactions
-                            handleLikeToggle(
-                              post.id,
-                              post?.fetchUserLikesStatus ? "disslike" : "likepost"
-                            );
-                          }}
-                        >
-                          <FaThumbsUp
-                            className={`like-icon ${loadingPostIds.includes(post.id) ? "loading" : ""}`}
-                            style={{
-                              color: post?.fetchUserLikesStatus ? "blue" : "gray",
-                            }}
-                          />
-                          <span style={{ marginLeft: "5px" }}>{post?.likeCount?.totalLikes}</span>
-                        </p>
-                      )}
-                    </div>
+            <div className="d-flex justify-content-center align-items-center my-3">
+              {loginRequired ? (
+                // If loginRequired, show "Login with LinkedIn" button
+                <button
+                  onClick={handleLinkedInCallback}
+                  className="btn btn-primary btn-lg"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "10px 20px",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
+                    alt="LinkedIn"
+                    style={{ width: "20px", height: "20px", marginRight: "10px" }}
+                  />
+                  Login with LinkedIn
+                </button>
+              ) : (
+                // If logged in, show like button
+                <p
+                  className="card-like fs-6 m-0"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                  }}
+                  onClick={(event) => {
+                    event.stopPropagation(); // Prevent other interactions
+                    handleLikeToggle(
+                      post.id,
+                      post?.fetchUserLikesStatus ? "disslike" : "likepost"
+                    );
+                  }}
+                >
+                  <FaThumbsUp
+                    className={`like-icon ${loadingPostIds.includes(post.id) ? "loading" : ""}`}
+                    style={{
+                      color: post?.fetchUserLikesStatus ? "blue" : "gray",
+                    }}
+                  />
+                  <span style={{ marginLeft: "5px" }}>{post?.likeCount?.totalLikes}</span>
+                </p>
+              )}
+            </div>
           </div>
         </div>
       ))}

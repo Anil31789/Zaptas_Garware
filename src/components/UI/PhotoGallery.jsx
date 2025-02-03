@@ -152,7 +152,7 @@ export default function PhotoGallery() {
                         })}
                       </span>
                     ) : null}
-                  </p>
+                </p>
                 </div>
               </div>
             </div>

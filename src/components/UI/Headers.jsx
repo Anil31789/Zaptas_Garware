@@ -126,7 +126,7 @@ export default function Headers() {
 
 
 
-const QuickLinksMenu = () => {
+  const QuickLinksMenu = () => {
     const addresses = [
       {
         id: "1",
@@ -197,7 +197,7 @@ const QuickLinksMenu = () => {
         </ul>
       </li>
     );
-    
+
   };
 
 
@@ -297,6 +297,98 @@ const QuickLinksMenu = () => {
       </li>
     );
   };
+
+
+
+
+  const ITServiceDropdown = () => {
+    const navigate = useNavigate();
+
+
+    const [serviceTypes, setServiceTypes] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+      const fetchServiceTypes = async () => {
+        setIsLoading(true);
+        try {
+          const url = `${ConnectMe.BASE_URL}/it/api/service-types`;
+          const token = getTokenFromLocalStorage();
+          const headers = { Authorization: `Bearer ${token}` };
+          const response = await apiCall("GET", url, headers);
+
+          if (response?.data?.length) {
+            setServiceTypes(response.data);
+          } else {
+            console.error("Failed to fetch service types, using default values.");
+            setServiceTypes(sampleServiceTypes); // Fallback to sample data
+          }
+        } catch (error) {
+          console.error("Error fetching service types:", error);
+          setServiceTypes(sampleServiceTypes); // Fallback to sample data
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchServiceTypes();
+    }, []);
+
+    return (
+      <li className="nav-item dropdown">
+        <a
+          className="nav-link dropdown-toggle d-flex align-items-center"
+          href="#"
+          id="quicklinksDropdown"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <span className="d-flex flex-column align-items-center">
+            <FiMonitor className="navbar-icon me-1" />
+            <span className="header1">IT</span>
+          </span>
+        </a>
+        <ul className="dropdown-menu" aria-labelledby="quicklinksDropdown">
+          <li className="dropdown-submenu">
+            <a
+              className="dropdown-item dropdown-toggle"
+              href="#"
+              id="itRequestDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              IT Request
+            </a>
+            <ul className="dropdown-menu">
+              {isLoading ? (
+                <li className="dropdown-item">Loading...</li>
+              ) : (
+                serviceTypes.map((link) => (
+                  <li key={link.id}>
+                    <a
+                      className="dropdown-item"
+                      href={link.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate("/ITService", { state: { id: link.id } });
+                      }}
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))
+              )}
+            </ul>
+          </li>
+        </ul>
+      </li>
+    );
+  };
+
 
 
 
@@ -419,9 +511,9 @@ const QuickLinksMenu = () => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [popupType, setPopupType] = useState("");
-  
+
     const notifications = [];
-  
+
     // Create the list of notifications based on the counts
     if (notificationCount?.comment?.totalUnseenBDayComments > 0) {
       notifications.push({
@@ -451,14 +543,14 @@ const QuickLinksMenu = () => {
         popupType: null, // No popup for IT request
       });
     }
-  
+
     // Calculate total notifications
     const totalNotifications =
       (notificationCount?.comment?.totalUnseenBDayComments || 0) +
       (notificationCount?.comment?.totalUnseenWorkAnnComments || 0) +
       (notificationCount?.comment?.totalUnseenJoinComments || 0) +
       (notificationCount?.Itcount || 0);
-  
+
     // Handle notification click (open popup only if it has a popupType)
     const handleNotificationClick = (notification) => {
       if (notification.popupType) {
@@ -468,7 +560,7 @@ const QuickLinksMenu = () => {
         navigate("/service"); // Navigate if no popup is associated
       }
     };
-  
+
     return (
       <div className="position-relative d-inline-block cursor-pointer">
         {/* Notification Icon */}
@@ -483,7 +575,7 @@ const QuickLinksMenu = () => {
             </span>
           )}
         </a>
-    
+
         {/* Dropdown Notifications */}
         {showDropdown && (
           <div
@@ -501,17 +593,17 @@ const QuickLinksMenu = () => {
             {notifications.length > 0 ? (
               notifications.map((note, index) => (
                 <button
-                key={index}
-                className="dropdown-item d-flex align-items-start "
-                onClick={() => handleNotificationClick(note)} // Handle click to open the popup
-              >
-                <span className="me-2">{note.type}</span>
-                <div className="flex-grow-1">
-                  <p className="mb-0 small text-dark ">{note.message}</p> {/* Add cursor-pointer here */}
-                </div>
-              </button>
-              
-              
+                  key={index}
+                  className="dropdown-item d-flex align-items-start "
+                  onClick={() => handleNotificationClick(note)} // Handle click to open the popup
+                >
+                  <span className="me-2">{note.type}</span>
+                  <div className="flex-grow-1">
+                    <p className="mb-0 small text-dark ">{note.message}</p> {/* Add cursor-pointer here */}
+                  </div>
+                </button>
+
+
               ))
             ) : (
               <p className="text-center text-muted small m-2">
@@ -520,7 +612,7 @@ const QuickLinksMenu = () => {
             )}
           </div>
         )}
-    
+
         {/* Send Email Popup */}
         {showPopup && (
           <SendEmailPopup
@@ -533,9 +625,9 @@ const QuickLinksMenu = () => {
         )}
       </div>
     );
-    
+
   };
-  
+
 
 
 
@@ -705,48 +797,11 @@ const QuickLinksMenu = () => {
                 ))}
               </ul>
             </li>
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle d-flex align-items-center"
-                href="#"
-                id="quicklinksDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <span className="d-flex flex-column align-items-center">
-                  <FiMonitor className="navbar-icon me-1" />
-                  <span className="header1 ">IT</span>
-                </span>
-              </a>
-              <ul
-                className="dropdown-menu"
-                aria-labelledby="quicklinksDropdown"
-              >
-                {serviceTypes && serviceTypes.map((link) => (
-
-                  <li key={link.id} className="dropdown-submenu">
-                    <a
-                      className="dropdown-item"
-                      href={link.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => {
-                        // Pass link._id while navigating to the new page
-                        navigate("/ITService", { state: { id: link._id } });
-                      }}
-                    >
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </li>
-            < AccountsIcon />
+            <ITServiceDropdown />
+            <AccountsIcon />
             <ProductsIcon />
             <QuickLinksMenu />
-         
-           
+
           </ul>
 
           <div className="d-flex social-icons align-items-center">

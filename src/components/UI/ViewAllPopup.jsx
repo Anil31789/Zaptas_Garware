@@ -82,9 +82,8 @@ export default function ViewAllPage() {
   const handleLikedisslike = async (announcementId, isLiked) => {
     showToast(isLiked ? "Unlike success" : "Like success", "success");
     const token = getTokenFromLocalStorage();
-    const url = `${ConnectMe.BASE_URL}/${type}/${announcementId}/${
-      isLiked ? "unlike" : "like"
-    }`;
+    const url = `${ConnectMe.BASE_URL}/${type}/${announcementId}/${isLiked ? "unlike" : "like"
+      }`;
     const headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -100,8 +99,8 @@ export default function ViewAllPage() {
               // Update the likes array and the likesCount locally
               const updatedLikes = isLiked
                 ? announcement.likes.filter(
-                    (userId) => userId !== response.userId
-                  )
+                  (userId) => userId !== response.userId
+                )
                 : [...announcement.likes, response.userId];
 
               return {
@@ -175,10 +174,10 @@ export default function ViewAllPage() {
                       <span>
                         Date:{" "}
                         {new Date(post.AnnouncementDate).toLocaleDateString("en-GB", {
-  day: "2-digit",
-  month: "short",
-  year: "numeric",
-})}
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
                       </span>
                     </div>
                     {/* <p
@@ -217,9 +216,8 @@ export default function ViewAllPage() {
                           .map((slide, index) => (
                             <div
                               key={index}
-                              className={`carousel-item view-all-images ${
-                                index === 0 ? "active" : ""
-                              }`}
+                              className={`carousel-item view-all-images ${index === 0 ? "active" : ""
+                                }`}
                             >
                               <div className="row">
                                 {slide.map((image, imgIndex) => (

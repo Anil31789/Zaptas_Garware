@@ -171,7 +171,7 @@ export default function UploadBanners() {
             <Cropper
               src={selectedFile}
               style={{ height: "500px", width: "auto" }}
-              aspectRatio={16 / 9}   // Maintain the aspect ratio
+              // aspectRatio={16 / 9}   // Maintain the aspect ratio
               viewMode={1}           // Keeps the crop box fixed and doesn't allow it to be moved
               minHeight={500}        // Minimum height fixed to 500px
        

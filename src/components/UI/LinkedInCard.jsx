@@ -106,8 +106,8 @@ export default function LinkedInCard() {
                 method === "likepost"
                   ? prevPost.likeCount.totalLikes + 1
                   : method === "disslike"
-                  ? prevPost.likeCount.totalLikes - 1
-                  : prevPost.likeCount.totalLikes,
+                    ? prevPost.likeCount.totalLikes - 1
+                    : prevPost.likeCount.totalLikes,
             },
           };
         });
@@ -116,17 +116,17 @@ export default function LinkedInCard() {
           prevPosts.map((post) =>
             post.id === postId
               ? {
-                  ...post,
-                  fetchUserLikesStatus: method === "likepost" ? true : false,
-                  likeCount: {
-                    totalLikes:
-                      method === "likepost"
-                        ? post.likeCount.totalLikes + 1
-                        : method === "disslike"
+                ...post,
+                fetchUserLikesStatus: method === "likepost" ? true : false,
+                likeCount: {
+                  totalLikes:
+                    method === "likepost"
+                      ? post.likeCount.totalLikes + 1
+                      : method === "disslike"
                         ? post.likeCount.totalLikes - 1
                         : post.likeCount.totalLikes,
-                  },
-                }
+                },
+              }
               : post
           )
         );
@@ -260,7 +260,7 @@ export default function LinkedInCard() {
                       }}
                       onClick={() => openPostPopup(post)}
                     >
-                      {post.multimedia.type === "image" ? (
+                      {post.multimedia.type === "images" ? (
                         <img
                           src={post.multimedia.url}
                           alt="LinkedIn Post"
@@ -270,7 +270,7 @@ export default function LinkedInCard() {
                             // objectFit: "cover", // Ensures the image fills the container
                           }}
                         />
-                      ) : post.multimedia.type === "video" ? (
+                      ) :
                         <video
                           controls
                           autoPlay
@@ -285,7 +285,7 @@ export default function LinkedInCard() {
                           <source src={post.multimedia.url} type="video/mp4" />
                           Your browser does not support the video tag.
                         </video>
-                      ) : null}
+                      }
                     </div>
 
                     {/* Post Text Section */}
@@ -346,9 +346,8 @@ export default function LinkedInCard() {
                           }}
                         >
                           <FaThumbsUp
-                            className={`like-icon ${
-                              loadingPostIds.includes(post.id) ? "loading" : ""
-                            }`}
+                            className={`like-icon ${loadingPostIds.includes(post.id) ? "loading" : ""
+                              }`}
                             style={{
                               color: post?.fetchUserLikesStatus
                                 ? "blue"
@@ -447,9 +446,8 @@ export default function LinkedInCard() {
                 // If logged in, display the like button
                 <div className="d-flex align-items-center">
                   <FaThumbsUp
-                    className={`like-icon fs-5 ${
-                      loadingPostIds.includes(selectedPost?.id) ? "loading" : ""
-                    }`}
+                    className={`like-icon fs-5 ${loadingPostIds.includes(selectedPost?.id) ? "loading" : ""
+                      }`}
                     style={{
                       color: selectedPost?.fetchUserLikesStatus
                         ? "blue"
