@@ -109,12 +109,12 @@ export default function GalleryCard() {
   
               return (
                 <div key={`${item._id}-${imgIndex}`} className={`carousel-item ${isActive}`}>
-                  <div className="card border-0 shadow-lg overflow-hidden h-100">
+                  <div className="card border-0  overflow-hidden h-100">
                     <img
                       src={imageUrl}
                       className="d-block w-100 rounded-3"
                       alt={item.title}
-                      style={{ maxHeight: "150px", cursor: "pointer"}} // Ensure pointer cursor
+                      style={{ height: "160px",objectFit:"contain", cursor: "pointer"}} // Ensure pointer cursor
                       onClick={() => handleTitleClick(item)} // Ensure onClick works for images as well
                     />
                     <div className="card-body">
