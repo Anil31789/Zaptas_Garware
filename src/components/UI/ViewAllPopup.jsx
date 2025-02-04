@@ -8,6 +8,7 @@ import Loader from "../Loader";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useLocation } from "react-router-dom";
 import { Modal } from "react-bootstrap";
+import "./ViewAllPopup.css";
 
 export default function ViewAllPage() {
   const { state } = useLocation();

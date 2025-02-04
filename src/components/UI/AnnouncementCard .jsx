@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 
 import { HiArrowCircleRight } from "react-icons/hi";
-import { AiOutlineSound } from "react-icons/ai";
+
 import { Modal, Spinner } from "react-bootstrap";
-import { FaMapMarkerAlt, FaThumbsUp } from "react-icons/fa";
+
 import "./AnnouncementCard.css";
 import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import showToast from "../../utils/toastHelper";
 import PostCard from "./postDisplay";
-import ViewAllPopup from "./ViewAllPopup";
+// import ViewAllPopup from "./ViewAllPopup";
 import { useNavigate } from "react-router-dom";
-import { MdOutlineAnnouncement } from "react-icons/md";
+
 import { IoIosMegaphone } from "react-icons/io";
 
 export default function AnnouncementCard() {
