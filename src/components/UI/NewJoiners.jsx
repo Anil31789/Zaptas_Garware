@@ -144,7 +144,7 @@ export default function NewJoiners() {
                                  setSelectName(`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim())
                                 setShowPopup(true)
                               })}>
-                                Comment
+                                Make a wish!
                               </button>
 
                             </div>

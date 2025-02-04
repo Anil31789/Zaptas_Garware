@@ -176,10 +176,10 @@ export default function WorkAnniversary() {
                             {/* <p className="message">{wish.CustomField6}</p> */}
                                  {/* <p className="message">{`Employee Code: ${wish.EmployeeCode}`}</p> */}
                             <div className="info">
-                              <span className="date">
+                              {/* <span className="date">
                                 <FaAward className="icon" />{calculateYearsOfExcellence(wish.JoinDate)}
 
-                              </span>
+                              </span> */}
                             </div>
                             <div className="d-flex justify-content-center">
                               {" "}
@@ -188,7 +188,7 @@ export default function WorkAnniversary() {
                                  setSelectName(`${wish?.FirstName || ''} ${wish?.MiddleName || ''} ${wish?.LastName || ''}`.trim())
                                 setShowPopup(true)
                               })}>
-                                Comment
+                                Make a wish!
                               </button>
 
                             </div>
