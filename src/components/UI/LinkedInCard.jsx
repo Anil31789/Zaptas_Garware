@@ -384,14 +384,14 @@ export default function LinkedInCard() {
             className="d-flex justify-content-center align-items-center mb-4"
             style={{ width: "100%" }}
           >
-            {selectedPost?.multimedia?.type === "image" ? (
+            {selectedPost?.multimedia?.type === "images" ? (
               <img
-                src={selectedPost.multimedia.url}
+                src={selectedPost?.multimedia.url}
                 alt="LinkedIn Post"
                 className="img-fluid rounded"
                 style={{ maxHeight: "400px" }}
               />
-            ) : selectedPost?.multimedia?.type === "video" ? (
+            ) :  (
               <video
                 controls
                 autoPlay
@@ -404,14 +404,10 @@ export default function LinkedInCard() {
                   // objectFit: "cover",
                 }}
               >
-                <source src={selectedPost.multimedia.url} type="video/mp4" />
+                <source src={selectedPost?.multimedia?.url} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
-            ) : (
-              <p className="text-muted">
-                No multimedia available for this post.
-              </p>
-            )}
+            ) }
           </div>
 
           {/* Like and Comment Section */}

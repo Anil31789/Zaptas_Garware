@@ -1,25 +1,27 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
-import "./ViewAllPopup.css";
+import React, { useEffect, useState, useRef } from "react";
+import { FaThumbsUp } from "react-icons/fa";
 import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import showToast from "../../utils/toastHelper";
 import PostCard from "./postDisplay";
 import Loader from "../Loader";
-import { FaThumbsUp } from "react-icons/fa";
+import "bootstrap/dist/css/bootstrap.min.css";
+import './ViewAllPopup.css'; // Assuming a custom CSS file for extra styles
+import { useLocation } from "react-router-dom";
 
 export default function ViewAllPage() {
   const { state } = useLocation();
   const { title, type = "announcement", bannerImg } = state;
   const [selectedImage, setSelectedImage] = useState(null); // For full-size image preview
-
   const [posts, setPosts] = useState([]); // All fetched posts
   const [loading, setLoading] = useState(false); // Loading state
+  const [showOtherImages, setShowOtherImages] = useState(false); // State to toggle visibility of other images
+  const [currentPostImages, setCurrentPostImages] = useState([]); // Store images of the clicked post
   const startRef = useRef(1); // Ref for pagination
   const hasMore = useRef(true); // Ref to track if there are more posts
 
   const fetchAnnouncements = async (limit = 9) => {
-    if (!hasMore.current || loading) return; // Exit if no more posts or already loading
+    if (!hasMore.current || loading) return;
 
     try {
       setLoading(true);
@@ -34,47 +36,22 @@ export default function ViewAllPage() {
       const response = await apiCall("GET", url, headers);
 
       if (response.success && response.data.announcements.length > 0) {
-        setPosts((prev) => [...prev, ...response.data.announcements]); // Append new posts
-        startRef.current += 1; // Increment the page for the next fetch
+        setPosts((prev) => [...prev, ...response.data.announcements]);
+        startRef.current += 1;
       } else {
-        hasMore.current = false; // No more posts available
+        hasMore.current = false;
         if (response.data.announcements.length === 0) {
           showToast("No more posts available", "info");
         }
       }
     } catch (error) {
-      hasMore.current = false; // Stop further API calls on error
+      hasMore.current = false;
       showToast("Error loading posts", "error");
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false);
     }
   };
 
-  // Debounce Function
-  const debounce = (func, delay) => {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => func(...args), delay);
-    };
-  };
-
-  useEffect(() => {
-    // Create a debounced version of the fetchAnnouncements function
-    const debouncedFetch = debounce(() => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop + 1 >=
-        document.documentElement.scrollHeight
-      ) {
-        fetchAnnouncements(); // Fetch posts when scrolling to the bottom
-      }
-    }, 300); // Debounce delay of 300ms
-
-    window.addEventListener("scroll", debouncedFetch);
-    return () => window.removeEventListener("scroll", debouncedFetch); // Cleanup on unmount
-  }, [fetchAnnouncements]); // Dependency to ensure the function is re-created if fetchAnnouncements changes
-
-  // Initial fetch when the page loads
   useEffect(() => {
     fetchAnnouncements();
   }, []);
@@ -82,8 +59,7 @@ export default function ViewAllPage() {
   const handleLikedisslike = async (announcementId, isLiked) => {
     showToast(isLiked ? "Unlike success" : "Like success", "success");
     const token = getTokenFromLocalStorage();
-    const url = `${ConnectMe.BASE_URL}/${type}/${announcementId}/${isLiked ? "unlike" : "like"
-      }`;
+    const url = `${ConnectMe.BASE_URL}/${type}/${announcementId}/${isLiked ? "unlike" : "like"}`;
     const headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -92,11 +68,9 @@ export default function ViewAllPage() {
     try {
       const response = await apiCall("POST", url, headers);
       if (response.success) {
-        // Update the local state to reflect the like/unlike action
         setPosts((prevAnnouncements) =>
           prevAnnouncements.map((announcement) => {
             if (announcement._id === announcementId) {
-              // Update the likes array and the likesCount locally
               const updatedLikes = isLiked
                 ? announcement.likes.filter(
                   (userId) => userId !== response.userId
@@ -106,20 +80,18 @@ export default function ViewAllPage() {
               return {
                 ...announcement,
                 likes: updatedLikes,
-                likesCount: updatedLikes.length, // Update the likes count directly
-                likedByUser: !isLiked, // Toggle the likedByUser state
+                likesCount: updatedLikes.length,
+                likedByUser: !isLiked,
               };
             }
-            return announcement; // Return the unchanged announcement if not matching
+            return announcement;
           })
         );
       } else {
         showToast("Error loading posts", "error");
-        fetchAnnouncements();
       }
     } catch (err) {
       showToast("Error loading posts", "error");
-      fetchAnnouncements();
     }
   };
 
@@ -127,158 +99,102 @@ export default function ViewAllPage() {
     setSelectedImage(null);
   };
 
+  // Toggle the visibility of other images for the specific post
+  const toggleOtherImages = (postId) => {
+    if (currentPostImages.length === 0 || currentPostImages !== postId) {
+      setCurrentPostImages(postId);
+    }
+    setShowOtherImages((prev) => !prev);
+  };
+
   return (
-    <div className="view-all-page">
-      {/* <header className="page-header"><h1>{title}</h1></header> */}
-      <div className="banner-img ">
-        <div className="bodx-img">
-          <img src={bannerImg} alt={title} width={"100%"} />
-          {/* </div>
-        <div className="box-img">
-          <img
-            className="img2"
-            src={`${ConnectMe.img_URL}${posts[0]?.imagePath[0]}`}
-            alt={title}
-            width={"100%"}
-          />
-        </div> */}
+    <div className="view-all-page container">
+      {/* Banner Section */}
+      <div className="banner-img my-4">
+        <div className="text-center">
+          <img src={bannerImg} alt={title} className="img-fluid rounded shadow" />
         </div>
       </div>
-      {posts.length === 0 && !loading && <p>No posts available</p>}
+
+      {/* Post List */}
+      {posts.length === 0 && !loading && <p className="text-center">No posts available</p>}
       {posts.length > 0 && (
-        <div className="container-fluid">
-          <div className="row">
-            {posts.map((post) => (
-              <React.Fragment key={post._id}>
-                <div className="col-md-9 mt-2">
-                  <div className="content-box">
-                    <h5>{post.title}</h5>
-                    <span>
-                      {post?.AwardierName} {post?.PersonDesignation}
-                    </span>
+        <div className="row">
+          {posts.map((post) => (
+            <div key={post._id} className="col-lg-4 col-md-6 mb-4">
+              <div className="card shadow-lg border-light rounded">
+                <div className="card-body d-flex flex-column">
+                  {/* Left-aligned Post Content */}
+                  <div className="post-content mb-3">
+                    <h5 className="card-title">{post.title}</h5>
+                    <p className="card-text">
+                      <strong>{post?.AwardierName} {post?.PersonDesignation}</strong>
+                    </p>
                     <div className="card-text fs-6">
                       <PostCard post={post.description} size={270} />
                     </div>
-                    <div className="additional-info mt-1">
-                      {post.links[0]?.link && (
-                        <a
-                          href={post.links[0]?.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Link: {post.links[0]?.link}
-                        </a>
-                      )}
-                      <br />
-                      {/* <span>Location: {post.location}</span> &nbsp; */}
-                      <span>
-                        Date:{" "}
-                        {new Date(post.AnnouncementDate).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </span>
-                    </div>
-                    {/* <p
-                      className="like-section"
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent triggering `handleShow`
-                        handleLikedisslike(post._id, post.likedByUser);
-                      }}
-                    >
-                      <FaThumbsUp
-                        style={{
-                          color: post.likedByUser ? "blue" : "gray",
-                          cursor: "pointer",
-                        }}
-                      />{" "}
-                      {post?.likes?.length}
-                    </p> */}
                   </div>
+
+                  {/* Right-aligned Main Image */}
+                  {post.imagePath?.length > 0 && (
+                    <div className="main-image-container text-center">
+                      <img
+                        src={`${ConnectMe.img_URL}${post.imagePath[0]}`}
+                        alt="Main Post Image"
+                        className="img-fluid rounded shadow-sm"
+                        style={{ cursor: "pointer", maxWidth: "350px" }}
+                        onClick={() => setSelectedImage(`${ConnectMe.img_URL}${post.imagePath[0]}`)}
+                      />
+                    </div>
+                  )}
                 </div>
 
-                {/* Bootstrap Carousel for Image Slider (4 photos per slide) */}
-                {post.imagePath?.length > 0 ? (
-                  <div className="col-md-3 mt-2">
-                    <div
-                      id={`carousel-${post._id}`}
-                      className="carousel slide"
-                      data-bs-ride="carousel"
-                    >
-                      <div className="carousel-inner">
-                        {post.imagePath
-                          .reduce((acc, img, index) => {
-                            if (index % 1 === 0) acc.push([]); // Create a new slide every 4 images
-                            acc[acc.length - 1].push(img); // Push the image to the current slide
-                            return acc;
-                          }, [])
-                          .map((slide, index) => (
-                            <div
-                              key={index}
-                              className={`carousel-item view-all-images ${index === 0 ? "active" : ""
-                                }`}
-                            >
-                              <div className="row">
-                                {slide.map((image, imgIndex) => (
-                                  <div key={imgIndex} className="col-md-12">
-                                    <img
-                                      src={`${ConnectMe.img_URL}${image}`}
-                                      alt={`slide-${imgIndex}`}
-                                      className="d-block w-100 slider-image"
-                                      onClick={() =>
-                                        setSelectedImage(
-                                          `${ConnectMe.img_URL}${image}`
-                                        )
-                                      } // Set the selected image for preview
-                                    />
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          ))}
+                {/* Thumbnail Images Section */}
+                {post.imagePath?.length > 1 && (
+                  <div className="mt-3">
+                    <button onClick={() => toggleOtherImages(post._id)} className="btn btn-outline-primary btn-sm">
+                      {showOtherImages && currentPostImages === post._id
+                        ? "Hide other images"
+                        : `Show ${post.imagePath.length - 1} more images`}
+                    </button>
+
+                    {showOtherImages && currentPostImages === post._id && (
+                      <div className="row mt-3">
+                        {post.imagePath.slice(1).map((image, index) => (
+                          <div key={index} className="col-4 col-md-2 mb-3">
+                            <img
+                              src={`${ConnectMe.img_URL}${image}`}
+                              alt={`thumbnail-${index}`}
+                              className="img-thumbnail shadow-sm"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => setSelectedImage(`${ConnectMe.img_URL}${image}`)}
+                            />
+                          </div>
+                        ))}
                       </div>
-                      {/* Carousel Controls */}
-                      <button
-                        className="carousel-control-prev"
-                        type="button"
-                        data-bs-target={`#carousel-${post._id}`}
-                        data-bs-slide="prev"
-                      >
-                        <span
-                          className="carousel-control-prev-icon"
-                          aria-hidden="true"
-                        ></span>
-                        <span className="visually-hidden">Previous</span>
-                      </button>
-                      <button
-                        className="carousel-control-next"
-                        type="button"
-                        data-bs-target={`#carousel-${post._id}`}
-                        data-bs-slide="next"
-                      >
-                        <span
-                          className="carousel-control-next-icon"
-                          aria-hidden="true"
-                        ></span>
-                        <span className="visually-hidden">Next</span>
-                      </button>
-                    </div>
+                    )}
                   </div>
-                ) : []}
-              </React.Fragment>
-            ))}
-          </div>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       )}
-      {loading && <Loader />} {/* Show loader when fetching data */}
+
+      {/* Loading Indicator */}
+      {loading && <Loader />}
+
+      {/* Image Preview (Lightbox Effect) */}
       {selectedImage && (
         <div className="image-preview-overlay" onClick={handleClosePreview}>
-          <img
-            src={selectedImage}
-            alt="Full View"
-            className="full-size-image"
-          />
+          <div className="image-preview-container">
+            <img
+              src={selectedImage}
+              alt="Full View"
+              className="img-fluid rounded"
+            />
+            <button className="close-preview btn btn-danger" onClick={handleClosePreview}>X</button>
+          </div>
         </div>
       )}
     </div>
