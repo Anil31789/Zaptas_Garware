@@ -1,29 +1,15 @@
 import { useEffect, useState } from "react";
 import { RiLink } from "react-icons/ri";
-import {
-  FaHome,
-  FaFacebookF,
-  FaTwitter,
-  FaInstagram,
-  FaLinkedinIn,
-  FaUsers,
-  FaLaptopCode,
-  FaUserTie,
-  FaBell,
-  FaCaretDown,
-  FaBox,
-  FaFolder,
-  FaTag,
-} from "react-icons/fa";
+
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
-import { FiChevronDown, FiCode, FiMonitor } from "react-icons/fi";
+import { FiMonitor } from "react-icons/fi";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
-import { IoIosNotifications, IoIosPerson } from "react-icons/io";
-import { FaSquareXTwitter } from "react-icons/fa6";
+import { IoIosNotifications } from "react-icons/io";
+
 import { AiOutlineHome, AiOutlineUser } from "react-icons/ai";
-import { HiOutlineDesktopComputer, HiOutlineServer, HiOutlineShoppingBag, HiOutlineUserGroup } from "react-icons/hi";
+import { HiOutlinePhone, HiOutlineShoppingBag, HiOutlineUserGroup } from "react-icons/hi";
 import SendEmailPopup from "./sendMailPopup";
 
 
@@ -50,7 +36,7 @@ export default function Headers() {
   }, []);
 
   useEffect(() => {
-    fetchQuickLinks();
+
     fetchNotificationCount();
   }, []);
 
@@ -80,53 +66,53 @@ export default function Headers() {
     fetchServiceTypes();
   }, []);
 
-  // Hardcoded data with third-level submenus
-  const [formData, setFormData] = useState({
-    links: [
-      {
-        id: "1",
-        title: "M1",
-        // link: "https://www.google.com",
-        subMenu: [
-          {
-            title: "Policy",
-            link: "https://maps.google.com",
-          },
-          {
-            title: "HelpDesk",
-            link: "https://drive.google.com",
-          },
-        ],
-      },
-      {
-        id: "2",
-        title: "M2",
-        link: "https://www.facebook.com",
-        subMenu: [
-          { title: "Facebook Ads", link: "https://www.facebook.com/ads" },
-          { title: "Facebook Messenger", link: "https://www.messenger.com" },
-        ],
-      },
-      {
-        id: "3",
-        title: "M3",
-        link: "https://www.linkedin.com",
-        subMenu: [
-          {
-            title: "LinkedIn Learning",
-            link: "https://www.linkedin.com/learning",
-          },
-          { title: "LinkedIn Jobs", link: "https://www.linkedin.com/jobs" },
-        ],
-      },
-    ],
-  });
-  const [qlink, setqlink] = useState([
-  ]);
+
 
 
 
   const QuickLinksMenu = () => {
+    const [quickLinks, setQuickLinks] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+      fetchQuickLinks();
+    }, []);
+
+    const fetchQuickLinks = async () => {
+      setIsLoading(true);
+      try {
+        const token = getTokenFromLocalStorage();
+        const headers = {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        };
+
+        const response = await apiCall(
+          "GET",
+          `${ConnectMe.BASE_URL}/qlink/quick-links`,
+          headers
+        );
+
+        if (response?.success && Array.isArray(response.data)) {
+          const fetchedLinks = response.data.map((link) => ({
+            id: link._id || Math.random().toString(36).substr(2, 9),
+            title: link.title || "Untitled",
+            link: link.url || "#",
+          }));
+          setQuickLinks(fetchedLinks);
+        } else {
+          console.error("Error fetching quick links.");
+          setQuickLinks([]); // Avoid undefined errors
+        }
+      } catch (error) {
+        console.error("Error fetching quick links:", error);
+        alert("Error fetching quick links");
+        setQuickLinks([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     const addresses = [
       {
         id: "1",
@@ -194,10 +180,25 @@ export default function Headers() {
               </ul>
             </li>
           ))}
+
+          {/* 🔹 Display Quick Links Fetched from API */}
+          <li className="dropdown-divider"></li>
+          {isLoading ? (
+            <li className="dropdown-item">Loading...</li>
+          ) : quickLinks.length > 0 ? (
+            quickLinks.map((link) => (
+              <li key={link.id} className="dropdown-item">
+                <a href={link.link} target="_blank" rel="noopener noreferrer">
+                  {link.title}
+                </a>
+              </li>
+            ))
+          ) : (
+            <li className="dropdown-item">No Quick Links Available</li>
+          )}
         </ul>
       </li>
     );
-
   };
 
 
@@ -279,9 +280,9 @@ export default function Headers() {
               </a>
               <ul className="dropdown-menu">
                 {link.subMenu.map((subItem, index) => (
-                  <li key={index}>
+                  <li key={index}   className="dropdown-item">
                     <a
-                      className="dropdown-item"
+                  
                       href={subItem.link}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -366,9 +367,8 @@ export default function Headers() {
                 <li className="dropdown-item">Loading...</li>
               ) : (
                 serviceTypes.map((link) => (
-                  <li key={link.id}>
+                  <li key={link.id} className="dropdown-item">
                     <a
-                      className="dropdown-item"
                       href={link.link}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -487,9 +487,9 @@ export default function Headers() {
               </a>
               <ul className="dropdown-menu">
                 {link.subMenu.map((subItem, index) => (
-                  <li key={index}>
+                  <li key={index} className="dropdown-item">
                     <a
-                      className="dropdown-item"
+                      // 
                       href={subItem.link}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -659,53 +659,134 @@ export default function Headers() {
     }
   };
 
-  const fetchQuickLinks = async () => {
-    try {
-      const token = getTokenFromLocalStorage();
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      };
 
-      const response = await apiCall(
-        "GET",
-        `${ConnectMe.BASE_URL}/qlink/quick-links`,
-        headers
-      );
-      if (response.success) {
-        const fetchedLinks = response?.data?.map((link) => ({
-          id: link._id, // Make sure to store the ID for each link
-          title: link.title,
-          link: link.url,
-        }));
-        setFormData({ links: fetchedLinks });
-      } else {
-        console.error("Error fetching quick links.");
-      }
-    } catch (error) {
-      console.error("Error fetching quick links:", error);
-      alert("Error fetching quick links");
-    }
-  };
 
-  const renderThirdLevelSubMenu = (thirdLevelSubMenu) => {
+  const HrMenu = () => {
+    const hrLinks = [
+      {
+        id: 1,
+        title: "Domestic Travel Policy",
+        url: `${ConnectMe.img_URL}/uploads/policy/hr/hrpolicy.docx`,
+      },
+    
+      {
+        id: 3,
+        title: "Regional Holiday Calendar",
+        url: `${ConnectMe.img_URL}/uploads/leaves/Location-wiseHolidayCalendarfor2025.docx`,
+      },
+    ];
+
+    const telcom = [
+      {
+        id: 1,
+        title: "Telephone",
+        subMenu: [
+          {
+            id: "1.1",
+            title: "Aurangabad [Waluj]",
+            link: "#",
+            subMenu: [
+              {
+                id: "1.1.1",
+                title: "Corporate Office",
+                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCorp.off.pdf`,
+              },
+              {
+                id: "1.1.2",
+                title: "Plants",
+                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujPlants.pdf`,
+              },
+              {
+                id: "1.1.3",
+                title: "Abbreviated Numbers",
+                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujAbv.pdf`,
+              },
+              {
+                id: "1.1.4",
+                title: "Chikalthana",
+                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCHK.pdf`,
+              },
+              {
+                id: "1.1.5",
+                title: "Mobile Number",
+                link: `${ConnectMe.BASE_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–Walujmobile.pdf`,
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
     return (
-      <ul className="dropdown-menu">
-        {thirdLevelSubMenu.map((item, index) => (
-          <li key={index}>
-            <a
-              className="dropdown-item"
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {item.title}
-            </a>
-          </li>
-        ))}
-      </ul>
+      <li className="nav-item dropdown">
+        <a
+          className="nav-link dropdown-toggle d-flex align-items-center"
+          href="#"
+          id="hrDropdown"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <span className="d-flex flex-column align-items-center">
+            <HiOutlineUserGroup className="navbar-icon me-1" />
+            <span className="header1">HR</span>
+          </span>
+        </a>
+        <ul className="dropdown-menu" aria-labelledby="hrDropdown">
+          {hrLinks.map((link) => (
+            <li key={link.id} className="dropdown-item">
+              <a href={link.url} target="_blank" rel="noopener noreferrer">
+                {link.title}
+              </a>
+            </li>
+          ))}
+
+          {telcom.map((item) => (
+            <li key={item.id} className="dropdown-submenu">
+              <a
+                className="dropdown-item dropdown-toggle"
+                href="#"
+                data-bs-toggle="dropdown"
+              >
+                {item.title}
+              </a>
+              <ul className="dropdown-menu">
+                {item.subMenu.map((subItem) => (
+                  <li key={subItem.id} className="dropdown-submenu">
+                    <a
+                      className="dropdown-item dropdown-toggle"
+                      href="#"
+                      data-bs-toggle="dropdown"
+                    >
+                      {subItem.title}
+                    </a>
+                    <ul className="dropdown-menu">
+                      {subItem.subMenu.map((subSubItem) => (
+                        <li key={subSubItem.id} className="dropdown-item">
+                          <a
+
+                            href={subSubItem.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {subSubItem.title}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </li>
     );
   };
+
+
+
+
 
 
   return (
@@ -714,7 +795,7 @@ export default function Headers() {
         <a className="navbar-brand" onClick={(() => {
           navigate('/')
         })}>
-          <img className="companylogo" src="./public/logo.png" alt="Logo" />
+          <img className="companylogo" src="./logo.png" alt="Logo" />
         </a>
 
         <button
@@ -741,62 +822,8 @@ export default function Headers() {
               </a>
             </li>
 
-            {/* Quick Links Dropdown */}
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle d-flex align-items-center"
-                href="#"
-                id="quicklinksDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <span className="d-flex flex-column align-items-center">
-                  <HiOutlineUserGroup className="navbar-icon me-1" />
-                  <span className="header1">HR</span>
-                </span>
-              </a>
-              <ul
-                className="dropdown-menu"
-                aria-labelledby="quicklinksDropdown"
-              >
-                {formData.links.map((link) => (
-                  <li key={link.id} className="dropdown-submenu">
-                    <a
-                      className="dropdown-item"
-                      href={link.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {link.title}
-                      {link.subMenu && (
-                        <FiChevronDown className="submenu-arrow" />
-                      )}
-                    </a>
-                    {link.subMenu && (
-                      <ul className="dropdown-menu">
-                        {link.subMenu.map((subLink, index) => (
-                          <li key={index} className="dropdown-submenu">
-                            <a
-                              className="dropdown-item"
-                              href={subLink.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {subLink.title}
-                            </a>
-                            {subLink.thirdLevelSubMenu &&
-                              renderThirdLevelSubMenu(
-                                subLink.thirdLevelSubMenu
-                              )}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </li>
+
+            <HrMenu />
             <ITServiceDropdown />
             <AccountsIcon />
             <ProductsIcon />
