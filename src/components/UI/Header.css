@@ -90,7 +90,7 @@ a.dropdown-item {
 
 .social-icons a:hover {
     color: #6d6f72;
-    background-color:#6d6f72 ;
+    /* background-color:#6d6f72 ; */
     border-color: #6d6f72;
 }
 

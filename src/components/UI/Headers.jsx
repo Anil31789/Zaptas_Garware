@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RiLink } from "react-icons/ri";
 
 import "./Header.css";
@@ -280,9 +280,9 @@ export default function Headers() {
               </a>
               <ul className="dropdown-menu">
                 {link.subMenu.map((subItem, index) => (
-                  <li key={index}   className="dropdown-item">
+                  <li key={index} className="dropdown-item">
                     <a
-                  
+
                       href={subItem.link}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -664,18 +664,23 @@ export default function Headers() {
   const HrMenu = () => {
     const hrLinks = [
       {
-        id: 1,
-        title: "Domestic Travel Policy",
-        url: `${ConnectMe.img_URL}/uploads/policy/hr/hrpolicy.docx`,
+        id: '1',
+        title: 'Policies',
+        subMenu: [
+          {
+            id: '1.1',
+            title: "Domestic Travel Policy",
+            url: `${ConnectMe.img_URL}/uploads/policy/hr/hrpolicy.docx`,
+          },
+        ],
       },
-    
       {
-        id: 3,
+        id: '3',
         title: "Regional Holiday Calendar",
         url: `${ConnectMe.img_URL}/uploads/leaves/Location-wiseHolidayCalendarfor2025.docx`,
       },
     ];
-
+  
     const telcom = [
       {
         id: 1,
@@ -701,22 +706,31 @@ export default function Headers() {
                 title: "Abbreviated Numbers",
                 link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujAbv.pdf`,
               },
+              
               {
                 id: "1.1.4",
-                title: "Chikalthana",
-                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCHK.pdf`,
-              },
-              {
-                id: "1.1.5",
                 title: "Mobile Number",
                 link: `${ConnectMe.BASE_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–Walujmobile.pdf`,
               },
             ],
           },
+          {
+            id: "1.2",
+            title: "Aurangabad [Chikalthana]",
+            subMenu: [
+              {
+                id: "1.1.1",
+                title: "Coordinates",
+                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCHK.pdf`,
+              },
+         
+            ],
+          
+          },
         ],
       },
     ];
-
+  
     return (
       <li className="nav-item dropdown">
         <a
@@ -733,42 +747,50 @@ export default function Headers() {
           </span>
         </a>
         <ul className="dropdown-menu" aria-labelledby="hrDropdown">
+          {/* HR Policies and Links */}
           {hrLinks.map((link) => (
-            <li key={link.id} className="dropdown-item">
-              <a href={link.url} target="_blank" rel="noopener noreferrer">
-                {link.title}
-              </a>
-            </li>
+            <React.Fragment key={link.id}>
+              {link.subMenu ? (
+                <li className="dropdown-submenu">
+                  <a className="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                    {link.title}
+                  </a>
+                  <ul className="dropdown-menu">
+                    {link.subMenu.map((sub) => (
+                      <li key={sub.id} className="dropdown-item">
+                        <a href={sub.url} target="_blank" rel="noopener noreferrer">
+                          {sub.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ) : (
+                <li className="dropdown-item">
+                  <a href={link.url} target="_blank" rel="noopener noreferrer">
+                    {link.title}
+                  </a>
+                </li>
+              )}
+            </React.Fragment>
           ))}
-
+  
+          {/* Telcom Section with Nested Dropdowns */}
           {telcom.map((item) => (
             <li key={item.id} className="dropdown-submenu">
-              <a
-                className="dropdown-item dropdown-toggle"
-                href="#"
-                data-bs-toggle="dropdown"
-              >
+              <a className="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">
                 {item.title}
               </a>
               <ul className="dropdown-menu">
                 {item.subMenu.map((subItem) => (
                   <li key={subItem.id} className="dropdown-submenu">
-                    <a
-                      className="dropdown-item dropdown-toggle"
-                      href="#"
-                      data-bs-toggle="dropdown"
-                    >
+                    <a className="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">
                       {subItem.title}
                     </a>
                     <ul className="dropdown-menu">
                       {subItem.subMenu.map((subSubItem) => (
                         <li key={subSubItem.id} className="dropdown-item">
-                          <a
-
-                            href={subSubItem.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
+                          <a href={subSubItem.link} target="_blank" rel="noopener noreferrer">
                             {subSubItem.title}
                           </a>
                         </li>
@@ -783,6 +805,7 @@ export default function Headers() {
       </li>
     );
   };
+  
 
 
 
