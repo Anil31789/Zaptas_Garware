@@ -78,3 +78,44 @@
 .col-md-12 {
   margin-bottom: 20px;
 }
+.main-image-container {
+  position: relative;
+  max-width: 100%; /* Ensure the container is responsive */
+  height: auto;
+  overflow: hidden; /* Hide overflowing images */
+}
+
+.main-image-container img {
+  width: 100%; /* Make the image responsive to the container */
+  height: auto; /* Maintain aspect ratio */
+  max-width: 100%; /* Ensure it doesn't overflow */
+}
+
+.image-preview-container img {
+  width: 100%; /* Make sure the full-size image is responsive */
+  max-width: 100%;
+  height: auto;
+}
+
+.image-preview-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.close-preview {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: none;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
