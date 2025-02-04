@@ -142,7 +142,11 @@ export default function ViewAllPage() {
                         src={`${ConnectMe.img_URL}${post.imagePath[0]}`}
                         alt="Main Post Image"
                         className="img-fluid rounded shadow-sm"
-                        style={{ cursor: "pointer", maxWidth: "350px" }}
+                        style={{
+                          cursor: "pointer",
+                          maxWidth: "350px",
+                          objectFit: "contain", // Ensures the image fits within the container without distortion
+                        }}
                         onClick={() => setSelectedImage(`${ConnectMe.img_URL}${post.imagePath[0]}`)}
                       />
                     </div>
@@ -161,12 +165,15 @@ export default function ViewAllPage() {
                     {showOtherImages && currentPostImages === post._id && (
                       <div className="row mt-3">
                         {post.imagePath.slice(1).map((image, index) => (
-                          <div key={index} className="col-4 col-md-2 mb-3">
+                          <div key={index} className="col-4 col-md-2 mb-3" >
                             <img
                               src={`${ConnectMe.img_URL}${image}`}
                               alt={`thumbnail-${index}`}
                               className="img-thumbnail shadow-sm"
-                              style={{ cursor: "pointer" }}
+                              style={{
+                                cursor: "pointer",
+                                objectFit: "contain", // Ensure thumbnail images also scale well
+                              }}
                               onClick={() => setSelectedImage(`${ConnectMe.img_URL}${image}`)}
                             />
                           </div>
@@ -187,11 +194,15 @@ export default function ViewAllPage() {
       {/* Image Preview (Lightbox Effect) */}
       {selectedImage && (
         <div className="image-preview-overlay" onClick={handleClosePreview}>
-          <div className="image-preview-container">
+          <div className="text-center">
             <img
               src={selectedImage}
               alt="Full View"
               className="img-fluid rounded"
+              style={{
+                objectFit: "contain", // Ensure full image fits within the preview window
+                maxHeight: "90vh", // Limit height to ensure it doesn't overflow
+              }}
             />
             <button className="close-preview btn btn-danger" onClick={handleClosePreview}>X</button>
           </div>
