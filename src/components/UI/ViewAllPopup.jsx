@@ -6,8 +6,8 @@ import showToast from "../../utils/toastHelper";
 import PostCard from "./postDisplay";
 import Loader from "../Loader";
 import "bootstrap/dist/css/bootstrap.min.css";
-import './ViewAllPopup.css'; // Assuming a custom CSS file for extra styles
 import { useLocation } from "react-router-dom";
+import { Modal } from "react-bootstrap";
 
 export default function ViewAllPage() {
   const { state } = useLocation();
@@ -99,7 +99,6 @@ export default function ViewAllPage() {
     setSelectedImage(null);
   };
 
-  // Toggle the visibility of other images for the specific post
   const toggleOtherImages = (postId) => {
     if (currentPostImages.length === 0 || currentPostImages !== postId) {
       setCurrentPostImages(postId);
@@ -144,7 +143,7 @@ export default function ViewAllPage() {
                         className="img-fluid rounded shadow-sm"
                         style={{
                           cursor: "pointer",
-                          maxWidth: "350px",
+                          maxWidth: "100%",
                           objectFit: "contain", // Ensures the image fits within the container without distortion
                         }}
                         onClick={() => setSelectedImage(`${ConnectMe.img_URL}${post.imagePath[0]}`)}
@@ -192,8 +191,12 @@ export default function ViewAllPage() {
       {loading && <Loader />}
 
       {/* Image Preview (Lightbox Effect) */}
-      {selectedImage && (
-        <div className="image-preview-overlay" onClick={handleClosePreview}>
+      <Modal
+        show={selectedImage !== null} // Show the modal if an image is selected
+        onHide={handleClosePreview} // Close the modal on clicking outside
+        centered // Center the modal
+      >
+        <Modal.Body>
           <div className="text-center">
             <img
               src={selectedImage}
@@ -204,10 +207,12 @@ export default function ViewAllPage() {
                 maxHeight: "90vh", // Limit height to ensure it doesn't overflow
               }}
             />
-            <button className="close-preview btn btn-danger" onClick={handleClosePreview}>X</button>
           </div>
-        </div>
-      )}
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-danger" onClick={handleClosePreview}>Close</button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
