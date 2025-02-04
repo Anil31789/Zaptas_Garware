@@ -27,29 +27,29 @@ export default function ITRequest() {
 
       </div>
       <div
-        className={`card-body d-flex justify-content-center align-items-center ${isHovered ? "hovered" : ""
-          }`}
-        style={{ height: "200px" }}
-      >
-        {/* <h4 className="text-muted coming-soon">Coming Soon...</h4> */}
-        <video
-          src={`${ConnectMe.img_URL}/uploads/videocard/garware.mp4`}
-          controls
-          autoPlay
-          muted
-          style={{
-            maxWidth: "100%",
-            height: "100%",
-            display: "block",
-            margin: "0px auto",
-            objectFit: "contain", // Use "contain" if you want to fit without cropping
-            borderRadius: "5px",
-            marginBottom:"180px"
-          }}>
-          Your browser does not support the video tag.
-        </video>
-
-      </div>
+  className={`card-body d-flex justify-content-center align-items-center ${isHovered ? "hovered" : ""}`}
+  style={{ 
+    height: "100%",  // Make sure the parent div covers the full height
+    width: "100%",   // Ensure full width
+    overflow: "hidden", // Hide any overflow content
+    position: "relative" // Helps with absolute positioning if needed
+  }}
+>
+  <video
+    src={`${ConnectMe.img_URL}/uploads/videocard/garware.mp4`}
+    controls
+    autoPlay
+    muted
+    style={{
+      width: "100%",  // Ensure the video takes full width
+      height: "100%", // Ensure full height
+      objectFit: "cover", // Fills the frame while maintaining aspect ratio
+      borderRadius: "5px",
+    }}
+  >
+    Your browser does not support the video tag.
+  </video>
+</div>
     </div>
   );
 }

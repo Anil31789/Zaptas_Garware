@@ -109,19 +109,26 @@ export default function GalleryCard() {
 
               return (
                 <div key={`${item._id}-${imgIndex}`} className={`carousel-item ${isActive}`}>
-                  <div className="card border-0  overflow-hidden h-100">
-                    <img
-                      src={imageUrl}
-                      className="d-block w-100 rounded-3"
-                      alt={item.title}
-                      style={{ height: "160px",objectFit:"contain", cursor: "pointer"}} // Ensure pointer cursor
-                      onClick={() => handleTitleClick(item)} // Ensure onClick works for images as well
-                    />
+                  <div className="card border-0 overflow-hidden h-100">
+                    <div className="d-flex justify-content-center align-items-center" style={{ height: "180px", overflow: "hidden" }}>
+                      <img
+                        src={imageUrl}
+                        className="d-block w-100 rounded-3"
+                        alt={item.title}
+                        style={{ 
+                          height: "100%", 
+                          width: "100%", 
+                          objectFit: "cover", // Ensures the image fills the frame properly
+                          cursor: "pointer"
+                        }} 
+                        onClick={() => handleTitleClick(item)} 
+                      />
+                    </div>
                     <div className="card-body">
                       <h5
                         className="card-title text-center mb-3 text-primary"
                         onClick={() => handleTitleClick(item?.title)}
-                        style={{ cursor: "pointer" }} // Ensure pointer cursor
+                        style={{ cursor: "pointer" }}
                       >
                         {item.title}
                       </h5>
@@ -156,6 +163,7 @@ export default function GalleryCard() {
                   </div>
                 </div>
               );
+              
             });
           })}
         </div>
