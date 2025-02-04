@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // For navigation
 import { FaCameraRetro } from "react-icons/fa";
 import { HiArrowCircleRight } from "react-icons/hi";
@@ -14,8 +14,6 @@ export default function GalleryCard() {
     Awards: [],
   });
 
-  console.log(data, 'ol')
-
   useEffect(() => {
     fetchData("Announcements");
     fetchData("CSR");
@@ -24,18 +22,16 @@ export default function GalleryCard() {
 
   const fetchData = async (type) => {
     try {
-      const url = `${ConnectMe.BASE_URL}/photosVideos/${type}?limit=3&page=1`;
+      const url = `${ConnectMe.BASE_URL}/photosVideos/${type}?limit=6&page=1`; // Fetching up to 6 items for CSR, Announcements, and Awards
       const token = getTokenFromLocalStorage();
       const headers = { Authorization: `Bearer ${token}` };
 
       const response = await apiCall("GET", url, headers);
       if (response.success) {
-
         setData((prevData) => ({
           ...prevData,
           [type]: response.data?.data || [],
         }));
-
       } else {
         showToast(`Failed to load ${type}`, "error");
       }
@@ -45,154 +41,65 @@ export default function GalleryCard() {
     }
   };
 
-
   const handleTitleClick = (item) => {
     navigate(`/photos`, { state: item });
   };
-  const renderCarousel = (items, section) => {
+
+  const renderCarousel = (items, section, rowLimit) => {
     if (!items || items.length === 0) return <p>No {section} available</p>;
 
+    // Limit the number of items to display based on rowLimit
+    const limitedItems = items.slice(0, rowLimit); 
+    const groupedItems = [];
+    
+    // Group the items in pairs for 2 items per row
+    for (let i = 0; i < limitedItems.length; i += 2) {
+      groupedItems.push(limitedItems.slice(i, i + 2)); // Group 2 images per row
+    }
+
     return (
-      <div id={`${section}-carousel`} className="carousel slide" data-bs-ride="carousel">
-        <div className="carousel-inner">
-          {items.map((item, index) => {
-            // Check if there are images
-            if (!item.images || item.images.length === 0) {
-              return (
-                <div key={item._id} className={`carousel-item ${index === 0 ? "active" : ""}`}>
-                  <div className="card border-0 shadow-lg overflow-hidden h-100">
-                    <div className="card-body">
-                      <h5
-                        className="card-title text-center mb-3 text-primary"
-                        onClick={() => handleTitleClick(item?.title)}
-                        style={{ cursor: "pointer" }} // Ensure pointer cursor
-                      >
-                        {item.title}
-                      </h5>
-                      <p className="card-text text-center text-muted">
-                        {item.AnnouncementDate ? (
-                          <span className="d-block">
-                            <strong></strong> {new Date(item.AnnouncementDate).toLocaleDateString("en-GB", {
-                              day: "2-digit",
-                              month: "short",
-                              year: "numeric",
-                            })}
-                          </span>
-                        ) : item.updatedAt ? (
-                          <span className="d-block">
-                            <strong>Updated On:</strong> {new Date(item.updatedAt).toLocaleDateString("en-GB", {
-                              day: "2-digit",
-                              month: "short",
-                              year: "numeric",
-                            })}
-                          </span>
-                        ) : item.createdAt ? (
-                          <span className="d-block">
-                            <strong>Created On:</strong> {new Date(item.createdAt).toLocaleDateString("en-GB", {
-                              day: "2-digit",
-                              month: "short",
-                              year: "numeric",
-                            })}
-                          </span>
-                        ) : null}
-                      </p>
+      <div className="carousel-inner">
+        {groupedItems.map((row, rowIndex) => (
+          <div key={rowIndex} className="row no-gutters">
+            {row.map((item) => {
+              const imageUrl = item?.images?.[0]?.imagePath
+                ? `${ConnectMe.img_URL}${item.images[0].imagePath}`
+                : "";
+
+                return (
+                  <div key={item._id} className="col-6 mb-0 p-0">
+                    <div className="card border-0 shadow-none overflow-hidden h-100 p-0">
+                      {imageUrl && (
+                        <img
+                          src={imageUrl}
+                          className="d-block w-100"
+                          alt={item.title}
+                          style={{
+                            width: "100%", // Ensure the image spans the full width of its container
+                            height: "160px", // Allow height to adjust automatically based on the aspect ratio
+                            objectFit: "cover", // Make sure the image covers the container without stretching
+                            cursor: "pointer",
+                            paddingTop:"10px",
+                            padding: "0", // No padding around the image
+                            margin: "0", // No margin around the image
+                            // paddingLeft:"10px",
+                            borderRadius: "10px", // Apply border-radius for rounded corners
+                          }}
+                          onClick={() => handleTitleClick(item)}
+                        />
+                      )}
                     </div>
                   </div>
-                </div>
-              );
-            }
-
-            // Loop through images and create carousel items for each
-            return item?.images?.map((image, imgIndex) => {
-              const isActive = index === 0 && imgIndex === 0 ? "active" : "";
-              const imageUrl = `${ConnectMe.img_URL}${image.imagePath}`; // Use imagePath from the image object
-
-              return (
-                <div key={`${item._id}-${imgIndex}`} className={`carousel-item ${isActive}`}>
-                  <div className="card border-0 overflow-hidden h-100">
-                    <div className="d-flex justify-content-center align-items-center" style={{ height: "180px", overflow: "hidden" }}>
-                      <img
-                        src={imageUrl}
-                        className="d-block w-100 rounded-3"
-                        alt={item.title}
-                        style={{ 
-                          height: "100%", 
-                          width: "100%", 
-                          objectFit: "cover", // Ensures the image fills the frame properly
-                          cursor: "pointer"
-                        }} 
-                        onClick={() => handleTitleClick(item)} 
-                      />
-                    </div>
-                    <div className="card-body">
-                      <h5
-                        className="card-title text-center mb-3 text-primary"
-                        onClick={() => handleTitleClick(item?.title)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        {item.title}
-                      </h5>
-                      <p className="card-text text-center text-muted">
-                        {item.AnnouncementDate ? (
-                          <span className="d-block">
-                            <strong></strong> {new Date(item.AnnouncementDate).toLocaleDateString("en-GB", {
-                              day: "2-digit",
-                              month: "short",
-                              year: "numeric",
-                            })}
-                          </span>
-                        ) : item.updatedAt ? (
-                          <span className="d-block">
-                            <strong>Updated On:</strong> {new Date(item.updatedAt).toLocaleDateString("en-GB", {
-                              day: "2-digit",
-                              month: "short",
-                              year: "numeric",
-                            })}
-                          </span>
-                        ) : item.createdAt ? (
-                          <span className="d-block">
-                            <strong>Created On:</strong> {new Date(item.createdAt).toLocaleDateString("en-GB", {
-                              day: "2-digit",
-                              month: "short",
-                              year: "numeric",
-                            })}
-                          </span>
-                        ) : null}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              );
-              
-            });
-          })}
-        </div>
-
-        {/* Carousel Controls */}
-        <button
-          className="carousel-control-prev"
-          type="button"
-          data-bs-target={`#${section}-carousel`}
-          data-bs-slide="prev"
-        >
-          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Previous</span>
-        </button>
-        <button
-          className="carousel-control-next"
-          type="button"
-          data-bs-target={`#${section}-carousel`}
-          data-bs-slide="next"
-        >
-          <span className="carousel-control-next-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Next</span>
-        </button>
+                );
+                
+                
+                
+            })}
+          </div>
+        ))}
       </div>
     );
   };
-
-
-
 
   return (
     <div className="card mb-3">
@@ -201,39 +108,39 @@ export default function GalleryCard() {
           <FaCameraRetro className="me-2" />
           <h5 className="mb-0">Photo/Video Gallery</h5>
         </div>
-        <a className="text-decoration-none" onClick={(() => {
-          navigate("/photos");
-        })}>
+        <a
+          className="text-decoration-none"
+          onClick={() => {
+            navigate("/photos");
+          }}
+        >
           View All <HiArrowCircleRight />
         </a>
       </div>
-      <div className="card-body card-scroll">
+      <div className="card-body p-0">
         <div className="row d-flex flex-column justify-content-center align-content-center">
-          {/* Announcements Section */}
+          {/* CSR Section - Display in a single row */}
+          {data.CsrType && data.CsrType.length > 0 && (
+            <div className="col text-center mb-2">
+              {renderCarousel(data.CsrType, "CSR", 6)} {/* Fetch and display all 6 CSR images */}
+            </div>
+          )}
+
+          {/* Announcements Section - 2 rows with 2 images per row */}
           {data.Announcements && data.Announcements.length > 0 && (
-            <div className="col text-center mb-2  " style={{ height: '400px' }}>
-              {renderCarousel(data.Announcements, "Announcements")}
+            <div className="col text-center mb-2">
+              {renderCarousel(data.Announcements, "Announcements", 4)} {/* Fetch and display 4 announcement images */}
             </div>
           )}
 
-          {/* CSR Section */}
-          {data.CSR && data.CSR.length > 0 && (
-            <div className="col text-center mb-3 border-bottom" >
-              {renderCarousel(data.CSR, "CSR")}
-            </div>
-          )}
-
-          {/* Awards Section */}
+          {/* Awards Section - 1 row with 2 images */}
           {data.Awards && data.Awards.length > 0 && (
-            <div className="col text-center " style={{ height: '40px' }}>
-              {renderCarousel(data.Awards, "Awards")}
+            <div className="col text-center mb-2">
+              {renderCarousel(data.Awards, "Awards", 2)} {/* Fetch and display 2 award images */}
             </div>
           )}
         </div>
       </div>
-
     </div>
   );
-
-
 }
