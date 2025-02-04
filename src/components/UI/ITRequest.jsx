@@ -4,6 +4,7 @@ import { HiArrowCircleRight } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import "./ITRequest.css"; // Import custom CSS file for animations
 import ConnectMe from "../../config/connect";
+import { FaFilm, FaPlayCircle } from "react-icons/fa";
 
 export default function ITRequest() {
   const navigate = useNavigate();
@@ -21,8 +22,8 @@ export default function ITRequest() {
     >
       <div className="card-header d-flex justify-content-between align-items-center ">
         <div className="d-flex align-items-center">
-          <FaUsersGear className="me-2" size={24} />
-          <h5 className="mb-0">IT Request</h5>
+          <FaPlayCircle className="me-2" size={24} />
+          <h5 className="mb-0">Video</h5>
         </div>
 
       </div>
@@ -44,7 +45,7 @@ export default function ITRequest() {
             margin: "0px auto",
             objectFit: "contain", // Use "contain" if you want to fit without cropping
             borderRadius: "5px",
-            marginBottom:"170px"
+            marginBottom:"60px"
           }}>
           Your browser does not support the video tag.
         </video>
