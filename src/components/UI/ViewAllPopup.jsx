@@ -155,7 +155,7 @@ export default function ViewAllPage() {
 
                 {/* Thumbnail Images Section */}
                 {post.imagePath?.length > 1 && (
-                  <div className="mt-3">
+                  <div className="mt-3 text-center"> {/* Center the button */}
                     <button onClick={() => toggleOtherImages(post._id)} className="btn btn-outline-primary btn-sm">
                       {showOtherImages && currentPostImages === post._id
                         ? "Hide other images"
@@ -163,9 +163,9 @@ export default function ViewAllPage() {
                     </button>
 
                     {showOtherImages && currentPostImages === post._id && (
-                      <div className="row mt-3">
+                      <div className="row mt-3 justify-content-center"> {/* Center the thumbnails */}
                         {post.imagePath.slice(1).map((image, index) => (
-                          <div key={index} className="col-4 col-md-2 mb-3" >
+                          <div key={index} className="col-4 col-md-2 mb-3">
                             <img
                               src={`${ConnectMe.img_URL}${image}`}
                               alt={`thumbnail-${index}`}
