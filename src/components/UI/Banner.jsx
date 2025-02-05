@@ -1,18 +1,17 @@
-import { useState, useEffect } from "react";
+import { Carousel } from "react-bootstrap";
 import ConnectMe from "../../config/connect";
-import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
+import { useEffect, useState } from "react";
+import Loader from "../Loader";
 import showToast from "../../utils/toastHelper";
-import Loader from "../../components/Loader"; // Import the Loader component
-import { Carousel } from "react-bootstrap"; // Importing Carousel component
-import "./Banner.css";
+import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 
 export default function Banner() {
   const [banners, setBanners] = useState([]);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
 
   // Fetch banners from the API
   const fetchBanners = async () => {
-    setLoading(true); // Set loading to true before API call
+    setLoading(true);
     try {
       const url = `${ConnectMe.BASE_URL}/banner/getFs?type=Banners&active=true`;
       const token = getTokenFromLocalStorage();
@@ -33,7 +32,7 @@ export default function Banner() {
       setBanners([]);
       showToast("Failed to load banners", "error");
     } finally {
-      setLoading(false); // Stop loading after API call
+      setLoading(false);
     }
   };
 
@@ -43,35 +42,35 @@ export default function Banner() {
 
   if (loading) {
     return (
-      <div className="banner-loader-container">
-        <Loader /> {/* Show loader while banners are being fetched */}
+      <div style={{ textAlign: "center", padding: "20px" }}>
+        <Loader />
       </div>
     );
   }
 
   if (banners.length === 0) {
     return (
-      <div className="no-banner-message">
+      <div style={{ textAlign: "center", padding: "20px" }}>
         <p>No banners available.</p>
       </div>
     );
   }
 
   return (
-    <Carousel controls interval={3000} className="banner-carousel">
+    <Carousel controls interval={3000} style={{ margin: "auto" }}>
       {banners.map((banner, index) => (
         <Carousel.Item key={banner._id}>
-          <div className="carousel-item-content">
+          <div style={{ textAlign: "center" }}>
             <img
               src={`${ConnectMe.img_URL}${banner.imagePath}`}
-              className="d-block w-100"
               alt={`Banner ${index + 1}`}
+              style={{
+                width: "100%", // Set width to 100% of the container
+                height: "500px", // Fixed height of 500px
+                objectFit: "fill", // Ensures the image fills the space properly
+                borderRadius: "10px", // Optional: Adds a smooth rounded look
+              }}
             />
-            <div className="carousel-caption d-none d-md-block">
-              {/* You can uncomment these if you want to show titles and descriptions */}
-              {/* <h5>{banner.title || `Slide ${index + 1}`}</h5>
-              <p>{banner.description || `Description for slide ${index + 1}`}</p> */}
-            </div>
           </div>
         </Carousel.Item>
       ))}

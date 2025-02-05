@@ -169,7 +169,7 @@ export default function AnnouncementCard() {
               <div className="d-flex align-items-start mb-4 flex-column">
                 {/* Announcement Content */}
                 <div className="announcement-disc pb-2">
-                  <p className="card-text">{announcement.title}</p>
+                  <p className="card-text celebrating-text" >{announcement.title}</p>
 
                   <div className="card-text fs-6">
                     <PostCard post={announcement.description} size={140} />
