@@ -795,7 +795,7 @@ export default function Headers() {
         <a className="navbar-brand" onClick={(() => {
           navigate('/')
         })}>
-          <img className="companylogo" src="./logo.png" alt="Logo" />
+          <img className="companylogo" src="./logo.PNG" alt="Logo" />
         </a>
 
         <button
