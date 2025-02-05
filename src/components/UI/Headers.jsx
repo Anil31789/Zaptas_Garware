@@ -694,23 +694,23 @@ export default function Headers() {
               {
                 id: "1.1.1",
                 title: "Corporate Office",
-                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCorp.off.pdf`,
+                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCorp.off.docx`,
               },
               {
                 id: "1.1.2",
                 title: "Plants",
-                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujPlants.pdf`,
+                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujPlants.docx`,
               },
               {
                 id: "1.1.3",
                 title: "Abbreviated Numbers",
-                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujAbv.pdf`,
+                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujAbv.docx`,
               },
               
               {
                 id: "1.1.4",
                 title: "Mobile Number",
-                link: `${ConnectMe.BASE_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–Walujmobile.pdf`,
+                link: `${ConnectMe.BASE_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–Walujmobile.docx`,
               },
             ],
           },
@@ -721,7 +721,7 @@ export default function Headers() {
               {
                 id: "1.1.1",
                 title: "Coordinates",
-                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCHK.pdf`,
+                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCHK.docx`,
               },
          
             ],

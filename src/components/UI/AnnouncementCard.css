@@ -8,7 +8,9 @@
   color: #333;
 
 }
-
+.annouuncTitle{
+  font-size: 14px !important;
+}
 /* Styling for the Date Badge */
 .date-badge {
   /* background-color: #e50019; */
@@ -50,7 +52,7 @@
 .announcement-disc p {
   margin-bottom: 5px;
   font-weight: 100;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .celebrating-text {

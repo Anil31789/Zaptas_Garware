@@ -169,7 +169,10 @@ export default function AnnouncementCard() {
               <div className="d-flex align-items-start mb-4 flex-column">
                 {/* Announcement Content */}
                 <div className="announcement-disc pb-2">
-                  <p className="card-text celebrating-text" >{announcement.title}</p>
+                  <p className="card-text celebrating-text annouuncTitle">
+                    {announcement.title}
+                  </p>
+
 
                   <div className="card-text fs-6">
                     <PostCard post={announcement.description} size={140} />
@@ -225,15 +228,15 @@ export default function AnnouncementCard() {
           </Modal.Header>
           <Modal.Body>
             {/* <div className="d-flex justify-content-between align-items-center mb-4"> */}
-              {/* Left Div */}
-              {/* <div>
+            {/* Left Div */}
+            {/* <div>
                 <h6 className="mb-1">{selectedAnnouncement.fullName}</h6>
                 <p className="mb-0 text-muted">
                   {selectedAnnouncement.Designation}
                 </p>
               </div> */}
-              {/* Right Div */}
-              {/* <div>
+            {/* Right Div */}
+            {/* <div>
                 <img
                   src={"./user.png"}
                   alt="User"
