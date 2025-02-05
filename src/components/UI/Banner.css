@@ -1,6 +1,9 @@
 .carousel-item img {
-    height: 600px;
-/* max-height:600px; */
-    /* object-fit: contain  ; */
+    height: 470px;
+    object-fit: fill;
 
+}
+
+.carousel-inner {
+    height: 470px;
 }
