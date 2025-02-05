@@ -28,29 +28,60 @@ export default function ITRequest() {
 
       </div>
       <div
-        className={`card-body d-flex justify-content-center align-items-center ${isHovered ? "hovered" : ""
-          }`}
-        style={{ height: "200px" }}
-      >
-        {/* <h4 className="text-muted coming-soon">Coming Soon...</h4> */}
-        <video
-          src={`${ConnectMe.img_URL}/uploads/videocard/garware.mp4`}
-          controls
-          autoPlay
-          muted
-          style={{
-            maxWidth: "100%",
-            height: "100%",
-            display: "block",
-            margin: "0px auto",
-            objectFit: "contain", // Use "contain" if you want to fit without cropping
-            borderRadius: "5px",
-            marginBottom:"60px"
-          }}>
-          Your browser does not support the video tag.
-        </video>
+  className={`card-body d-flex justify-content-center align-items-center ${isHovered ? "hovered" : ""}`}
+  style={{
+    height: "200px",
+    width: "100%",
+    position: "relative", // Ensure proper positioning of the video inside
+    overflow: "hidden", // Prevent overflow issues
+  }}
+>
+  {/* <video
+    src="./public/GarwareGoaKochiVideoArvindFinal.mp4"
+    controls
+    autoPlay
+    muted
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover", // Ensures the video fills the container
+      position: "absolute",
+      top: "0",
+      left: "0",
+      borderRadius: "5px",
+    }}
+  >
+    Your browser does not support the video tag.
+  </video> */}
+  <div
+  style={{
+    position: "relative",
+    width: "100%",
+    height: "100vh", // Full viewport height
+    overflow: "hidden",
+  }}
+>
+  <video
+    src="./GarwareGoaKochiVideoArvindFinal.mp4"
+    controls
+    autoPlay
+    muted
+    style={{
+      width: "100%",
+      height: "30%", // Change as needed
+      objectFit: "cover", // Ensures the video covers without stretching
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)", // Centers the video
+      borderRadius: "5px",
+    }}
+  >
+    Your browser does not support the video tag.
+  </video>
+</div>
+</div>
 
-      </div>
     </div>
   );
 }
