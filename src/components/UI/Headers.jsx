@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { RiLink } from "react-icons/ri";
 
 import "./Header.css";
@@ -280,9 +280,9 @@ export default function Headers() {
               </a>
               <ul className="dropdown-menu">
                 {link.subMenu.map((subItem, index) => (
-                  <li key={index} className="dropdown-item">
+                  <li key={index}   className="dropdown-item">
                     <a
-
+                  
                       href={subItem.link}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -664,23 +664,18 @@ export default function Headers() {
   const HrMenu = () => {
     const hrLinks = [
       {
-        id: '1',
-        title: 'Policies',
-        subMenu: [
-          {
-            id: '1.1',
-            title: "Domestic Travel Policy",
-            url: `${ConnectMe.img_URL}/uploads/policy/hr/hrpolicy.docx`,
-          },
-        ],
+        id: 1,
+        title: "Domestic Travel Policy",
+        url: `${ConnectMe.img_URL}/uploads/policy/hr/hrpolicy.docx`,
       },
+    
       {
-        id: '3',
+        id: 3,
         title: "Regional Holiday Calendar",
         url: `${ConnectMe.img_URL}/uploads/leaves/Location-wiseHolidayCalendarfor2025.docx`,
       },
     ];
-  
+
     const telcom = [
       {
         id: 1,
@@ -706,31 +701,22 @@ export default function Headers() {
                 title: "Abbreviated Numbers",
                 link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujAbv.pdf`,
               },
-              
               {
                 id: "1.1.4",
+                title: "Chikalthana",
+                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCHK.pdf`,
+              },
+              {
+                id: "1.1.5",
                 title: "Mobile Number",
                 link: `${ConnectMe.BASE_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–Walujmobile.pdf`,
               },
             ],
           },
-          {
-            id: "1.2",
-            title: "Aurangabad [Chikalthana]",
-            subMenu: [
-              {
-                id: "1.1.1",
-                title: "Coordinates",
-                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCHK.pdf`,
-              },
-         
-            ],
-          
-          },
         ],
       },
     ];
-  
+
     return (
       <li className="nav-item dropdown">
         <a
@@ -747,50 +733,42 @@ export default function Headers() {
           </span>
         </a>
         <ul className="dropdown-menu" aria-labelledby="hrDropdown">
-          {/* HR Policies and Links */}
           {hrLinks.map((link) => (
-            <React.Fragment key={link.id}>
-              {link.subMenu ? (
-                <li className="dropdown-submenu">
-                  <a className="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                    {link.title}
-                  </a>
-                  <ul className="dropdown-menu">
-                    {link.subMenu.map((sub) => (
-                      <li key={sub.id} className="dropdown-item">
-                        <a href={sub.url} target="_blank" rel="noopener noreferrer">
-                          {sub.title}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ) : (
-                <li className="dropdown-item">
-                  <a href={link.url} target="_blank" rel="noopener noreferrer">
-                    {link.title}
-                  </a>
-                </li>
-              )}
-            </React.Fragment>
+            <li key={link.id} className="dropdown-item">
+              <a href={link.url} target="_blank" rel="noopener noreferrer">
+                {link.title}
+              </a>
+            </li>
           ))}
-  
-          {/* Telcom Section with Nested Dropdowns */}
+
           {telcom.map((item) => (
             <li key={item.id} className="dropdown-submenu">
-              <a className="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">
+              <a
+                className="dropdown-item dropdown-toggle"
+                href="#"
+                data-bs-toggle="dropdown"
+              >
                 {item.title}
               </a>
               <ul className="dropdown-menu">
                 {item.subMenu.map((subItem) => (
                   <li key={subItem.id} className="dropdown-submenu">
-                    <a className="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                    <a
+                      className="dropdown-item dropdown-toggle"
+                      href="#"
+                      data-bs-toggle="dropdown"
+                    >
                       {subItem.title}
                     </a>
                     <ul className="dropdown-menu">
                       {subItem.subMenu.map((subSubItem) => (
                         <li key={subSubItem.id} className="dropdown-item">
-                          <a href={subSubItem.link} target="_blank" rel="noopener noreferrer">
+                          <a
+
+                            href={subSubItem.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
                             {subSubItem.title}
                           </a>
                         </li>
@@ -805,7 +783,6 @@ export default function Headers() {
       </li>
     );
   };
-  
 
 
 
@@ -905,39 +882,42 @@ export default function Headers() {
                   className="profile-img img-fluid rounded-circle border border-2 shadow-sm"
                 />
               </button>
-              <ul
-                className="dropdown-menu p-3"
-                aria-labelledby="dropdownMenuButton"
-              >
-                <li className="d-flex align-items-center mb-3" onClick={() => {
-                  navigate("/profile");
-                }}>
-                  <img
-                    src={userDetails?.images?.imagePath ? `${ConnectMe.img_URL}${userDetails?.images?.imagePath}` : "./user.png"}
-                    alt="Profile"
-                    className="profile-img img-fluid rounded-circle border border-2 shadow-sm"
+              <ul className="dropdown-menu p-3" aria-labelledby="dropdownMenuButton" style={{ minWidth: '250px' }}>
+  {/* Profile Section */}
+  <li className="d-flex align-items-center mb-3" onClick={() => navigate("/profile")} style={{ cursor: "pointer" }}>
+    <img
+      src={userDetails?.images?.imagePath ? `${ConnectMe.img_URL}${userDetails?.images?.imagePath}` : "./user.png"}
+      alt="Profile"
+      className="profile-img img-fluid rounded-circle border border-2 shadow-sm"
+      style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+    />
+    <div className="d-flex flex-column ms-3">
+      <span className="profile-name" style={{ fontSize: '1rem', fontWeight: 'bold' }}>
+        {userDetails?.name}
+      </span>
+      <span className="profile-degree" style={{ fontSize: '0.875rem', color: '#6c757d' }}>
+        {userDetails?.jobTitle}
+      </span>
+    </div>
+  </li>
 
-                  />
+  {/* Logout Button with Bootstrap Hover Effect */}
+  <li className="d-flex justify-content-center mt-3">
+    <a
+      className="btn btn-danger w-50" // Make button width 75% of the parent for better centering
+      onClick={() => navigate("/login")}
+      style={{
+        padding: '10px 20px',
+        borderRadius: '10px',
+        fontWeight: 'bold',
+        color: "white",
+      }}
+    >
+      Logout
+    </a>
+  </li>
+</ul>
 
-                  <div className="d-flex flex-column ms-3" style={{ cursor: "pointer" }}>
-                    <span className="profile-name">{userDetails?.name}</span>
-                    <span className="profile-degree">
-                      {userDetails?.jobTitle}
-                    </span>
-                  </div>
-                </li>
-
-                <li>
-                  <a
-                    className="btn btn-danger w-50 ms-auto"
-                    onClick={() => {
-                      navigate("/login");
-                    }}
-                  >
-                    Logout
-                  </a>
-                </li>
-              </ul>
             </div>
 
             {/* <div className="notification-bell">
