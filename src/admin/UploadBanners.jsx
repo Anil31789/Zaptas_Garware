@@ -11,7 +11,7 @@ export default function UploadBanners() {
   const [cropper, setCropper] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [croppedImage, setCroppedImage] = useState(null);
-  const [cropDimensions, setCropDimensions] = useState({ width: 0, height: 0 });
+
   const fileInputRef = React.createRef();
 
   useEffect(() => {
@@ -105,12 +105,7 @@ export default function UploadBanners() {
     }
   };
 
-  const handleCropperChange = () => {
-    if (cropper) {
-      const data = cropper.getData();
-      setCropDimensions({ width: data.width, height: data.height });
-    }
-  };
+
 
   return (
     <div className="upload-banners container">
@@ -146,6 +141,11 @@ export default function UploadBanners() {
 
       <div className="banners-section">
         <h4>Upload New Banners</h4>
+
+        <div className="image-info mt-3">
+          <p><strong>Banner Size:</strong> 1440px (Width) x 482px (Height)</p>
+          <p><strong>Aspect Ratio:</strong> 3:1 (Width:Height)</p>
+        </div>
         <input
           type="file"
           className="form-control upload-input mb-3"
@@ -170,19 +170,23 @@ export default function UploadBanners() {
           <div className="cropper-container">
             <Cropper
               src={selectedFile}
-              style={{ height: "500px", width: "auto" }}
-              // aspectRatio={16 / 9}   // Maintain the aspect ratio
-              viewMode={1}           // Keeps the crop box fixed and doesn't allow it to be moved
-              minHeight={500}        // Minimum height fixed to 500px
-       
+              aspectRatio={3 / 1}  // Force 3:1 aspect ratio
+              viewMode={1}          // Restrict movement but allow zoom
+              minCropBoxWidth={1440} // Minimum crop width fixed to 1440px
+              minCropBoxHeight={482} // Minimum crop height fixed to 482px
+              zoomable={true}        // Allow zooming in and out
+              scalable={false}       // Disable scaling beyond limits
+              movable={false}        // Prevent moving the crop box
+              cropBoxMovable={false} // Lock the crop box position
+              cropBoxResizable={false} // Prevent resizing crop box
+              minCanvasHeight={1}  // Ensure minimum canvas height
+              minCanvasWidth={3}  // Ensure minimum canvas width
               onInitialized={setCropper}
-              onCrop={handleCropperChange} // Listen for crop changes
             />
 
-            <div className="crop-dimensions">
-              <p>Width: {cropDimensions.width}px</p>
-              <p>Height: {cropDimensions.height}px</p>
-            </div>
+
+
+
 
             <div className="d-flex justify-content-between mt-3">
               <button className="btn btn-primary btn-sm" onClick={saveCroppedImage}>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Loader from "../Loader";
 import showToast from "../../utils/toastHelper";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
+// import './banner.css'
 
 export default function Banner() {
   const [banners, setBanners] = useState([]);
@@ -57,7 +58,7 @@ export default function Banner() {
   }
 
   return (
-    <Carousel controls interval={3000} style={{ margin: "auto" }}>
+    <Carousel controls interval={3000} className="banner-carousel">
       {banners.map((banner, index) => (
         <Carousel.Item key={banner._id}>
           <div style={{ textAlign: "center" }}>
@@ -65,15 +66,17 @@ export default function Banner() {
               src={`${ConnectMe.img_URL}${banner.imagePath}`}
               alt={`Banner ${index + 1}`}
               style={{
-                width: "100%", // Set width to 100% of the container
-                height: "500px", // Fixed height of 500px
-                objectFit: "fill", // Ensures the image fills the space properly
-                borderRadius: "10px", // Optional: Adds a smooth rounded look
+                width: "100%",
+                height: "75vh",
+                objectFit: "fill", /* Ensures the image fits without cropping */
+                borderRadius: "10px",
               }}
             />
           </div>
         </Carousel.Item>
+
       ))}
     </Carousel>
+
   );
 }
