@@ -48,8 +48,19 @@ export default function Home() {
           <div className="col-md-4 d-flex">
             <AwardsCard />
           </div>
+          <div className="col-md-4 d-flex">
+          <BirthdayBox />
         </div>
-        <div className="birthday-wish">
+        <div className="col-md-4 d-flex">
+          <WorkAnniversary />
+        </div>
+        <div className="col-md-4 d-flex">
+          <NewJoiners />
+        </div>
+         
+        </div>
+
+        {/* <div className="birthday-wish">
           <BirthdayBox />
         </div>
         <div className="birthday-wish">
@@ -57,7 +68,7 @@ export default function Home() {
         </div>
         <div className="birthday-wish">
           <NewJoiners />
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ export default function ITRequest() {
 
   return (
     <div
-      className="card mb-3 "
+      className="card mb-3"
       // onClick={() => {
       //   navigate("/ITService");
       // }}
