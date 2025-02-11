@@ -3,32 +3,18 @@ import { HiArrowCircleRight } from "react-icons/hi";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { SlCalender } from "react-icons/sl";
-import { FaBirthdayCake, FaAward, FaHandshake, FaRegClipboard } from "react-icons/fa";
-import { IoGiftOutline } from "react-icons/io5"; // New icon for Paid-Holiday
+import { FaAward, FaHandshake, FaRegClipboard } from "react-icons/fa";
+import { IoGiftOutline } from "react-icons/io5"; // Icon for Paid-Holiday
 import "./CalendarCard.css";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 import showToast from "../../utils/toastHelper";
 import { useNavigate } from "react-router-dom";
 
-const GARWARE_QUOTES = [
-  "Innovation drives the future of industries.",
-  "Garware believes in empowering individuals for growth.",
-  "Sustainability is not an option; it's our responsibility.",
-  "Teamwork is the foundation of our success.",
-  "Leading the way in engineering excellence.",
-  "Our values define our actions and achievements.",
-  "Quality is at the heart of everything we do.",
-  "Think big, act responsibly, and achieve greatness.",
-  "Garware: Bridging tradition with innovation.",
-  "Passion fuels our purpose every day."
-];
-
 export default function CalendarCard() {
   const [date, setDate] = useState(new Date());
   const [events, setEvents] = useState([]);
   const [selectedDateEvents, setSelectedDateEvents] = useState([]);
-  const [randomQuotes, setRandomQuotes] = useState([]);
   const navigate = useNavigate();
 
   const fetchEvents = async (month, year) => {
@@ -59,30 +45,14 @@ export default function CalendarCard() {
 
   const handleDateClick = (selectedDate) => {
     setDate(selectedDate);
-    const eventsForDate = getEventsForDate(selectedDate);
-    setSelectedDateEvents(eventsForDate);
-
-    if (eventsForDate.length === 0) {
-      displayRandomQuotes();
-    }
-  };
-
-  const displayRandomQuotes = () => {
-    const shuffledQuotes = GARWARE_QUOTES.sort(() => 0.5 - Math.random());
-    setRandomQuotes(shuffledQuotes.slice(0, 2)); // Select 2 random quotes
+    setSelectedDateEvents(getEventsForDate(selectedDate));
   };
 
   useEffect(() => {
-    const currentMonth = date.getMonth() + 1; // JavaScript months are 0-based
+    const currentMonth = date.getMonth() + 1;
     const currentYear = date.getFullYear();
     fetchEvents(currentMonth, currentYear);
-
-    // Display events for today or random quotes if no events
-    const todayEvents = getEventsForDate(date);
-    setSelectedDateEvents(todayEvents);
-    if (todayEvents.length === 0) {
-      displayRandomQuotes();
-    }
+    setSelectedDateEvents(getEventsForDate(date));
   }, [date]);
 
   const tileContent = ({ date, view }) => {
@@ -96,7 +66,7 @@ export default function CalendarCard() {
                 key={index}
                 className={`event-dot ${event.type.toLowerCase()}`}
                 style={{
-                  backgroundColor: getDotColor(event.type), // Set background color of dot
+                  backgroundColor: getDotColor(event.type),
                 }}
               />
             ))}
@@ -111,9 +81,7 @@ export default function CalendarCard() {
 
   const handleActiveStartDateChange = ({ activeStartDate, view }) => {
     if (view === "month") {
-      const newMonth = activeStartDate.getMonth() + 1;
-      const newYear = activeStartDate.getFullYear();
-      fetchEvents(newMonth, newYear);
+      fetchEvents(activeStartDate.getMonth() + 1, activeStartDate.getFullYear());
     }
   };
 
@@ -132,21 +100,20 @@ export default function CalendarCard() {
       CSR: <FaHandshake className="event-icon" />,
       Award: <FaAward className="event-icon" />,
       Announcement: <FaRegClipboard className="event-icon" />,
-      "Paid-Holiday": <IoGiftOutline className="event-icon" />, // Holiday icon for Paid-Holiday
+      "Paid-Holiday": <IoGiftOutline className="event-icon" />,
     };
     return iconClass[eventType] || <FaRegClipboard className="event-icon" />;
   };
 
-  // Function to return color based on event type
   const getDotColor = (eventType) => {
     const colorMap = {
-      CSR: "#007bff", // Blue for CSR
-      Award: "#28a745", // Green for Award
-      Announcement: "#ffc107", // Yellow for Announcement
-      "Paid-Holiday": "#17a2b8", // Info color for Paid-Holiday
+      CSR: "#007bff",
+      Award: "#28a745",
+      Announcement: "#ffc107",
+      "Paid-Holiday": "#17a2b8",
     };
 
-    return colorMap[eventType] || "#6c757d"; // Default color if no match
+    return colorMap[eventType] || "#6c757d";
   };
 
   return (
@@ -190,15 +157,8 @@ export default function CalendarCard() {
             </ul>
           </div>
         ) : (
-          <div className="quote-list mt-3">
-            <h6>No events for {date.toDateString()}:</h6>
-            <ul>
-              {randomQuotes.map((quote, index) => (
-                <li key={index} className="text-primary">
-                  {quote}
-                </li>
-              ))}
-            </ul>
+          <div className="mt-3">
+            <h6>No events for {date.toDateString()}.</h6>
           </div>
         )}
       </div>
