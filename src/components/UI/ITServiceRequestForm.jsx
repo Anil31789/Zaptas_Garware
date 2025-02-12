@@ -4,6 +4,7 @@ import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 import { useLocation } from "react-router-dom";
 import { FaChevronDown } from "react-icons/fa"; // Bootstrap Icons
+import showToast from "../../utils/toastHelper";
 
 const ITServiceRequestForm = () => {
   const location = useLocation();
@@ -79,15 +80,15 @@ const ITServiceRequestForm = () => {
       const response = await apiCall("POST", url, headers, formData);
 
       if (response && response.success) {
-        alert("Service request submitted successfully!");
+        showToast("Service request submitted successfully!", "success");
         setFormData({ typeOfService: "", fieldsData: {} });
       } else {
         console.error("Failed to submit the service request:", response.message);
-        alert("Failed to submit the service request. Please try again.");
+        showToast("Failed to submit the service request. Please try again.", "error");
       }
     } catch (error) {
       console.error("Error submitting the service request:", error);
-      alert("An error occurred while submitting the request. Please try again.");
+      showToast("An error occurred while submitting the request. Please try again.", "error");
     } finally {
       setIsLoading(false);
     }
