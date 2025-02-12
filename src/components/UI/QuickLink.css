@@ -1,0 +1,48 @@
+.quicklink-card {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 10px;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  
+  .quicklink-card .card-header {
+    background: #6d6f72;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .quicklink-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .quicklink-list li {
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd;
+    transition: background 0.2s ease-in-out;
+  }
+  
+  .quicklink-list li:last-child {
+    border-bottom: none;
+  }
+  
+  .quicklink-list li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .quicklink-list li:hover {
+    background: #f5f5f5;
+  }
+  
+  .quicklink-icon {
+    color: #007bff;
+    font-size: 16px;
+  }
+  

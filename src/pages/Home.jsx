@@ -11,6 +11,10 @@ import LinkedInCard from "../components/UI/LinkedInCard";
 import ManagementMessageCard from "../components/UI/ManagementMessageCard";
 import NewJoiners from "../components/UI/NewJoiners";
 import WorkAnniversary from "../components/UI/WorkAnniversary";
+import QuickLink from "../components/UI/Quicklink"; // Import the QuickLink component
+import HR from "../components/UI/HR";
+import IT from "../components/UI/IT";
+import Accounts from "../components/UI/Account";
 
 export default function Home() {
   return (
@@ -22,13 +26,11 @@ export default function Home() {
           <div className="col-md-4 d-flex">
             <LinkedInCard />
           </div>
-          <div className="col-md-4 d-flex ">
-          <ManagementMessageCard />
-           
+          <div className="col-md-4 d-flex">
+            <ManagementMessageCard />
           </div>
           <div className="col-md-4 d-flex">
-          <AnnouncementCard />
-            {/* <AwardsCard /> */}
+            <AnnouncementCard />
           </div>
           <div className="col-md-4 d-flex">
             <CalendarCard />
@@ -49,27 +51,38 @@ export default function Home() {
             <AwardsCard />
           </div>
           <div className="col-md-4 d-flex">
-          <BirthdayBox />
-        </div>
-        <div className="col-md-4 d-flex">
-          <WorkAnniversary />
-        </div>
-        <div className="col-md-4 d-flex">
-          <NewJoiners />
-        </div>
-         
+            <BirthdayBox />
+          </div>
+          <div className="col-md-4 d-flex">
+            <WorkAnniversary />
+          </div>
+          <div className="col-md-4 d-flex">
+            <NewJoiners />
+          </div>
+
+          
         </div>
 
-        {/* <div className="birthday-wish">
-          <BirthdayBox />
-        </div>
         <div className="birthday-wish">
-          <WorkAnniversary />
+          <QuickLink />
         </div>
-        <div className="birthday-wish">
-          <NewJoiners />
-        </div> */}
+        <div className="container-fluid p-4">
+        <div className="row d-flex">
+             {/* New Components */}
+          <div className="col-md-4 d-flex">
+            <HR />
+          </div>
+          <div className="col-md-4 d-flex">
+            <IT />
+          </div>
+          <div className="col-md-4 d-flex">
+            <Accounts />
+            </div>
+          </div>
+        </div>
+        
       </div>
     </div>
   );
 }
+
