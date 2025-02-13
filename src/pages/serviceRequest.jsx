@@ -14,26 +14,29 @@ const ServiceRequestPage = () => {
   const [activeTab, setActiveTab] = useState('Pending');
 
   useEffect(() => {
-    const fetchServiceRequests = async () => {
-      setLoading(true);
-      try {
-        const url = `${ConnectMe.BASE_URL}/it/api/getrequests?status=${activeTab}&count=true&data=true`;
-        const token = getTokenFromLocalStorage();
-        const headers = { Authorization: `Bearer ${token}` };
-        const response = await apiCall('GET', url, headers);
-        if (response?.data?.data) {
-          setServiceRequests(response.data.data);
-        } else {
-          console.error('Failed to fetch service requests');
-        }
-      } catch (error) {
-        console.error('Error fetching service requests:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+
     fetchServiceRequests();
   }, [activeTab]);
+
+
+  const fetchServiceRequests = async () => {
+    setLoading(true);
+    try {
+      const url = `${ConnectMe.BASE_URL}/it/api/getrequests?status=${activeTab}&count=true&data=true`;
+      const token = getTokenFromLocalStorage();
+      const headers = { Authorization: `Bearer ${token}` };
+      const response = await apiCall('GET', url, headers , null, 2000,false);
+      if (response?.data?.data) {
+        setServiceRequests(response.data.data);
+      } else {
+        console.error('Failed to fetch service requests');
+      }
+    } catch (error) {
+      console.error('Error fetching service requests:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleAction = async (action) => {
     if (!comment.trim()) {
@@ -69,6 +72,7 @@ const ServiceRequestPage = () => {
         );
         setSelectedRequest(null);
         setComment('');
+        await fetchServiceRequests()
       } else {
         showToast(`Failed to ${action} the request.`, 'error');
       }

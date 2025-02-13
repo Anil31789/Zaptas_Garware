@@ -418,7 +418,7 @@ export default function Headers() {
         subMenu: [
           {
             title:
-              "Income Tax Declaration proposed investment (Proposed tax-saving investment declarations and regime selection at the beginning of the year).",
+              "Income Tax Declaration proposed investment .",
             link: `${ConnectMe.img_URL}/uploads/forms/INCOMETAXSAVINGSTATEMENTFORFY2024-25_updated.xls`,
           },
           {
