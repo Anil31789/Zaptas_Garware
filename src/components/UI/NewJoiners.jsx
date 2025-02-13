@@ -171,7 +171,7 @@ export default function WorkAnniversary() {
             </div>
           </div>
         ) : (
-          <div>No work anniversaries found.</div>
+          <div>No Joiners found.</div>
         )}
       </div>
       {showPopup && (
@@ -182,7 +182,7 @@ export default function WorkAnniversary() {
           personalName={`${selectedEmployee?.FirstName || ""} ${
             selectedEmployee?.MiddleName || ""
           } ${selectedEmployee?.LastName || ""}`.trim()}
-          type="WorkAnnComments"
+          type="joinComments"
         />
       )}
     </div>
