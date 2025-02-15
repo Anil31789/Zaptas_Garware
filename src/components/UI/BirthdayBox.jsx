@@ -89,9 +89,9 @@ export default function WorkAnniversary() {
         if (response.success && response?.data?.birthdayWishes?.length > 0) {
           setWorkAnniversaries(response?.data?.birthdayWishes);
         }
-        else {
-          setWorkAnniversaries(datadb)
-        }
+      //  else {
+      //     setWorkAnniversaries(datadb)
+      //   } 
       } catch (err) {
         setWorkAnniversaries(datadb)
         setError("Error fetching joiners.");

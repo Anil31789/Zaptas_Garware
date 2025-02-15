@@ -11,6 +11,7 @@ import { IoIosNotifications } from "react-icons/io";
 import { AiOutlineHome, AiOutlineUser } from "react-icons/ai";
 import { HiOutlinePhone, HiOutlineShoppingBag, HiOutlineUserGroup } from "react-icons/hi";
 import SendEmailPopup from "./sendMailPopup";
+import { Button, Modal } from "react-bootstrap";
 
 
 
@@ -280,9 +281,9 @@ export default function Headers() {
               </a>
               <ul className="dropdown-menu">
                 {link.subMenu.map((subItem, index) => (
-                  <li key={index}   className="dropdown-item">
+                  <li key={index} className="dropdown-item">
                     <a
-                  
+
                       href={subItem.link}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -506,15 +507,17 @@ export default function Headers() {
     );
   };
 
-  const NotificationIcon = ({ notificationCount, userDetails }) => {
+
+
+  
+const NotificationIcon = ({ notificationCount, userDetails }) => {
     const navigate = useNavigate();
     const [showDropdown, setShowDropdown] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [popupType, setPopupType] = useState("");
-
+  
     const notifications = [];
-
-    // Create the list of notifications based on the counts
+  
     if (notificationCount?.comment?.totalUnseenBDayComments > 0) {
       notifications.push({
         message: `You have ${notificationCount.comment.totalUnseenBDayComments} new birthday comment(s).`,
@@ -540,27 +543,48 @@ export default function Headers() {
       notifications.push({
         message: `You have ${notificationCount.Itcount} pending IT request(s).`,
         type: "💻 IT Request",
-        popupType: null, // No popup for IT request
+        popupType: "ITRequest",
       });
     }
-
-    // Calculate total notifications
+  
     const totalNotifications =
       (notificationCount?.comment?.totalUnseenBDayComments || 0) +
       (notificationCount?.comment?.totalUnseenWorkAnnComments || 0) +
       (notificationCount?.comment?.totalUnseenJoinComments || 0) +
       (notificationCount?.Itcount || 0);
-
-    // Handle notification click (open popup only if it has a popupType)
+  
     const handleNotificationClick = (notification) => {
-      if (notification.popupType) {
+      if (notification.popupType === "ITRequest") {
+        setPopupType("ITRequest");
+        setShowPopup(true);
+      } else if (notification.popupType) {
         setPopupType(notification.popupType);
-        setShowPopup(true); // Only show popup for certain notifications
-      } else {
-        navigate("/service"); // Navigate if no popup is associated
+        setShowPopup(true);
       }
     };
-
+  
+    // Function to check if the modal should be shown
+    const shouldShowModal = () => {
+      const lastClosedTime = localStorage.getItem("lastClosedITModal");
+      if (!lastClosedTime) return true; // First time visiting the page
+      const timeElapsed = Date.now() - parseInt(lastClosedTime, 10);
+      return timeElapsed >= 5 * 60 * 1000; // 5 minutes (in milliseconds)
+    };
+  
+    // Automatically open IT Request popup if there are pending requests and enough time has passed
+    useEffect(() => {
+      if (notificationCount?.Itcount > 0 && shouldShowModal()) {
+        setPopupType("ITRequest");
+        setShowPopup(true);
+      }
+    }, [notificationCount?.Itcount]);
+  
+    // Function to handle modal close
+    const handleCloseModal = () => {
+      localStorage.setItem("lastClosedITModal", Date.now().toString());
+      setShowPopup(false);
+    };
+  
     return (
       <div className="position-relative d-inline-block cursor-pointer">
         {/* Notification Icon */}
@@ -568,18 +592,18 @@ export default function Headers() {
           onClick={() => setShowDropdown(!showDropdown)}
           className="text-dark position-relative cursor-pointer"
         >
-          <IoIosNotifications size={25} className="mx-2 cursor-pointer" />
+          <IoIosNotifications size={28} className="mx-2 cursor-pointer" />
           {totalNotifications > 0 && (
             <span className="badge bg-danger rounded-circle position-absolute top-0 start-100 translate-middle">
               {totalNotifications}
             </span>
           )}
         </a>
-
+  
         {/* Dropdown Notifications */}
         {showDropdown && (
           <div
-            className="dropdown-menu show p-2 position-absolute end-0 mt-2 shadow-lg rounded cursor-pointer"
+            className="dropdown-menu show p-2 position-absolute end-0 mt-2 shadow-lg rounded"
             style={{
               minWidth: "250px",
               zIndex: 1050,
@@ -587,37 +611,64 @@ export default function Headers() {
               border: "1px solid #ddd",
             }}
           >
-            <h6 className="dropdown-header text-primary fw-bold cursor-pointer">
-              🔔 Notifications
-            </h6>
+            <h6 className="dropdown-header text-primary fw-bold">🔔 Notifications</h6>
             {notifications.length > 0 ? (
               notifications.map((note, index) => (
                 <button
                   key={index}
-                  className="dropdown-item d-flex align-items-start "
-                  onClick={() => handleNotificationClick(note)} // Handle click to open the popup
+                  className="dropdown-item d-flex align-items-start"
+                  onClick={() => handleNotificationClick(note)}
                 >
                   <span className="me-2">{note.type}</span>
-                  <div className="flex-grow-1">
-                    <p className="mb-0 small text-dark ">{note.message}</p> {/* Add cursor-pointer here */}
-                  </div>
+                  <p className="mb-0 small text-dark">{note.message}</p>
                 </button>
-
-
               ))
             ) : (
-              <p className="text-center text-muted small m-2">
-                No new notifications
-              </p>
+              <p className="text-center text-muted small m-2">No new notifications</p>
             )}
           </div>
         )}
-
-        {/* Send Email Popup */}
-        {showPopup && (
+  
+        {/* IT Request Modal */}
+        {showPopup && popupType === "ITRequest" && (
+          <div
+            className="modal fade show"
+            style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
+            tabIndex="-1"
+          >
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content shadow-lg rounded-3">
+                <div className="modal-header bg-primary text-white">
+                  <h5 className="modal-title">🔔 Pending IT Requests</h5>
+                  <button
+                    type="button"
+                    className="btn-close btn-close-white"
+                    onClick={handleCloseModal}
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <p className="text-dark fs-6">
+                    You have <strong>{notificationCount.Itcount}</strong> pending IT request(s).
+                  </p>
+                </div>
+                <div className="modal-footer">
+                  <button className="btn btn-secondary" onClick={handleCloseModal}>
+                    Close
+                  </button>
+                  <button className="btn btn-primary" onClick={() => navigate("/service")}>
+                    View Requests
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+  
+        {/* Other Popups */}
+        {showPopup && popupType !== "ITRequest" && (
           <SendEmailPopup
-            show={showPopup} // Popup will only show if showPopup is true
-            handleClose={() => setShowPopup(false)} // Close the popup when triggered
+            show={showPopup}
+            handleClose={() => setShowPopup(false)}
             recipient={userDetails}
             personalName={userDetails?.name}
             type={popupType}
@@ -625,9 +676,8 @@ export default function Headers() {
         )}
       </div>
     );
-
   };
-
+  
 
 
 
@@ -668,7 +718,7 @@ export default function Headers() {
         title: "Domestic Travel Policy",
         url: `${ConnectMe.img_URL}/uploads/policy/hr/hrpolicy.docx`,
       },
-    
+
       {
         id: 3,
         title: "Regional Holiday Calendar",
@@ -722,9 +772,9 @@ export default function Headers() {
                 title: "Coordinates",
                 link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCHK.docx`,
               },
-         
+
             ],
-          
+
           },
         ],
       },
@@ -836,9 +886,9 @@ export default function Headers() {
             </li>
 
 
-            <HrMenu />
+            {/* <HrMenu />
             <ITServiceDropdown />
-            <AccountsIcon />
+            <AccountsIcon /> */}
             <ProductsIcon />
             <QuickLinksMenu />
 
@@ -896,40 +946,40 @@ export default function Headers() {
                 />
               </button>
               <ul className="dropdown-menu p-3" aria-labelledby="dropdownMenuButton" style={{ minWidth: '250px' }}>
-  {/* Profile Section */}
-  <li className="d-flex align-items-center mb-3" onClick={() => navigate("/profile")} style={{ cursor: "pointer" }}>
-    <img
-      src={userDetails?.images?.imagePath ? `${ConnectMe.img_URL}${userDetails?.images?.imagePath}` : "./user.png"}
-      alt="Profile"
-      className="profile-img img-fluid rounded-circle border border-2 shadow-sm"
-      style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-    />
-    <div className="d-flex flex-column ms-3">
-      <span className="profile-name" style={{ fontSize: '1rem', fontWeight: 'bold' }}>
-        {userDetails?.name}
-      </span>
-      <span className="profile-degree" style={{ fontSize: '0.875rem', color: '#6c757d' }}>
-        {userDetails?.jobTitle}
-      </span>
-    </div>
-  </li>
+                {/* Profile Section */}
+                <li className="d-flex align-items-center mb-3" onClick={() => navigate("/profile")} style={{ cursor: "pointer" }}>
+                  <img
+                    src={userDetails?.images?.imagePath ? `${ConnectMe.img_URL}${userDetails?.images?.imagePath}` : "./user.png"}
+                    alt="Profile"
+                    className="profile-img img-fluid rounded-circle border border-2 shadow-sm"
+                    style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                  />
+                  <div className="d-flex flex-column ms-3">
+                    <span className="profile-name" style={{ fontSize: '1rem', fontWeight: 'bold' }}>
+                      {userDetails?.name}
+                    </span>
+                    <span className="profile-degree" style={{ fontSize: '0.875rem', color: '#6c757d' }}>
+                      {userDetails?.jobTitle}
+                    </span>
+                  </div>
+                </li>
 
-  {/* Logout Button with Bootstrap Hover Effect */}
-  <li className="d-flex justify-content-center mt-3">
-    <a
-      className="btn btn-danger w-50" // Make button width 75% of the parent for better centering
-      onClick={() => navigate("/login")}
-      style={{
-        padding: '10px 20px',
-        borderRadius: '10px',
-        fontWeight: 'bold',
-        color: "white",
-      }}
-    >
-      Logout
-    </a>
-  </li>
-</ul>
+                {/* Logout Button with Bootstrap Hover Effect */}
+                <li className="d-flex justify-content-center mt-3">
+                  <a
+                    className="btn btn-danger w-50" // Make button width 75% of the parent for better centering
+                    onClick={() => navigate("/login")}
+                    style={{
+                      padding: '10px 20px',
+                      borderRadius: '10px',
+                      fontWeight: 'bold',
+                      color: "white",
+                    }}
+                  >
+                    Logout
+                  </a>
+                </li>
+              </ul>
 
             </div>
 

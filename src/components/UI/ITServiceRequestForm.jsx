@@ -123,7 +123,7 @@ const ITServiceRequestForm = () => {
                   ))}
                 </Form.Select>
                 <InputGroup.Text>
-                  <FaChevronDown />
+                  {/* <FaChevronDown /> */}
                 </InputGroup.Text>
               </InputGroup>
             </div>

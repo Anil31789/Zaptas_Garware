@@ -12,7 +12,7 @@ import "./BirthdayBox.css";
 
 
 
-const datadb =[
+const datadb = [
   {
     "FirstName": "Amit",
     "MiddleName": "Kumar",
@@ -90,9 +90,9 @@ export default function WorkAnniversary() {
         if (response.success && response?.data?.workAnniversaries?.length > 0) {
           setWorkAnniversaries(response?.data?.workAnniversaries);
         }
-        else{
-          setWorkAnniversaries(datadb)
-        }
+        // else{
+        //   setWorkAnniversaries(datadb)
+        // }
       } catch (err) {
         setWorkAnniversaries(datadb)
         setError("Error fetching work anniversaries.");
@@ -141,9 +141,8 @@ export default function WorkAnniversary() {
               </div>
               <div className="wish-content text-center">
                 <h5 className="title card-text text-danger fw-bold celebrating-text">
-                  {`${workAnniversaries[currentIndex]?.FirstName || ""} ${workAnniversaries[currentIndex]?.MiddleName || ""} ${
-                    workAnniversaries[currentIndex]?.LastName || ""
-                  }`.trim()}
+                  {`${workAnniversaries[currentIndex]?.FirstName || ""} ${workAnniversaries[currentIndex]?.MiddleName || ""} ${workAnniversaries[currentIndex]?.LastName || ""
+                    }`.trim()}
                 </h5>
                 <p className="message">{workAnniversaries[currentIndex]?.CustomField6 || "Support"}</p>
                 <div className="info">
@@ -151,9 +150,9 @@ export default function WorkAnniversary() {
                     <FaAward className="icon" />{" "}
                     {new Date(workAnniversaries[currentIndex]?.JoinDate).toLocaleDateString("en-GB", {
                       day: "2-digit",
-                      month: "short",
-                      year: "numeric",
+                      month: "short"
                     })}
+
                   </span>
                 </div>
                 <button
@@ -177,9 +176,8 @@ export default function WorkAnniversary() {
           show={showPopup}
           handleClose={() => setShowPopup(false)}
           recipient={selectedEmployee}
-          personalName={`${selectedEmployee?.FirstName || ""} ${
-            selectedEmployee?.MiddleName || ""
-          } ${selectedEmployee?.LastName || ""}`.trim()}
+          personalName={`${selectedEmployee?.FirstName || ""} ${selectedEmployee?.MiddleName || ""
+            } ${selectedEmployee?.LastName || ""}`.trim()}
           type="WorkAnnComments"
         />
       )}

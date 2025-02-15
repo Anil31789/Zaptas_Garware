@@ -26,7 +26,7 @@ const HR = () => {
       subMenu: [
         {
           id: "1.1",
-          title: "Aurangabad [Waluj]",
+          title: "Waluj",
           link: "#",
           subMenu: [
             {
@@ -58,7 +58,7 @@ const HR = () => {
         },
         {
           id: "1.2",
-          title: "Aurangabad [Chikalthana]",
+          title: "Chikalthana",
           subMenu: [
             {
               id: "1.1.1",
@@ -69,6 +69,39 @@ const HR = () => {
           ],
         
         },
+
+
+
+        {
+          id: "1.3",
+          title: "Mumbai",
+          subMenu: [
+            {
+              id: "1.3.1",
+              title: "Corporate Office",
+              link: `${ConnectMe.img_URL}/uploads/telecomHr/Mumbai/corporateoffice.pdf`,
+            },
+       
+          ],
+        
+        },
+
+
+
+        {
+          id: "1.4",
+          title: "Nashik",
+          subMenu: [
+            {
+              id: "1.4.1",
+              title: "Mobile Number",
+              link: `${ConnectMe.img_URL}/uploads/telecomHr/Nashik/telcom.pdf`,
+            },
+       
+          ],
+        
+        },
+
       ],
     },
   ];

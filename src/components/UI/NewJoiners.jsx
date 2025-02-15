@@ -10,7 +10,7 @@ import "./BirthdayBox.css";
 
 
 
-const datadb =[
+const datadb = [
   {
     "FirstName": "Amit",
     "MiddleName": "Kumar",
@@ -89,9 +89,9 @@ export default function WorkAnniversary() {
         if (response.success && response?.data?.joinedToday?.length > 0) {
           setWorkAnniversaries(response?.data?.joinedToday);
         }
-        else{
-          setWorkAnniversaries(datadb)
-        }
+        // else{
+        //   setWorkAnniversaries(datadb)
+        // }
       } catch (err) {
         setWorkAnniversaries(datadb)
         setError("Error fetching joiners.");
@@ -119,8 +119,8 @@ export default function WorkAnniversary() {
     <div className="card mb-3" style={{ cursor: "pointer", borderRadius: "10px" }}>
       <div className="card-header d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
-        <FaHandshake className="me-2" size={24} />
-        <h5 className="mb-0">New Joiners</h5>
+          <FaHandshake className="me-2" size={24} />
+          <h5 className="mb-0">New Joiners</h5>
         </div>
       </div>
       <div className="card-body">
@@ -140,23 +140,18 @@ export default function WorkAnniversary() {
               </div>
               <div className="wish-content text-center">
                 <h5 className="title card-text text-danger fw-bold celebrating-text">
-                  {`${workAnniversaries[currentIndex]?.FirstName || ""} ${workAnniversaries[currentIndex]?.MiddleName || ""} ${
-                    workAnniversaries[currentIndex]?.LastName || ""
-                  }`.trim()}
+                  {`${workAnniversaries[currentIndex]?.FirstName || ""} ${workAnniversaries[currentIndex]?.MiddleName || ""} ${workAnniversaries[currentIndex]?.LastName || ""
+                    }`.trim()}
                 </h5>
                 <p className="message">{workAnniversaries[currentIndex]?.CustomField6 || "Support"}</p>
                 <div className="info">
-                <span className="date">
-                                <FaHandshake className="icon" />{" "}
-                                {new Date(workAnniversaries[currentIndex]?.JoinDate).toLocaleDateString(
-                                  "en-GB",
-                                  {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric",
-                                  }
-                                )}
-                              </span>
+                  <span className="date">
+                    <FaHandshake className="icon" />{" "}
+                    {new Date(workAnniversaries[currentIndex]?.JoinDate).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short"
+                    })}
+                  </span>
                 </div>
                 <button
                   className="send-wish-btn mt-2"
@@ -179,9 +174,8 @@ export default function WorkAnniversary() {
           show={showPopup}
           handleClose={() => setShowPopup(false)}
           recipient={selectedEmployee}
-          personalName={`${selectedEmployee?.FirstName || ""} ${
-            selectedEmployee?.MiddleName || ""
-          } ${selectedEmployee?.LastName || ""}`.trim()}
+          personalName={`${selectedEmployee?.FirstName || ""} ${selectedEmployee?.MiddleName || ""
+            } ${selectedEmployee?.LastName || ""}`.trim()}
           type="joinComments"
         />
       )}
