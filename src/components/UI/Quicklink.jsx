@@ -82,11 +82,11 @@ const QuickLink = () => {
   // ];
 
   return (
-    <div className="card quicklink-card">
+    <div className=" quicklink-card">
       {/* Header */}
       <div className="card-header d-flex align-items-center justify-content-center">
         <FaLink className="me-2" size={24} />
-        {/* <h5 className="mb-0">Quick Links</h5> */}
+        <h5 className="mb-0">Quick Links</h5>
       </div>
 
    

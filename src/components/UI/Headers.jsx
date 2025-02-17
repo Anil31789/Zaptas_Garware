@@ -205,54 +205,124 @@ export default function Headers() {
 
 
 
-  const ProductsIcon = () => {
+  // const ProductsIcon = () => {
+  //   const links = [
+  //     {
+  //       id: "1",
+  //       title: "Polyester Films(BOPET)",
+  //       subMenu: [
+  //         { title: "Shrink PET Films", link: "https://www.garwarehitechfilms.com/polyester-films/shrink-pet-films" },
+  //         { title: "Lidding", link: "https://www.garwarehitechfilms.com/polyester-films/lidding-films" },
+  //         { title: "Liner", link: "https://www.garwarehitechfilms.com/polyester-films/liner" },
+  //         { title: "Electrical & Electronics", link: "https://www.garwarehitechfilms.com/polyester-films/electrical-and-electronics" },
+  //         { title: "Metallized Films", link: "https://www.garwarehitechfilms.com/polyester-films/metallized-films" },
+  //         { title: "Graphics", link: "https://www.garwarehitechfilms.com/polyester-films/graphics-films" },
+  //         { title: "Thermal", link: "https://www.garwarehitechfilms.com/polyester-films/thermal-films" },
+  //         { title: "Packaging", link: "https://www.garwarehitechfilms.com/polyester-films/packaging-films" },
+  //       ],
+  //     },
+  //     {
+  //       id: "2",
+  //       title: "Paint Protection Films",
+  //       subMenu: [
+  //         { title: "Plus PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/plus-ppf" },
+  //         { title: "Premium PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/premium-ppf" },
+  //         { title: "Matte PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/matte-ppf" },
+  //         { title: "Black PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/black-ppf" },
+  //         { title: "White PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/white-ppf" },
+  //         { title: "Titanium PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/titanium-ppf" },
+  //       ],
+  //     },
+  //     {
+  //       id: "3",
+  //       title: "Architectural Films",
+  //       subMenu: [
+  //         { title: "Platina Films", link: "https://www.garwarehitechfilms.com/architectural-films" },
+  //         { title: "Premium Films", link: "https://www.garwarehitechfilms.com/architectural-films" },
+  //         { title: "Classic Films", link: "https://www.garwarehitechfilms.com/architectural-films" },
+  //       ],
+  //     },
+  //     {
+  //       id: "4",
+  //       title: "Sun Control Films",
+  //       subMenu: [
+  //         { title: "Ice Cool Elite SG", link: "https://www.garwarehitechfilms.com/sun-control-films/ice-cool-elite-sg" },
+  //         { title: "Artic Cool SG", link: "https://www.garwarehitechfilms.com/sun-control-films/artic-cool-sg" },
+  //         { title: "Ice Cool Shield SG", link: "https://www.garwarehitechfilms.com/sun-control-films/ice-cool-shield-sg" },
+  //       ],
+  //     },
+  //   ];
+
+  //   return (
+  //     <li className="nav-item dropdown">
+  //       <a
+  //         className="nav-link dropdown-toggle d-flex align-items-center"
+  //         href="#"
+  //         id="productsDropdown"
+  //         role="button"
+  //         data-bs-toggle="dropdown"
+  //         aria-expanded="false"
+  //       >
+  //         <span className="d-flex flex-column align-items-center">
+  //           <HiOutlineShoppingBag className="navbar-icon me-1" />
+  //           <span className="header1">Our Products</span>
+  //         </span>
+
+  //       </a>
+  //       <ul className="dropdown-menu" aria-labelledby="productsDropdown">
+  //         {links.map((link) => (
+  //           <li key={link.id} className="dropdown-submenu">
+  //             <a
+  //               className="dropdown-item dropdown-toggle"
+  //               href="#"
+  //               data-bs-toggle="dropdown"
+  //             >
+  //               {link.title}
+  //             </a>
+  //             <ul className="dropdown-menu">
+  //               {link.subMenu.map((subItem, index) => (
+  //                 <li key={index} className="dropdown-item">
+  //                   <a
+
+  //                     href={subItem.link}
+  //                     target="_blank"
+  //                     rel="noopener noreferrer"
+  //                   >
+  //                     {subItem.title}
+  //                   </a>
+  //                 </li>
+  //               ))}
+  //             </ul>
+  //           </li>
+  //         ))}
+  //       </ul>
+  //     </li>
+  //   );
+  // };
+ const ProductsIcon = () => {
     const links = [
       {
         id: "1",
         title: "Polyester Films(BOPET)",
-        subMenu: [
-          { title: "Shrink PET Films", link: "https://www.garwarehitechfilms.com/polyester-films/shrink-pet-films" },
-          { title: "Lidding", link: "https://www.garwarehitechfilms.com/polyester-films/lidding-films" },
-          { title: "Liner", link: "https://www.garwarehitechfilms.com/polyester-films/liner" },
-          { title: "Electrical & Electronics", link: "https://www.garwarehitechfilms.com/polyester-films/electrical-and-electronics" },
-          { title: "Metallized Films", link: "https://www.garwarehitechfilms.com/polyester-films/metallized-films" },
-          { title: "Graphics", link: "https://www.garwarehitechfilms.com/polyester-films/graphics-films" },
-          { title: "Thermal", link: "https://www.garwarehitechfilms.com/polyester-films/thermal-films" },
-          { title: "Packaging", link: "https://www.garwarehitechfilms.com/polyester-films/packaging-films" },
-        ],
+        link: "https://www.garwarehitechfilms.com/polyester-films",
       },
       {
         id: "2",
         title: "Paint Protection Films",
-        subMenu: [
-          { title: "Plus PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/plus-ppf" },
-          { title: "Premium PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/premium-ppf" },
-          { title: "Matte PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/matte-ppf" },
-          { title: "Black PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/black-ppf" },
-          { title: "White PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/white-ppf" },
-          { title: "Titanium PPF", link: "https://www.garwarehitechfilms.com/paint-protection-films/titanium-ppf" },
-        ],
+        link: "https://www.garwarehitechfilms.com/paint-protection-films",
       },
       {
         id: "3",
         title: "Architectural Films",
-        subMenu: [
-          { title: "Platina Films", link: "https://www.garwarehitechfilms.com/architectural-films" },
-          { title: "Premium Films", link: "https://www.garwarehitechfilms.com/architectural-films" },
-          { title: "Classic Films", link: "https://www.garwarehitechfilms.com/architectural-films" },
-        ],
+        link: "https://www.garwarehitechfilms.com/architectural-films",
       },
       {
         id: "4",
         title: "Sun Control Films",
-        subMenu: [
-          { title: "Ice Cool Elite SG", link: "https://www.garwarehitechfilms.com/sun-control-films/ice-cool-elite-sg" },
-          { title: "Artic Cool SG", link: "https://www.garwarehitechfilms.com/sun-control-films/artic-cool-sg" },
-          { title: "Ice Cool Shield SG", link: "https://www.garwarehitechfilms.com/sun-control-films/ice-cool-shield-sg" },
-        ],
+        link: "https://www.garwarehitechfilms.com/sun-control-films",
       },
     ];
-
+  
     return (
       <li className="nav-item dropdown">
         <a
@@ -267,32 +337,13 @@ export default function Headers() {
             <HiOutlineShoppingBag className="navbar-icon me-1" />
             <span className="header1">Our Products</span>
           </span>
-
         </a>
         <ul className="dropdown-menu" aria-labelledby="productsDropdown">
           {links.map((link) => (
-            <li key={link.id} className="dropdown-submenu">
-              <a
-                className="dropdown-item dropdown-toggle"
-                href="#"
-                data-bs-toggle="dropdown"
-              >
+            <li key={link.id} className="dropdown-item">
+              <a href={link.link} target="_blank" rel="noopener noreferrer">
                 {link.title}
               </a>
-              <ul className="dropdown-menu">
-                {link.subMenu.map((subItem, index) => (
-                  <li key={index} className="dropdown-item">
-                    <a
-
-                      href={subItem.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {subItem.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
             </li>
           ))}
         </ul>
@@ -711,75 +762,243 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
 
 
 
+  // const HrMenu = () => {
+  //   const hrLinks = [
+  //     // {
+  //     //   id: 1,
+  //     //   title: "Domestic Travel Policy",
+  //     //   url: `${ConnectMe.img_URL}/uploads/policy/hr/hrpolicy.docx`,
+  //     // },
+
+  //     // {
+  //     //   id: 3,
+  //     //   title: "Regional Holiday Calendar",
+  //     //   url: `${ConnectMe.img_URL}/uploads/leaves/Location-wiseHolidayCalendarfor2025.docx`,
+  //     // },
+  //   ];
+
+  // const telcom = [
+  //   {
+  //     id: 1,
+  //     title: "Telephone",
+  //     subMenu: [
+  //       {
+  //         id: "1.1",
+  //         title: "Waluj",
+  //         link: "#",
+  //         subMenu: [
+  //           {
+  //             id: "1.1.1",
+  //             title: "Corporate Office",
+  //             link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCorp.off.pdf`,
+  //           },
+  //           {
+  //             id: "1.1.2",
+  //             title: "Plants",
+  //             link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujPlants.pdf`,
+  //           },
+  //           {
+  //             id: "1.1.3",
+  //             title: "Abbreviated Numbers",
+  //             link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujAbv.pdf`,
+  //           },
+  //           // {
+  //           //   id: "1.1.4",
+  //           //   title: "Chikalthana",
+  //           //   link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCHK.pdf`,
+  //           // },
+  //           {
+  //             id: "1.1.5",
+  //             title: "Mobile Number",
+  //             link: `${ConnectMe.BASE_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–Walujmobile.pdf`,
+  //           },
+  //         ],
+  //       },
+  //       {
+  //         id: "1.2",
+  //         title: "Chikalthana",
+  //         subMenu: [
+  //           {
+  //             id: "1.1.1",
+  //             title: "Coordinates",
+  //             link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCHK.pdf`,
+  //           },
+       
+  //         ],
+        
+  //       },
+
+
+
+  //       {
+  //         id: "1.3",
+  //         title: "Mumbai",
+  //         subMenu: [
+  //           {
+  //             id: "1.3.1",
+  //             title: "Corporate Office",
+  //             link: `${ConnectMe.img_URL}/uploads/telecomHr/Mumbai/corporateoffice.pdf`,
+  //           },
+       
+  //         ],
+        
+  //       },
+
+
+
+  //       {
+  //         id: "1.4",
+  //         title: "Nashik",
+  //         subMenu: [
+  //           {
+  //             id: "1.4.1",
+  //             title: "Mobile Number",
+  //             link: `${ConnectMe.img_URL}/uploads/telecomHr/Nashik/telcom.pdf`,
+  //           },
+       
+  //         ],
+        
+  //       },
+
+  //     ],
+  //   },
+  // ];
+
+  //   return (
+  //     <li className="nav-item dropdown">
+  //       <a
+  //         className="nav-link dropdown-toggle d-flex align-items-center"
+  //         href="#"
+  //         id="hrDropdown"
+  //         role="button"
+  //         data-bs-toggle="dropdown"
+  //         aria-expanded="false"
+  //       >
+  //         <span className="d-flex flex-column align-items-center">
+  //           <HiOutlinePhone className="navbar-icon me-1" />
+  //           <span className="header1">Telecome</span>
+  //         </span>
+  //       </a>
+  //       <ul className="dropdown-menu" aria-labelledby="hrDropdown">
+  //         {hrLinks.map((link) => (
+  //           <li key={link.id} className="dropdown-item">
+  //             <a href={link.url} target="_blank" rel="noopener noreferrer">
+  //               {link.title}
+  //             </a>
+  //           </li>
+  //         ))}
+
+  //         {telcom.map((item) => (
+  //           <li key={item.id} className="dropdown-submenu">
+  //             <a
+  //               className="dropdown-item dropdown-toggle"
+  //               href="#"
+  //               data-bs-toggle="dropdown"
+  //             >
+  //               {item.title}
+  //             </a>
+  //             <ul className="dropdown-menu">
+  //               {item.subMenu.map((subItem) => (
+  //                 <li key={subItem.id} className="dropdown-submenu">
+  //                   <a
+  //                     className="dropdown-item dropdown-toggle"
+  //                     href="#"
+  //                     data-bs-toggle="dropdown"
+  //                   >
+  //                     {subItem.title}
+  //                   </a>
+  //                   <ul className="dropdown-menu">
+  //                     {subItem.subMenu.map((subSubItem) => (
+  //                       <li key={subSubItem.id} className="dropdown-item">
+  //                         <a
+
+  //                           href={subSubItem.link}
+  //                           target="_blank"
+  //                           rel="noopener noreferrer"
+  //                         >
+  //                           {subSubItem.title}
+  //                         </a>
+  //                       </li>
+  //                     ))}
+  //                   </ul>
+  //                 </li>
+  //               ))}
+  //             </ul>
+  //           </li>
+  //         ))}
+  //       </ul>
+  //     </li>
+  //   );
+  // };
+
   const HrMenu = () => {
     const hrLinks = [
-      {
-        id: 1,
-        title: "Domestic Travel Policy",
-        url: `${ConnectMe.img_URL}/uploads/policy/hr/hrpolicy.docx`,
-      },
-
-      {
-        id: 3,
-        title: "Regional Holiday Calendar",
-        url: `${ConnectMe.img_URL}/uploads/leaves/Location-wiseHolidayCalendarfor2025.docx`,
-      },
+      // other links if necessary
     ];
-
+  
     const telcom = [
       {
-        id: 1,
-        title: "Telephone",
+        id: "1.1",
+        title: "Waluj",
+        link: "#",
         subMenu: [
           {
-            id: "1.1",
-            title: "Aurangabad [Waluj]",
-            link: "#",
-            subMenu: [
-              {
-                id: "1.1.1",
-                title: "Corporate Office",
-                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCorp.off.docx`,
-              },
-              {
-                id: "1.1.2",
-                title: "Plants",
-                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujPlants.docx`,
-              },
-              {
-                id: "1.1.3",
-                title: "Abbreviated Numbers",
-                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujAbv.docx`,
-              },
-              {
-                id: "1.1.4",
-                title: "Chikalthana",
-                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCHK.pdf`,
-              },
-              {
-                id: "1.1.5",
-                title: "Mobile Number",
-                link: `${ConnectMe.BASE_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–Walujmobile.docx`,
-              },
-            ],
+            id: "1.1.1",
+            title: "Corporate Office",
+            link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCorp.off.pdf`,
           },
           {
-            id: "1.2",
-            title: "Aurangabad [Chikalthana]",
-            subMenu: [
-              {
-                id: "1.1.1",
-                title: "Coordinates",
-                link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCHK.docx`,
-              },
-
-            ],
-
+            id: "1.1.2",
+            title: "Plants",
+            link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujPlants.pdf`,
+          },
+          {
+            id: "1.1.3",
+            title: "Abbreviated Numbers",
+            link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujAbv.pdf`,
+          },
+          {
+            id: "1.1.5",
+            title: "Mobile Number",
+            link: `${ConnectMe.BASE_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–Walujmobile.pdf`,
+          },
+        ],
+      },
+      {
+        id: "1.2",
+        title: "Chikalthana",
+        subMenu: [
+          {
+            id: "1.1.1",
+            title: "Coordinates",
+            link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCHK.pdf`,
+          },
+        ],
+      },
+      {
+        id: "1.3",
+        title: "Mumbai",
+        subMenu: [
+          {
+            id: "1.3.1",
+            title: "Corporate Office",
+            link: `${ConnectMe.img_URL}/uploads/telecomHr/Mumbai/corporateoffice.pdf`,
+          },
+        ],
+      },
+      {
+        id: "1.4",
+        title: "Nashik",
+        subMenu: [
+          {
+            id: "1.4.1",
+            title: "Mobile Number",
+            link: `${ConnectMe.img_URL}/uploads/telecomHr/Nashik/telcom.pdf`,
           },
         ],
       },
     ];
-
+  
     return (
       <li className="nav-item dropdown">
         <a
@@ -791,8 +1010,8 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
           aria-expanded="false"
         >
           <span className="d-flex flex-column align-items-center">
-            <HiOutlineUserGroup className="navbar-icon me-1" />
-            <span className="header1">HR</span>
+            <HiOutlinePhone className="navbar-icon me-1" />
+            <span className="header1">Telecome</span>
           </span>
         </a>
         <ul className="dropdown-menu" aria-labelledby="hrDropdown">
@@ -803,40 +1022,26 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
               </a>
             </li>
           ))}
-
+  
           {telcom.map((item) => (
             <li key={item.id} className="dropdown-submenu">
               <a
                 className="dropdown-item dropdown-toggle"
-                href="#"
+                href={item.link}  // Use the link if necessary
                 data-bs-toggle="dropdown"
               >
                 {item.title}
               </a>
               <ul className="dropdown-menu">
                 {item.subMenu.map((subItem) => (
-                  <li key={subItem.id} className="dropdown-submenu">
+                  <li key={subItem.id} className="dropdown-item">
                     <a
-                      className="dropdown-item dropdown-toggle"
-                      href="#"
-                      data-bs-toggle="dropdown"
+                      href={subItem.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       {subItem.title}
                     </a>
-                    <ul className="dropdown-menu">
-                      {subItem.subMenu.map((subSubItem) => (
-                        <li key={subSubItem.id} className="dropdown-item">
-                          <a
-
-                            href={subSubItem.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {subSubItem.title}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
                   </li>
                 ))}
               </ul>
@@ -848,6 +1053,69 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
   };
 
 
+  
+ 
+
+  const SearchBar = ({ data }) => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredData, setFilteredData] = useState(data);
+  
+    // Handle the search input change
+    const handleSearchChange = (e) => {
+      const query = e.target.value;
+      setSearchQuery(query);
+  
+      if (query === '') {
+        setFilteredData(data); // Reset when input is cleared
+      } else {
+        // Filter the data based on the query
+        const filtered = data.filter((item) =>
+          item.title.toLowerCase().includes(query.toLowerCase())
+        );
+        setFilteredData(filtered);
+      }
+    };
+  
+    return (
+      <div className="search-container position-relative d-flex justify-content-end align-items-center">
+        <form className="d-flex">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+        </form>
+  
+        {searchQuery && (
+          <ul
+            className="search-suggestions position-absolute bg-light border rounded p-2 w-100 mt-1"
+            style={{ right: 0, zIndex: 9999 }}
+          >
+            {filteredData.length > 0 ? (
+              filteredData.map((item, index) => (
+                <li key={index} className="suggestion-item list-group-item list-group-item-action hoverable">
+                  <a href={item.link} target="_blank" rel="noopener noreferrer">
+                    {item.title}
+                  </a>
+                </li>
+              ))
+            ) : (
+              <li className="list-group-item">No results found</li>
+            )}
+          </ul>
+        )}
+      </div>
+    );
+  };
+  
+ 
+  
+  
+  
+  
+  
 
 
 
@@ -886,11 +1154,15 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
             </li>
 
 
-            {/* <HrMenu />
-            <ITServiceDropdown />
+
+
+            
+            {/* <ITServiceDropdown />
             <AccountsIcon /> */}
             <ProductsIcon />
             <QuickLinksMenu />
+            <HrMenu />
+            <SearchBar/>
 
           </ul>
 
