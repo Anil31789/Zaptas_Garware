@@ -127,3 +127,8 @@ img.profile-img {
     background-color:rgba(109, 111, 114, 0.4);; /* Line color */
     margin-left: 7px; /* Adjust spacing from the icon */
   }
+
+  .suggestion-item:hover {
+    background-color: #007bff; /* Bootstrap's primary color */
+    color: white;
+  }

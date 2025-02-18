@@ -6,7 +6,7 @@ const ConnectMe = {
     const hostname = window.location.hostname;
 
     if (hostname === "localhost") {
-      this.BASE_URL = "http://localhost:3060/v1";
+      this.BASE_URL = "https://intranet.zaptas.in/v1";
       this.img_URL = "https://intranet.zaptas.in";
     } else if (hostname === "intranet.zaptas.in") {
       this.BASE_URL = "https://intranet.zaptas.in/v1";

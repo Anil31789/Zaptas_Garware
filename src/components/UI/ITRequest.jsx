@@ -28,6 +28,7 @@ export default function ITRequest() {
 
       </div>
       <div
+      
   className={`card-body d-flex justify-content-center align-items-center ${isHovered ? "hovered" : ""}`}
   style={{
     height: "200px",
@@ -35,25 +36,13 @@ export default function ITRequest() {
     position: "relative", // Ensure proper positioning of the video inside
     overflow: "hidden", // Prevent overflow issues
   }}
+  
 >
-  {/* <video
-    src="./public/GarwareGoaKochiVideoArvindFinal.mp4"
-    controls
-    autoPlay
-    muted
-    style={{
-      width: "100%",
-      height: "100%",
-      objectFit: "cover", // Ensures the video fills the container
-      position: "absolute",
-      top: "0",
-      left: "0",
-      borderRadius: "5px",
-    }}
-  >
-    Your browser does not support the video tag.
-  </video> */}
+  
+  
+  
   <div
+  
   style={{
     position: "relative",
     width: "100%",
@@ -61,6 +50,10 @@ export default function ITRequest() {
     overflow: "hidden",
   }}
 >
+  {/* Heading */}
+  <h3 style={{ position: "absolute", top: "50px", fontWeight: "bold", zIndex: 1 }}>
+    Explore the Beauty of Goa & Kochi
+  </h3>
   <video
     src="./GarwareGoaKochiVideoArvindFinal.mp4"
     controls
@@ -68,10 +61,10 @@ export default function ITRequest() {
     muted
     style={{
       width: "100%",
-      height: "30%", // Change as needed
+      height: "35%", // Change as needed
       objectFit: "cover", // Ensures the video covers without stretching
       position: "absolute",
-      top: "50%",
+      top: "45%",
       left: "50%",
       transform: "translate(-50%, -50%)", // Centers the video
       borderRadius: "5px",
@@ -79,7 +72,12 @@ export default function ITRequest() {
   >
     Your browser does not support the video tag.
   </video>
+  {/* Bottom Paragraph */}
+  <p style={{ position: "absolute", bottom: "120px", fontSize: "14px", zIndex: 1 }}>
+    Experience the breathtaking views and cultural richness Goa and Kochi through this captivating visual journey.
+  </p>
 </div>
+
 </div>
 
     </div>
