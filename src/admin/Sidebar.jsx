@@ -68,6 +68,13 @@ export default function Sidebar() {
             <FaServer /> <span>IT</span>
           </li>
         </Link>
+
+
+        <Link to="/admin/telephone" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <li>
+            <FaServer /> <span>telephone directory</span>
+          </li>
+        </Link>
       </ul>
     </div>
   );

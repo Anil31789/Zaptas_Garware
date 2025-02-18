@@ -142,6 +142,7 @@ const ServiceTypePage = () => {
                         required
                       />
                     </div>
+
                     <div className="mb-2">
                       <label className="form-label">Field Type:</label>
                       <select
@@ -155,8 +156,24 @@ const ServiceTypePage = () => {
                         <option value="number">Number</option>
                         <option value="email">Email</option>
                         <option value="date">Date</option>
+                        <option value="select">Dropdown (Multiple Options)</option>
+                        <option value="checkbox">Checkbox (Multiple Options)</option>
                       </select>
                     </div>
+
+                    {(newField.fieldType === "select" || newField.fieldType === "checkbox") && (
+                      <div className="mb-2">
+                        <label className="form-label">Options (comma-separated):</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Option1, Option2, Option3"
+                          value={newField.options?.join(", ")}
+                          onChange={(e) => setNewField({ ...newField, options: e.target.value.split(",").map(opt => opt.trim()) })}
+                        />
+                      </div>
+                    )}
+
                     <div className="form-check mb-3">
                       <input
                         type="checkbox"
@@ -169,6 +186,7 @@ const ServiceTypePage = () => {
                         Is Required
                       </label>
                     </div>
+
                     <button className="btn btn-secondary" onClick={handleAddField}>
                       Add Field
                     </button>
