@@ -11,7 +11,7 @@ import { IoIosNotifications } from "react-icons/io";
 import { AiOutlineHome, AiOutlineUser } from "react-icons/ai";
 import { HiOutlinePhone, HiOutlineShoppingBag, HiOutlineUserGroup } from "react-icons/hi";
 import SendEmailPopup from "./sendMailPopup";
-import { Button, Modal } from "react-bootstrap";
+import { Button, FormControl, InputGroup, ListGroup, Modal } from "react-bootstrap";
 
 
 
@@ -1053,67 +1053,112 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
   };
 
 
+  const useDebouncedSearch = (query, delay, headers) => {
+    const [debouncedQuery, setDebouncedQuery] = useState(query);
+    const [options, setOptions] = useState([]);
+    const [loading, setLoading] = useState(false);
   
- 
-
-  const SearchBar = ({ data }) => {
-    const [searchQuery, setSearchQuery] = useState("");
-    const [filteredData, setFilteredData] = useState(data);
+    useEffect(() => {
+      const handler = setTimeout(() => {
+        setDebouncedQuery(query);
+      }, delay);
   
-    // Handle search input change
+      return () => {
+        clearTimeout(handler);
+      };
+    }, [query, delay]); // Only trigger on query or delay change
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        if (debouncedQuery.trim() === '') {
+          setOptions([]);
+          return;
+        }
+  
+        setLoading(true);
+        try {
+          const response = await apiCall(
+            'GET',
+            `${ConnectMe.BASE_URL}/telecom/search?q=${debouncedQuery}`,
+            headers,
+            null,
+            2000, // cooldown time
+            true // allow cache
+          );
+  
+          if (response.status !== false) {
+            setOptions(response?.data?.data || []);
+          } else {
+            console.error(response.message);
+          }
+        } catch (error) {
+          console.error('Error fetching search data:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      if (debouncedQuery) {
+        fetchData();
+      }
+    }, [debouncedQuery, headers]); // Only trigger on debouncedQuery or headers change
+  
+    return { options, loading };
+  };
+  
+  const SearchBar = () => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [options, setOptions] = useState([]);
+    const token = getTokenFromLocalStorage();
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    };
+  
+    const { options: fetchedOptions, loading } = useDebouncedSearch(searchQuery, 1500, headers);
+  
+    // Handle search input change with clearing options when input is cleared
     const handleSearchChange = (e) => {
       const query = e.target.value;
       setSearchQuery(query);
   
-      if (query === "") {
-        setFilteredData(data); // Reset when input is cleared
-      } else {
-        // Filter data based on query
-        const filtered = data.filter((item) =>
-          item.title.toLowerCase().includes(query.toLowerCase())
-        );
-        setFilteredData(filtered);
+      if (query.trim() === '') {
+        setOptions([]);  // Clear options when input is empty
       }
     };
   
+    useEffect(() => {
+      setOptions(fetchedOptions);  // Update the options when the fetched data changes
+    }, [fetchedOptions]);
+  
     return (
-      <div className="search-container position-relative d-flex justify-content-end align-items-center ms-3">
-        <form className="d-flex">
-          <input
+      <div className="search-container position-relative z-index-1">
+        <InputGroup>
+          <FormControl
             type="text"
-            className="form-control"
             placeholder="Search..."
             value={searchQuery}
             onChange={handleSearchChange}
-            style={{ width: "150px", marginRight: "20px" }} // Add left margin
           />
-        </form>
-  
-        {searchQuery && (
-          <ul
-            className="search-suggestions position-absolute bg-light border rounded p-2 w-100 mt-1"
-            style={{ right: 0, zIndex: 9999 }}
-          >
-            {filteredData.length > 0 ? (
-              filteredData.map((item, index) => (
-                <li key={index} className="list-group-item list-group-item-action">
-                  <a href={item.link} target="_blank" rel="noopener noreferrer">
-                    {item.title}
-                  </a>
-                </li>
-              ))
-            ) : (
-              <li className="list-group-item">No results found</li>
-            )}
-          </ul>
+        </InputGroup>
+        {loading && <div>Loading...</div>}
+        {options.length > 0 && (
+          <ListGroup className="mt-2">
+            {options.map((option, index) => (
+              <ListGroup.Item key={index} action>
+                <strong>{option.name}</strong><br />
+                <small>Location: {option.location}</small><br />
+                <small>Department: {option.department}</small>
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+        )}
+        {searchQuery && options.length === 0 && (
+          <div className="no-results">No results found</div>
         )}
       </div>
     );
   };
-  
- 
-  
-  
   
   
   
