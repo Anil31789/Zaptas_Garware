@@ -876,7 +876,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
   //       >
   //         <span className="d-flex flex-column align-items-center">
   //           <HiOutlinePhone className="navbar-icon me-1" />
-  //           <span className="header1">Telecome</span>
+  //           <span className="header1">Directory</span>
   //         </span>
   //       </a>
   //       <ul className="dropdown-menu" aria-labelledby="hrDropdown">
@@ -1011,7 +1011,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
         >
           <span className="d-flex flex-column align-items-center">
             <HiOutlinePhone className="navbar-icon me-1" />
-            <span className="header1">Telecome</span>
+            <span className="header1">Directory</span>
           </span>
         </a>
         <ul className="dropdown-menu" aria-labelledby="hrDropdown">
@@ -1109,56 +1109,105 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
   const SearchBar = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [options, setOptions] = useState([]);
+    const [selectedOption, setSelectedOption] = useState(null); // To store the selected option
+    const [modalShow, setModalShow] = useState(false); // To control modal visibility
     const token = getTokenFromLocalStorage();
     const headers = {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     };
   
-    const { options: fetchedOptions, loading } = useDebouncedSearch(searchQuery, 1500, headers);
+    const { options: fetchedOptions, loading } = useDebouncedSearch(searchQuery, 500, headers);
   
-    // Handle search input change with clearing options when input is cleared
     const handleSearchChange = (e) => {
       const query = e.target.value;
       setSearchQuery(query);
   
       if (query.trim() === '') {
-        setOptions([]);  // Clear options when input is empty
+        setOptions([]);
       }
     };
   
     useEffect(() => {
-      setOptions(fetchedOptions);  // Update the options when the fetched data changes
+      setOptions(fetchedOptions);
     }, [fetchedOptions]);
   
+    const handleSearchClick = (option) => {
+      setSelectedOption(option);  // Set the clicked option
+      setModalShow(true);  // Open the modal
+    };
+  
+    const handleModalClose = () => {
+      setModalShow(false);  // Close the modal
+    };
+  
     return (
-      <div className="search-container position-relative z-index-1">
+      <div className="search-container" style={{ position: 'relative', width: '100%' }}>
         <InputGroup>
           <FormControl
             type="text"
             placeholder="Search..."
             value={searchQuery}
             onChange={handleSearchChange}
+            className="custom-search-input"
           />
         </InputGroup>
-        {loading && <div>Loading...</div>}
-        {options.length > 0 && (
-          <ListGroup className="mt-2">
-            {options.map((option, index) => (
-              <ListGroup.Item key={index} action>
-                <strong>{option.name}</strong><br />
-                <small>Location: {option.location}</small><br />
-                <small>Department: {option.department}</small>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
+  
+        {(loading || options.length > 0 || searchQuery) && (
+          <div className="search-dropdown">
+            {loading && <div className="loading">Loading...</div>}
+            {options.length > 0 ? (
+              <ListGroup>
+                {options.map((option, index) => (
+                  <ListGroup.Item
+                    key={index}
+                    action
+                    onClick={() => handleSearchClick(option)} // Handle item click
+                  >
+                    <strong>{option.name}</strong><br />
+                    <small>Location: {option.location}</small><br />
+                    <small>Department: {option.department}</small>
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            ) : (
+              searchQuery && !loading && <div className="no-results">No results found</div>
+            )}
+          </div>
         )}
-        {searchQuery && options.length === 0 && (
-          <div className="no-results">No results found</div>
-        )}
+  
+        {/* Modal Popup */}
+        <Modal show={modalShow} onHide={handleModalClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Details</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {/* Display the selected option's details */}
+            {selectedOption ? (
+              <>
+                <h5>Name: {selectedOption.name}</h5>
+                <p>Location: {selectedOption.location}</p>
+                <p>Department: {selectedOption.department}</p>
+                {/* You can add more details here */}
+              </>
+            ) : (
+              <p>No details available</p>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            
+            <Button variant="secondary" onClick={handleModalClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   };
+  
+  
+  
+  
   
   
   
