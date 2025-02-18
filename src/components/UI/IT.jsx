@@ -3,6 +3,7 @@ import { FaLaptopCode } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
+import { HiArrowCircleRight } from "react-icons/hi";
 
 const IT = () => {
   const navigate = useNavigate();
@@ -35,9 +36,19 @@ const IT = () => {
 
   return (
     <div className="card mb-3">
-      <div className="card-header d-flex align-items-center">
+    <div className="card-header d-flex justify-content-between align-items-center">
+    <div className="d-flex align-items-center">
         <FaLaptopCode className="me-2" size={24} />
         <h5 className="mb-0">IT Services</h5>
+      </div>
+      <a
+        className="text-decoration-none"
+        onClick={() => {
+          navigate("/service");
+        }}
+      >
+        My Requests <HiArrowCircleRight />
+      </a>
       </div>
       <div className="card-body">
         <ul className="list-unstyled">
@@ -54,7 +65,7 @@ const IT = () => {
                     className="text-decoration-none"
                     onClick={(e) => {
                       e.preventDefault();
-                      navigate("/ITService", { state: { id: service.id } });
+                      navigate("/ITService", { state: { id: service._id } });
                     }}
                   >
                     {service.name}

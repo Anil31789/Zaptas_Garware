@@ -11,7 +11,7 @@ const ServiceRequestPage = () => {
   const [loading, setLoading] = useState(true);
   const [comment, setComment] = useState('');
   const [selectedRequest, setSelectedRequest] = useState(null);
-  const [activeTab, setActiveTab] = useState('Pending');
+  const [activeTab, setActiveTab] = useState('My Requests');
 
   useEffect(() => {
 
@@ -92,14 +92,6 @@ const ServiceRequestPage = () => {
 
 
   };
-
-
-
-
-
-
-
-
 
 
 

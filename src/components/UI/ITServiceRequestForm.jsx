@@ -138,7 +138,11 @@ const ITServiceRequestForm = () => {
                     <Row key={field._id} className="mb-3">
                       <Col md={12}>
                         <Form.Group>
-                          <Form.Label className="fw-bold">{field.fieldName}</Form.Label>
+                          <Form.Label className="fw-bold">
+                            {field.fieldName} {field.isRequired && <span className="text-danger">*</span>}
+                          </Form.Label>
+
+                          {/* Boolean (Checkbox) Field */}
                           {field.fieldType === "Boolean" ? (
                             <Form.Check
                               type="checkbox"
@@ -147,13 +151,38 @@ const ITServiceRequestForm = () => {
                               onChange={handleCheckboxChange}
                               className="form-check-lg"
                             />
-                          ) : (
-                            <Form.Control
-                              type={field.fieldType === "text" ? "text" : "date"}
+                          ) : field.fieldType === "select" || field.fieldType === "checkbox" ? (
+                            // Dropdown (Select) or Multi-Select (Checkbox) Field
+                            <Form.Select
                               id={field._id}
                               value={formData.fieldsData[field._id] || ""}
                               onChange={handleInputChange}
-                              required={field?.isRequired}
+                              required={field.isRequired}
+                              className="form-control-lg"
+                            >
+                              <option value="">Select {field.fieldName}</option>
+                              {field.options.map((option, index) => (
+                                <option key={index} value={option}>
+                                  {option}
+                                </option>
+                              ))}
+                            </Form.Select>
+                          ) : (
+                            // Text, Number, Email, Date Fields
+                            <Form.Control
+                              type={
+                                field.fieldType === "text"
+                                  ? "text"
+                                  : field.fieldType === "number"
+                                    ? "number"
+                                    : field.fieldType === "email"
+                                      ? "email"
+                                      : "date"
+                              }
+                              id={field._id}
+                              value={formData.fieldsData[field._id] || ""}
+                              onChange={handleInputChange}
+                              required={field.isRequired}
                               className="form-control-lg"
                             />
                           )}
@@ -163,6 +192,7 @@ const ITServiceRequestForm = () => {
                   ))}
                 </div>
               ))}
+
 
             {/* Submit Button */}
             <div className="text-center mt-4">
