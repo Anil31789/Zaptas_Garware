@@ -51,9 +51,9 @@ export default function ITRequest() {
   }}
 >
   {/* Heading */}
-  <h3 style={{ position: "absolute", top: "50px", fontWeight: "bold", zIndex: 1 }}>
-    Explore the Beauty of Goa & Kochi
-  </h3>
+  <h4 style={{ position: "absolute", top: "70px", fontWeight: "bold", zIndex: 1 }}>
+  One Company, Infinite Solutions
+  </h4>
   <video
     src="./GarwareGoaKochiVideoArvindFinal.mp4"
     controls

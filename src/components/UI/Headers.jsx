@@ -1057,18 +1057,18 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
  
 
   const SearchBar = ({ data }) => {
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState("");
     const [filteredData, setFilteredData] = useState(data);
   
-    // Handle the search input change
+    // Handle search input change
     const handleSearchChange = (e) => {
       const query = e.target.value;
       setSearchQuery(query);
   
-      if (query === '') {
+      if (query === "") {
         setFilteredData(data); // Reset when input is cleared
       } else {
-        // Filter the data based on the query
+        // Filter data based on query
         const filtered = data.filter((item) =>
           item.title.toLowerCase().includes(query.toLowerCase())
         );
@@ -1077,7 +1077,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
     };
   
     return (
-      <div className="search-container position-relative d-flex justify-content-end align-items-center">
+      <div className="search-container position-relative d-flex justify-content-end align-items-center ms-3">
         <form className="d-flex">
           <input
             type="text"
@@ -1085,6 +1085,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
             placeholder="Search..."
             value={searchQuery}
             onChange={handleSearchChange}
+            style={{ width: "150px", marginRight: "20px" }} // Add left margin
           />
         </form>
   
@@ -1095,7 +1096,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
           >
             {filteredData.length > 0 ? (
               filteredData.map((item, index) => (
-                <li key={index} className="suggestion-item list-group-item list-group-item-action hoverable">
+                <li key={index} className="list-group-item list-group-item-action">
                   <a href={item.link} target="_blank" rel="noopener noreferrer">
                     {item.title}
                   </a>
@@ -1162,7 +1163,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
             <ProductsIcon />
             <QuickLinksMenu />
             <HrMenu />
-            <SearchBar/>
+            
 
           </ul>
 
@@ -1199,9 +1200,13 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
             >
               <FaLinkedinIn size={20} />
             </a> */}
+
+<SearchBar/>
             <NotificationIcon notificationCount={notificationCount} userDetails={userDetails} />
 
             <span className="horizontal-line"></span>
+
+           
 
             <div className="user-profile-dropdown dropdown">
               <button

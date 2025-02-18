@@ -122,7 +122,7 @@ img.profile-img {
 
 .horizontal-line {
     flex-shrink: 0;
-    width: 1.5%; /* Full-width horizontal line */
+    width:0.8%; /* Full-width horizontal line */
     height: 25px; /* Adjust the height of the line */
     background-color:rgba(109, 111, 114, 0.4);; /* Line color */
     margin-left: 7px; /* Adjust spacing from the icon */
@@ -132,3 +132,4 @@ img.profile-img {
     background-color: #007bff; /* Bootstrap's primary color */
     color: white;
   }
+
