@@ -13,6 +13,8 @@ import ServiceTypePage from "./admin/ItReqedit";
 import ServiceRequestPage from "./pages/serviceRequest";
 import UserProfile from "./components/UI/Profile";
 import ITSecurityForm from "./components/UI/ITSecurityForm";
+import ExcelUploader from "./admin/telephone";
+
 // import PhotoGallery from "./components/UI/PhotoGallery";
 
 const CsrPage = lazy(() => import("./admin/csr"));
@@ -76,6 +78,8 @@ export const routes = [
       { path: "awards", element: <AwardsPage /> },
       { path: "CalenderHoliday", element: <CalenderHoliday /> },
       { path: "it", element: <ServiceTypePage /> },
+      { path: "telephone", element: <ExcelUploader /> },
+      
     ],
   },
   { path: "/login", element: <Login /> },
