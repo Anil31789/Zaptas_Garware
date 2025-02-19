@@ -299,7 +299,7 @@ export default function Headers() {
   //     </li>
   //   );
   // };
- const ProductsIcon = () => {
+  const ProductsIcon = () => {
     const links = [
       {
         id: "1",
@@ -322,7 +322,7 @@ export default function Headers() {
         link: "https://www.garwarehitechfilms.com/sun-control-films",
       },
     ];
-  
+
     return (
       <li className="nav-item dropdown">
         <a
@@ -560,15 +560,15 @@ export default function Headers() {
 
 
 
-  
-const NotificationIcon = ({ notificationCount, userDetails }) => {
+
+  const NotificationIcon = ({ notificationCount, userDetails }) => {
     const navigate = useNavigate();
     const [showDropdown, setShowDropdown] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [popupType, setPopupType] = useState("");
-  
+
     const notifications = [];
-  
+
     if (notificationCount?.comment?.totalUnseenBDayComments > 0) {
       notifications.push({
         message: `You have ${notificationCount.comment.totalUnseenBDayComments} new birthday comment(s).`,
@@ -597,13 +597,13 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
         popupType: "ITRequest",
       });
     }
-  
+
     const totalNotifications =
       (notificationCount?.comment?.totalUnseenBDayComments || 0) +
       (notificationCount?.comment?.totalUnseenWorkAnnComments || 0) +
       (notificationCount?.comment?.totalUnseenJoinComments || 0) +
       (notificationCount?.Itcount || 0);
-  
+
     const handleNotificationClick = (notification) => {
       if (notification.popupType === "ITRequest") {
         setPopupType("ITRequest");
@@ -613,7 +613,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
         setShowPopup(true);
       }
     };
-  
+
     // Function to check if the modal should be shown
     const shouldShowModal = () => {
       const lastClosedTime = localStorage.getItem("lastClosedITModal");
@@ -621,7 +621,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
       const timeElapsed = Date.now() - parseInt(lastClosedTime, 10);
       return timeElapsed >= 5 * 60 * 1000; // 5 minutes (in milliseconds)
     };
-  
+
     // Automatically open IT Request popup if there are pending requests and enough time has passed
     useEffect(() => {
       if (notificationCount?.Itcount > 0 && shouldShowModal()) {
@@ -629,13 +629,13 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
         setShowPopup(true);
       }
     }, [notificationCount?.Itcount]);
-  
+
     // Function to handle modal close
     const handleCloseModal = () => {
       localStorage.setItem("lastClosedITModal", Date.now().toString());
       setShowPopup(false);
     };
-  
+
     return (
       <div className="position-relative d-inline-block cursor-pointer">
         {/* Notification Icon */}
@@ -650,7 +650,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
             </span>
           )}
         </a>
-  
+
         {/* Dropdown Notifications */}
         {showDropdown && (
           <div
@@ -679,7 +679,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
             )}
           </div>
         )}
-  
+
         {/* IT Request Modal */}
         {showPopup && popupType === "ITRequest" && (
           <div
@@ -706,15 +706,19 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
                   <button className="btn btn-secondary" onClick={handleCloseModal}>
                     Close
                   </button>
-                  <button className="btn btn-primary" onClick={() => navigate("/service")}>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => navigate("/service", { state: { status: "Pending" } })}
+                  >
                     View Requests
                   </button>
+
                 </div>
               </div>
             </div>
           </div>
         )}
-  
+
         {/* Other Popups */}
         {showPopup && popupType !== "ITRequest" && (
           <SendEmailPopup
@@ -728,7 +732,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
       </div>
     );
   };
-  
+
 
 
 
@@ -823,9 +827,9 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
   //             title: "Coordinates",
   //             link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCHK.pdf`,
   //           },
-       
+
   //         ],
-        
+
   //       },
 
 
@@ -839,9 +843,9 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
   //             title: "Corporate Office",
   //             link: `${ConnectMe.img_URL}/uploads/telecomHr/Mumbai/corporateoffice.pdf`,
   //           },
-       
+
   //         ],
-        
+
   //       },
 
 
@@ -855,9 +859,9 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
   //             title: "Mobile Number",
   //             link: `${ConnectMe.img_URL}/uploads/telecomHr/Nashik/telcom.pdf`,
   //           },
-       
+
   //         ],
-        
+
   //       },
 
   //     ],
@@ -935,7 +939,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
     const hrLinks = [
       // other links if necessary
     ];
-  
+
     const telcom = [
       {
         id: "1.1",
@@ -998,7 +1002,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
         ],
       },
     ];
-  
+
     return (
       <li className="nav-item dropdown">
         <a
@@ -1022,7 +1026,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
               </a>
             </li>
           ))}
-  
+
           {telcom.map((item) => (
             <li key={item.id} className="dropdown-submenu">
               <a
@@ -1057,24 +1061,24 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
     const [debouncedQuery, setDebouncedQuery] = useState(query);
     const [options, setOptions] = useState([]);
     const [loading, setLoading] = useState(false);
-  
+
     useEffect(() => {
       const handler = setTimeout(() => {
         setDebouncedQuery(query);
       }, delay);
-  
+
       return () => {
         clearTimeout(handler);
       };
     }, [query, delay]); // Only trigger on query or delay change
-  
+
     useEffect(() => {
       const fetchData = async () => {
         if (debouncedQuery.trim() === '') {
           setOptions([]);
           return;
         }
-  
+
         setLoading(true);
         try {
           const response = await apiCall(
@@ -1085,7 +1089,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
             2000, // cooldown time
             true // allow cache
           );
-  
+
           if (response.status !== false) {
             setOptions(response?.data?.data || []);
           } else {
@@ -1097,15 +1101,15 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
           setLoading(false);
         }
       };
-  
+
       if (debouncedQuery) {
         fetchData();
       }
     }, [debouncedQuery, headers]); // Only trigger on debouncedQuery or headers change
-  
+
     return { options, loading };
   };
-  
+
   const SearchBar = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [options, setOptions] = useState([]);
@@ -1116,31 +1120,31 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     };
-  
+
     const { options: fetchedOptions, loading } = useDebouncedSearch(searchQuery, 500, headers);
-  
+
     const handleSearchChange = (e) => {
       const query = e.target.value;
       setSearchQuery(query);
-  
+
       if (query.trim() === '') {
         setOptions([]);
       }
     };
-  
+
     useEffect(() => {
       setOptions(fetchedOptions);
     }, [fetchedOptions]);
-  
+
     const handleSearchClick = (option) => {
       setSelectedOption(option);  // Set the clicked option
       setModalShow(true);  // Open the modal
     };
-  
+
     const handleModalClose = () => {
       setModalShow(false);  // Close the modal
     };
-  
+
     return (
       <div className="search-container" style={{ position: 'relative', width: '100%' }}>
         <InputGroup>
@@ -1152,7 +1156,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
             className="custom-search-input"
           />
         </InputGroup>
-  
+
         {(loading || options.length > 0 || searchQuery) && (
           <div className="search-dropdown">
             {loading && <div className="loading">Loading...</div>}
@@ -1175,7 +1179,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
             )}
           </div>
         )}
-  
+
         {/* Modal Popup */}
         <Modal show={modalShow} onHide={handleModalClose}>
           <Modal.Header closeButton>
@@ -1184,39 +1188,39 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
           <Modal.Body>
             {/* Display the selected option's details */}
             {selectedOption ? (
-  <>
-    <h5>Name: {selectedOption.name}</h5>
-    
-    {/* Location and Department in one line */}
-    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-      <span>Location: {selectedOption.location}</span>
-      <span>Department: {selectedOption.department}</span>
-    </div>
-    
-    {/* Cellular Number and Area No in one line */}
-    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-      <span>Cellular Number: {selectedOption.cellularNumber}</span>
-      <span>Area No:{selectedOption.areaNo}</span>
-    </div>
-    
-    {/* Extension No and Abbreviation in one line */}
-    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-      <span>Extension No: {selectedOption.extensionNo}</span>
-      <span>Abbreviation: {selectedOption.abbreviation}</span>
-    </div>
-    
-    {/* Email on a new line */}
-    <div style={{ marginBottom: '10px' }}>
-      <span>Email: {selectedOption.email}</span>
-    </div>
-  </>
-) : (
-  <p>No details available</p>
-)}
+              <>
+                <h5>Name: {selectedOption.name}</h5>
+
+                {/* Location and Department in one line */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                  <span>Location: {selectedOption.location}</span>
+                  <span>Department: {selectedOption.department}</span>
+                </div>
+
+                {/* Cellular Number and Area No in one line */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                  <span>Cellular Number: {selectedOption.cellularNumber}</span>
+                  <span>Area No:{selectedOption.areaNo}</span>
+                </div>
+
+                {/* Extension No and Abbreviation in one line */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                  <span>Extension No: {selectedOption.extensionNo}</span>
+                  <span>Abbreviation: {selectedOption.abbreviation}</span>
+                </div>
+
+                {/* Email on a new line */}
+                <div style={{ marginBottom: '10px' }}>
+                  <span>Email: {selectedOption.email}</span>
+                </div>
+              </>
+            ) : (
+              <p>No details available</p>
+            )}
 
           </Modal.Body>
           <Modal.Footer>
-            
+
             <Button variant="secondary" onClick={handleModalClose}>
               Close
             </Button>
@@ -1225,13 +1229,13 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
       </div>
     );
   };
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 
 
 
@@ -1272,13 +1276,13 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
 
 
 
-            
+
             {/* <ITServiceDropdown />
             <AccountsIcon /> */}
             <ProductsIcon />
             <QuickLinksMenu />
             <HrMenu />
-            
+
 
           </ul>
 
@@ -1316,12 +1320,12 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
               <FaLinkedinIn size={20} />
             </a> */}
 
-<SearchBar/>
+            <SearchBar />
             <NotificationIcon notificationCount={notificationCount} userDetails={userDetails} />
 
             <span className="horizontal-line"></span>
 
-           
+
 
             <div className="user-profile-dropdown dropdown">
               <button

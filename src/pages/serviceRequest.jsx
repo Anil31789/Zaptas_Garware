@@ -5,13 +5,18 @@ import ConnectMe from '../config/connect';
 import showToast from '../utils/toastHelper';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { useLocation } from 'react-router-dom';
 
 const ServiceRequestPage = () => {
+  const location = useLocation();
+  const initialTab = location.state?.status || "My Requests"; // Default to "My Requests"
   const [serviceRequests, setServiceRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [comment, setComment] = useState('');
   const [selectedRequest, setSelectedRequest] = useState(null);
-  const [activeTab, setActiveTab] = useState('My Requests');
+  const [activeTab, setActiveTab] = useState(initialTab);
+  const [communicationType, setCommunicationType] = useState('');
+  const [showCommunicationField, setShowCommunicationField] = useState(false);
 
   useEffect(() => {
 
@@ -25,7 +30,7 @@ const ServiceRequestPage = () => {
       const url = `${ConnectMe.BASE_URL}/it/api/getrequests?status=${activeTab}&count=true&data=true`;
       const token = getTokenFromLocalStorage();
       const headers = { Authorization: `Bearer ${token}` };
-      const response = await apiCall('GET', url, headers , null, 2000,false);
+      const response = await apiCall('GET', url, headers, null, 2000, false);
       if (response?.data?.data) {
         setServiceRequests(response.data.data);
       } else {
@@ -56,7 +61,7 @@ const ServiceRequestPage = () => {
       const url = `${ConnectMe.BASE_URL}/it/api/servicerequests/${selectedRequest}/${action}`;
       const token = getTokenFromLocalStorage();
       const headers = { Authorization: `Bearer ${token}` };
-      const response = await apiCall('PUT', url, headers, { comment });
+      const response = await apiCall('PUT', url, headers, { comment,communicationType });
 
       if (response && response.data) {
         showToast(`Service request ${action}ed successfully!`, 'success');
@@ -82,20 +87,21 @@ const ServiceRequestPage = () => {
     }
   };
 
-  const openCommentModal = (requestId) => {
-    setSelectedRequest(requestId);
+  const openCommentModal = (request) => {
+    setSelectedRequest(request._id);
     setComment('');
+
+    // Show the communication type field if hodCommunication is true
+    setShowCommunicationField(request?.hodCommunication || false);
+    setCommunicationType(''); // Reset the communication type field
+
     const modal = new bootstrap.Modal(document.getElementById('commentModal'));
     modal.show();
-
-
-
-
   };
 
 
 
-  
+
 
   const ApprovalTimeline = ({ request }) => {
     const approvalSteps = [
@@ -104,11 +110,11 @@ const ServiceRequestPage = () => {
       { name: 'IT Approval', status: request.itApproval?.status, comment: request.itApproval?.comment, date: request.itApproval?.date },
       { name: 'IT Head Approval', status: request.itHeadApproval?.status, comment: request.itHeadApproval?.comment, date: request.itHeadApproval?.date }
     ];
-  
+
     // Determine the progress percentage based on approvals
     const approvedSteps = approvalSteps.filter(step => step.status === 'Approved').length;
     const progressPercentage = (approvedSteps / approvalSteps.length) * 100;
-  
+
     return (
       <div className="mt-4">
         {/* Progress Bar */}
@@ -122,7 +128,7 @@ const ServiceRequestPage = () => {
             aria-valuemax="100"
           ></div>
         </div>
-  
+
         {/* Approval Timeline */}
         <div className="d-flex justify-content-between align-items-center mt-2">
           {approvalSteps.map((step, index) => (
@@ -152,7 +158,7 @@ const ServiceRequestPage = () => {
       </div>
     );
   };
-  
+
 
 
 
@@ -183,48 +189,48 @@ const ServiceRequestPage = () => {
         </div>
       ) : (
         <div className="row">
-        {serviceRequests.map((request) => (
-          <div className="col-md-4 mb-3" key={request._id}>
-            <div className="card shadow-sm p-3">
-              
-              {/* Header Section */}
-              <div className="card-header bg-light text-dark p-2">
-                <h6 className="mb-1 fw-bold">Request ID: {request.requestId}</h6>
-                <p className="mb-1 text-muted small">Employee: {request.EmployeeCode}</p>
-                <p className="mb-1 text-muted small">Type: {request.serviceType}</p>
-              </div>
-      
-              {/* Details Section */}
-              <div className="card-body">
-                <p className="mb-2 fw-bold">Details:</p>
-                <div className="px-2">
-                  {request.serviceFields.map((field, index) => (
-                    <div key={index} className="d-flex justify-content-between">
-                      <p className="mb-1 text-muted small">{field.fieldConfig}:</p>
-                      <p className="mb-1 text-dark small">{field.fieldValue}</p>
-                    </div>
-                  ))}
+          {serviceRequests.map((request) => (
+            <div className="col-md-4 mb-3" key={request._id}>
+              <div className="card shadow-sm p-3">
+
+                {/* Header Section */}
+                <div className="card-header bg-light text-dark p-2">
+                  <h6 className="mb-1 fw-bold">Request ID: {request.requestId}</h6>
+                  <p className="mb-1 text-muted small">Employee: {request.EmployeeCode}</p>
+                  <p className="mb-1 text-muted small">Type: {request.serviceType}</p>
                 </div>
-      
-                {activeTab === 'Pending' ? (
-                  <div className="d-flex justify-content-between mt-3">
-                    <button className="btn btn-success btn-sm" onClick={() => openCommentModal(request._id)}>Approve</button>
-                    <button className="btn btn-danger btn-sm" onClick={() => openCommentModal(request._id)}>Reject</button>
+
+                {/* Details Section */}
+                <div className="card-body">
+                  <p className="mb-2 fw-bold">Details:</p>
+                  <div className="px-2">
+                    {request.serviceFields.map((field, index) => (
+                      <div key={index} className="d-flex justify-content-between">
+                        <p className="mb-1 text-muted small">{field.fieldConfig}:</p>
+                        <p className="mb-1 text-dark small">{field.fieldValue}</p>
+                      </div>
+                    ))}
                   </div>
-                ) : (
-                  <p className="text-muted small mt-3">
-                 <ApprovalTimeline request={request}/>
-                  </p>
-                )}
+
+                  {activeTab === 'Pending' ? (
+                    <div className="d-flex justify-content-between mt-3">
+                      <button className="btn btn-success btn-sm" onClick={() => openCommentModal(request)}>Approve</button>
+                      <button className="btn btn-danger btn-sm" onClick={() => openCommentModal(request)}>Reject</button>
+                    </div>
+                  ) : (
+                    <p className="text-muted small mt-3">
+                      <ApprovalTimeline request={request} />
+                    </p>
+                  )}
+                </div>
+
               </div>
-      
             </div>
-          </div>
-        ))}
-      </div>
-      
-      
-      
+          ))}
+        </div>
+
+
+
       )}
 
       <div className="modal fade" id="commentModal" tabIndex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
@@ -235,6 +241,27 @@ const ServiceRequestPage = () => {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
+              {/* Show Communication Type field if hodCommunication is true */}
+              {showCommunicationField && (
+                <div className="mb-3">
+                  <label className="form-label">
+                    Communication Type <span className="text-danger">*</span>
+                  </label>
+                  <select
+                    className="form-select"
+                    value={communicationType}
+                    onChange={(e) => setCommunicationType(e.target.value)}
+                    required
+                  >
+                    <option value="">Select Communication Type</option>
+                    <option value="Internal">Internal</option>
+                    <option value="External">External</option>
+                    <option value="Both">Both</option>
+                  </select>
+                </div>
+              )}
+
+              <label className="form-label">Comment</label>
               <textarea
                 className="form-control"
                 rows="3"
@@ -245,8 +272,12 @@ const ServiceRequestPage = () => {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" className="btn btn-success" onClick={() => handleAction('approve')}>Approve</button>
-              <button type="button" className="btn btn-danger" onClick={() => handleAction('reject')}>Reject</button>
+              <button type="button" className="btn btn-success" onClick={() => handleAction('approve')} disabled={showCommunicationField && !communicationType}>
+                Approve
+              </button>
+              <button type="button" className="btn btn-danger" onClick={() => handleAction('reject')} disabled={showCommunicationField && !communicationType}>
+                Reject
+              </button>
             </div>
           </div>
         </div>

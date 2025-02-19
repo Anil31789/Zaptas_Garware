@@ -43,9 +43,7 @@ const IT = () => {
       </div>
       <a
         className="text-decoration-none"
-        onClick={() => {
-          navigate("/service");
-        }}
+        onClick={() => navigate("/service", { state: { status: "My Requests" } })}
       >
         My Requests <HiArrowCircleRight />
       </a>
