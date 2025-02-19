@@ -1184,15 +1184,36 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
           <Modal.Body>
             {/* Display the selected option's details */}
             {selectedOption ? (
-              <>
-                <h5>Name: {selectedOption.name}</h5>
-                <p>Location: {selectedOption.location}</p>
-                <p>Department: {selectedOption.department}</p>
-                {/* You can add more details here */}
-              </>
-            ) : (
-              <p>No details available</p>
-            )}
+  <>
+    <h5>Name: {selectedOption.name}</h5>
+    
+    {/* Location and Department in one line */}
+    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+      <span>Location: {selectedOption.location}</span>
+      <span>Department: {selectedOption.department}</span>
+    </div>
+    
+    {/* Cellular Number and Area No in one line */}
+    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+      <span>Cellular Number: {selectedOption.cellularNumber}</span>
+      <span>Area No:{selectedOption.areaNo}</span>
+    </div>
+    
+    {/* Extension No and Abbreviation in one line */}
+    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+      <span>Extension No: {selectedOption.extensionNo}</span>
+      <span>Abbreviation: {selectedOption.abbreviation}</span>
+    </div>
+    
+    {/* Email on a new line */}
+    <div style={{ marginBottom: '10px' }}>
+      <span>Email: {selectedOption.email}</span>
+    </div>
+  </>
+) : (
+  <p>No details available</p>
+)}
+
           </Modal.Body>
           <Modal.Footer>
             
