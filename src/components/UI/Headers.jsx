@@ -1146,7 +1146,7 @@ const NotificationIcon = ({ notificationCount, userDetails }) => {
         <InputGroup>
           <FormControl
             type="text"
-            placeholder="Search..."
+            placeholder="Directory Search..."
             value={searchQuery}
             onChange={handleSearchChange}
             className="custom-search-input"

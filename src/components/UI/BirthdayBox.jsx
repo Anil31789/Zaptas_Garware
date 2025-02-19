@@ -150,7 +150,7 @@ export default function WorkAnniversary() {
                     {new Date(workAnniversaries[currentIndex]?.BirthDate).toLocaleDateString("en-GB", {
                       day: "2-digit",
                       month: "short",
-                      year: "numeric",
+                      // year: "numeric",
                     })}
                   </span>
                 </div>
