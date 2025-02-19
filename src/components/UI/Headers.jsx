@@ -1150,7 +1150,7 @@ export default function Headers() {
         <InputGroup>
           <FormControl
             type="text"
-            placeholder="Search..."
+            placeholder="Directory Search..."
             value={searchQuery}
             onChange={handleSearchChange}
             className="custom-search-input"
