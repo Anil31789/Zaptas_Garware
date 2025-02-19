@@ -20,7 +20,7 @@ export default function ITRequest() {
       <div className="card-header d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
           <FaPlayCircle className="me-2" size={24} />
-          <h5 className="mb-0">Video</h5>
+          <h5 className="mb-0">Garware Hi-Tech Films: Innovating Excellence</h5>
         </div>
       </div>
   
@@ -55,6 +55,7 @@ export default function ITRequest() {
               marginBottom: "20px",
               maxWidth:"100%",
             }}
+            className="celebrating-text"
           >
             One Company, Infinite Solutions
           </h4>

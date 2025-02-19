@@ -1,6 +1,18 @@
-import React from "react";
+import React, { useRef } from "react";
+import { useReactToPrint } from "react-to-print";
 
 export default function ITSecurityForm() {
+  const formRef = useRef(null);
+
+  const handlePrint = useReactToPrint({
+    content: () => {
+      console.log("Form Ref:", formRef.current); // Debugging: Check if ref is attached
+      return formRef.current || document.createElement("div"); // Fallback to avoid null
+    },
+    documentTitle: "IT Security Form",
+    pageStyle: "@page { size: auto; margin: 20mm; }",
+  });
+
   const formData = {
     employeeName: "John Doe",
     date: "16-02-2025",
@@ -18,9 +30,16 @@ export default function ITSecurityForm() {
     reviewedBy: "David Johnson",
     approvedBy: "Sophia Brown",
   };
+
   return (
     <div className="container mt-4">
-      <div className="form-container p-4 bg-white rounded shadow border">
+      {/* Print Button */}
+      <button className="btn btn-primary mb-3" onClick={handlePrint}>
+        Print Form
+      </button>
+
+      {/* Printable Section */}
+      <div ref={formRef} className="form-container p-4 bg-white rounded shadow border">
         <h3 className="text-center text-uppercase">IT Security Form</h3>
 
         {/* Applicant’s Data */}
@@ -42,53 +61,31 @@ export default function ITSecurityForm() {
 
         {/* Signatures */}
         <div className="row">
-          <div className="col-md-6">
-            <strong>Employee Signature:</strong>
-            <div className="border p-3 rounded bg-light text-muted text-center">
-              {formData.employeeSignature ? (
-                <img
-                  src={formData.employeeSignature}
-                  alt="Signature"
-                  width="100"
-                />
-              ) : (
-                "Signature Not Available"
-              )}
+          {[
+            { label: "Employee Signature", value: formData.employeeSignature },
+            { label: "HOD’s Signature", value: formData.hodSignature },
+          ].map((field, index) => (
+            <div className="col-md-6" key={index}>
+              <strong>{field.label}:</strong>
+              <div className="border p-3 rounded bg-light text-muted text-center">
+                {field.value ? <img src={field.value} alt="Signature" width="100" /> : "Signature Not Available"}
+              </div>
             </div>
-          </div>
-          <div className="col-md-6">
-            <strong>HOD’s Signature:</strong>
-            <div className="border p-3 rounded bg-light text-muted text-center">
-              {formData.hodSignature ? (
-                <img src={formData.hodSignature} alt="Signature" width="100" />
-              ) : (
-                "Signature Not Available"
-              )}
-            </div>
-          </div>
+          ))}
         </div>
 
-        {/* Equipment Request */}
+        {/* Access Details */}
         <h5 className="mt-4">Equipment Request for Access</h5>
-        <div className="mb-3">
-          <strong>Type of Access:</strong> CCTV Camera
-        </div>
-        <div className="mb-3">
-          <strong>Location of CCTV Camera:</strong>{" "}
-          {formData.cctvLocation || "N/A"}
-        </div>
-        <div className="mb-3">
-          <strong>Reason for Access:</strong> {formData.reason || "N/A"}
-        </div>
-        <div className="mb-3">
-          <strong>Expected Period:</strong> {formData.expectedPeriod || "N/A"}
-        </div>
+        <div className="mb-3"><strong>Type of Access:</strong> CCTV Camera</div>
+        <div className="mb-3"><strong>Location of CCTV Camera:</strong> {formData.cctvLocation || "N/A"}</div>
+        <div className="mb-3"><strong>Reason for Access:</strong> {formData.reason || "N/A"}</div>
+        <div className="mb-3"><strong>Expected Period:</strong> {formData.expectedPeriod || "N/A"}</div>
 
-        {/* Justification from HOD */}
+        {/* Justification */}
         <h5 className="mt-4">Justification from HOD</h5>
         <p className="border p-3">{formData.hodJustification || "N/A"}</p>
 
-        {/* Comments from IT Department */}
+        {/* IT Department Comments */}
         <h5 className="mt-4">Comments from IT Department</h5>
         <p className="border p-3">{formData.itComments || "N/A"}</p>
 

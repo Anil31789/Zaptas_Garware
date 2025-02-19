@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { apiCall, getTokenFromLocalStorage } from '../utils/apiCall';
 import ConnectMe from '../config/connect';
@@ -7,10 +7,13 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FaCheckCircle, FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 import { FaRegCircleQuestion } from 'react-icons/fa6';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 
 
 const ServiceRequestPage = () => {
+  const formRef = useRef(null);
   const location = useLocation();
   const initialTab = location.state?.status || "My Requests"; // Default to "My Requests"
   const [serviceRequests, setServiceRequests] = useState([]);
@@ -64,7 +67,7 @@ const ServiceRequestPage = () => {
       const url = `${ConnectMe.BASE_URL}/it/api/servicerequests/${selectedRequest}/${action}`;
       const token = getTokenFromLocalStorage();
       const headers = { Authorization: `Bearer ${token}` };
-      const response = await apiCall('PUT', url, headers, { comment,communicationType });
+      const response = await apiCall('PUT', url, headers, { comment, communicationType });
 
       if (response && response.data) {
         showToast(`Service request ${action}ed successfully!`, 'success');
@@ -165,8 +168,25 @@ const ServiceRequestPage = () => {
 
 
 
+  const handlePrint = async () => {
+    if (!formRef.current) {
+      alert("Form not found!");
+      return;
+    }
 
+    const canvas = await html2canvas(formRef.current);
+    const imgData = canvas.toDataURL("image/png");
 
+    const pdf = new jsPDF("p", "mm", "a4");
+    const imgWidth = 210;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+
+    // Open PDF in new tab
+    const pdfBlob = pdf.output("blob");
+    const pdfURL = URL.createObjectURL(pdfBlob);
+    window.open(pdfURL, "_blank");
+  };
 
 
 
@@ -198,13 +218,13 @@ const ServiceRequestPage = () => {
 
                 {/* Header Section */}
                 <div className="card-header bg-light text-dark p-2 d-flex justify-content-between align-items-center">
-  <div>
-    <h6 className="mb-1 fw-bold">Request ID: {request.requestId}</h6>
-    <p className="mb-1 text-muted small">Employee: {request.EmployeeCode}</p>
-    <p className="mb-1 text-muted small">Type: {request.serviceType}</p>
-  </div>
-  <FaInfoCircle size={20} className="text-black cursor-pointer" />
-  </div>
+                  <div>
+                    <h6 className="mb-1 fw-bold">Request ID: {request.requestId}</h6>
+                    <p className="mb-1 text-muted small">Employee: {request.EmployeeCode}</p>
+                    <p className="mb-1 text-muted small">Type: {request.serviceType}</p>
+                  </div>
+                  <FaInfoCircle size={20} className="text-black cursor-pointer" />
+                </div>
 
                 {/* Details Section */}
                 <div className="card-body">
