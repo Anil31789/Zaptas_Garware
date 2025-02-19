@@ -4,8 +4,11 @@ import { apiCall, getTokenFromLocalStorage } from '../utils/apiCall';
 import ConnectMe from '../config/connect';
 import showToast from '../utils/toastHelper';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
+import { FaRegCircleQuestion } from 'react-icons/fa6';
+
+
 
 const ServiceRequestPage = () => {
   const location = useLocation();
@@ -194,11 +197,14 @@ const ServiceRequestPage = () => {
               <div className="card shadow-sm p-3">
 
                 {/* Header Section */}
-                <div className="card-header bg-light text-dark p-2">
-                  <h6 className="mb-1 fw-bold">Request ID: {request.requestId}</h6>
-                  <p className="mb-1 text-muted small">Employee: {request.EmployeeCode}</p>
-                  <p className="mb-1 text-muted small">Type: {request.serviceType}</p>
-                </div>
+                <div className="card-header bg-light text-dark p-2 d-flex justify-content-between align-items-center">
+  <div>
+    <h6 className="mb-1 fw-bold">Request ID: {request.requestId}</h6>
+    <p className="mb-1 text-muted small">Employee: {request.EmployeeCode}</p>
+    <p className="mb-1 text-muted small">Type: {request.serviceType}</p>
+  </div>
+  <FaInfoCircle size={20} className="text-black cursor-pointer" />
+  </div>
 
                 {/* Details Section */}
                 <div className="card-body">
