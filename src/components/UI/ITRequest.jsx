@@ -13,73 +13,81 @@ export default function ITRequest() {
   return (
     <div
       className="card mb-3"
-      // onClick={() => {
-      //   navigate("/ITService");
-      // }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{ cursor: "pointer", borderRadius: "10px" }}
     >
-      <div className="card-header d-flex justify-content-between align-items-center ">
+      <div className="card-header d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
           <FaPlayCircle className="me-2" size={24} />
           <h5 className="mb-0">Video</h5>
         </div>
-
       </div>
+  
       <div
-      
-  className={`card-body d-flex justify-content-center align-items-center ${isHovered ? "hovered" : ""}`}
-  style={{
-    height: "200px",
-    width: "100%",
-    position: "relative", // Ensure proper positioning of the video inside
-    overflow: "hidden", // Prevent overflow issues
-  }}
+        className={`card-body d-flex justify-content-center align-items-center ${isHovered ? "hovered" : ""}`}
+        style={{
+          height: "200px",
+          width: "100%",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            padding: "20px",
+          }}
+        >
+          {/* Heading - Auto Adjusts */}
+          <h4
+            style={{
+              fontSize: "18px", // Responsive size (min: 16px, max: 32px)
+              fontWeight: "bold",
+              zIndex: 1,
+              marginBottom: "20px",
+              maxWidth:"100%",
+            }}
+          >
+            One Company, Infinite Solutions
+          </h4>
   
->
+          {/* Video */}
+          <video
+            src="./GarwareGoaKochiVideoArvindFinal.mp4"
+            controls
+            autoPlay
+            muted
+            style={{
+              width: "100%",
+              height: "35vh",
+              objectFit: "cover",
+              borderRadius: "5px",
+            }}
+          >
+            Your browser does not support the video tag.
+          </video>
   
-  
-  
-  <div
-  
-  style={{
-    position: "relative",
-    width: "100%",
-    height: "100vh", // Full viewport height
-    overflow: "hidden",
-  }}
->
-  {/* Heading */}
-  <h4 style={{ position: "absolute", top: "70px", fontWeight: "bold", zIndex: 1 }}>
-  One Company, Infinite Solutions
-  </h4>
-  <video
-    src="./GarwareGoaKochiVideoArvindFinal.mp4"
-    controls
-    autoPlay
-    muted
-    style={{
-      width: "100%",
-      height: "35%", // Change as needed
-      objectFit: "cover", // Ensures the video covers without stretching
-      position: "absolute",
-      top: "45%",
-      left: "50%",
-      transform: "translate(-50%, -50%)", // Centers the video
-      borderRadius: "5px",
-    }}
-  >
-    Your browser does not support the video tag.
-  </video>
-  {/* Bottom Paragraph */}
-  <p style={{ position: "absolute", bottom: "120px", fontSize: "14px", zIndex: 1 }}>
-    Experience the breathtaking views and cultural richness Goa and Kochi through this captivating visual journey.
-  </p>
-</div>
-
-</div>
-
+          {/* Paragraph - Auto Adjusts */}
+          <p
+            style={{
+              fontSize: "16px", // Responsive text size
+              marginTop: "10px",
+              maxWidth: "100%", // Ensures proper width
+            }}
+          >
+            Experience the breathtaking views and cultural richness of Goa and Kochi through this captivating visual journey.
+          </p>
+        </div>
+      </div>
     </div>
   );
+  
 }
