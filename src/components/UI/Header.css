@@ -165,18 +165,20 @@ img.profile-img {
 
 .search-dropdown {
     position: absolute;
-    top: 100%;
-    left: 0;
+    top: 100%; /* Place it right below the input */
+    left: -80px;
     width: 100%;
-    min-width: 270px;
-    z-index: 1000;
-    background-color: white;
+    min-width: 400px; /* Adjust for smaller screens */
+    max-width: 600px; /* Prevent it from becoming too wide */
+    max-height: 300px; /* Prevent excessive height */
+    overflow-y: auto; /* Enable scrolling inside the dropdown if needed */
+    background: white;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    z-index: 1000; /* Ensure it's above other elements */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-height: 300px;
-    overflow-y: auto;
-  }
+}
+
+  
   
   .loading,
   .no-results {
