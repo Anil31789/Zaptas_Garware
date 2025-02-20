@@ -1179,7 +1179,7 @@ export default function Headers() {
                 </div>
                 <small>{option.location}</small>
                  (
-                 <small>{option.areaNo}</small>/
+                 <small>{option.areaNo}</small>-
                 <small>{option.extensionNo}</small>)
 
                 <br />
