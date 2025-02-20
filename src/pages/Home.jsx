@@ -63,9 +63,9 @@ export default function Home() {
           
         </div>
 
-        <div className="birthday-wish">
+        {/* <div className="birthday-wish">
           <QuickLink />
-        </div>
+        </div> */}
         <div className="container-fluid p-4">
         <div className="row d-flex">
              {/* New Components */}
