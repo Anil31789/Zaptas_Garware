@@ -708,7 +708,11 @@ export default function Headers() {
                   </button>
                   <button
                     className="btn btn-primary"
-                    onClick={() => navigate("/service", { state: { status: "Pending" } })}
+                    onClick={() => {
+                      handleCloseModal();
+                      navigate("/service", { state: { status: "Pending" } });
+                    }}
+
                   >
                     View Requests
                   </button>

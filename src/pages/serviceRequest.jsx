@@ -5,7 +5,7 @@ import ConnectMe from '../config/connect';
 import showToast from '../utils/toastHelper';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FaCheckCircle, FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { FaRegCircleQuestion } from 'react-icons/fa6';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -13,6 +13,7 @@ import jsPDF from 'jspdf';
 
 
 const ServiceRequestPage = () => {
+  const navigate = useNavigate()
   const formRef = useRef(null);
   const location = useLocation();
   const initialTab = location.state?.status || "My Requests"; // Default to "My Requests"
@@ -212,48 +213,58 @@ const ServiceRequestPage = () => {
         </div>
       ) : (
         <div className="row">
-          {serviceRequests.map((request) => (
-            <div className="col-md-4 mb-3" key={request._id}>
-              <div className="card shadow-sm p-3">
-
-                {/* Header Section */}
-                <div className="card-header bg-light text-dark p-2 d-flex justify-content-between align-items-center">
-                  <div>
-                    <h6 className="mb-1 fw-bold">Request ID: {request.requestId}</h6>
-                    <p className="mb-1 text-muted small">Employee: {request.EmployeeCode}</p>
-                    <p className="mb-1 text-muted small">Type: {request.serviceType}</p>
-                  </div>
-                  <FaInfoCircle size={20} className="text-black cursor-pointer" />
+        {serviceRequests.map((request) => (
+          <div className="col-md-4 mb-3" key={request._id}>
+            <div className="card border rounded shadow-sm">
+              
+              {/* Header Section */}
+              <div className="card-header bg-white border-bottom d-flex justify-content-between align-items-center p-3">
+                <div>
+                  <h6 className="mb-1 fw-semibold text-dark">Request ID: {request.requestId}</h6>
+                  <p className="mb-1 small text-muted">Employee: {request.EmployeeCode}</p>
+                  <p className="mb-0 small text-muted">{request.serviceType}</p>
                 </div>
-
-                {/* Details Section */}
-                <div className="card-body">
-                  <p className="mb-2 fw-bold">Details:</p>
-                  <div className="px-2">
-                    {request.serviceFields.map((field, index) => (
-                      <div key={index} className="d-flex justify-content-between">
-                        <p className="mb-1 text-muted small">{field.fieldConfig}:</p>
-                        <p className="mb-1 text-dark small">{field.fieldValue}</p>
-                      </div>
-                    ))}
-                  </div>
-
-                  {activeTab === 'Pending' ? (
-                    <div className="d-flex justify-content-between mt-3">
-                      <button className="btn btn-success btn-sm" onClick={() => openCommentModal(request)}>Approve</button>
-                      <button className="btn btn-danger btn-sm" onClick={() => openCommentModal(request)}>Reject</button>
-                    </div>
-                  ) : (
-                    <p className="text-muted small mt-3">
-                      <ApprovalTimeline request={request} />
-                    </p>
-                  )}
-                </div>
-
+                <FaInfoCircle 
+                  size={20} 
+                  className="text-secondary cursor-pointer" 
+                  onClick={() => navigate("/securityform", { state: request })} 
+                />
               </div>
+      
+              {/* Details Section with Fixed Height and Scroll */}
+              <div className="card-body overflow-auto" style={{ maxHeight: "250px" }}>
+                <p className="fw-bold text-secondary mb-2">Details:</p>
+                <div className="px-2">
+                  {request.serviceFields.map((field, index) => (
+                    <div key={index} className="d-flex justify-content-between border-bottom py-2">
+                      <span className="text-muted small">{field.fieldConfig}:</span>
+                      <span className="text-dark small">{field.fieldValue}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+      
+              {/* Footer Section */}
+              <div className="card-footer bg-light p-3 d-flex justify-content-between align-items-center">
+                {activeTab === 'Pending' ? (
+                  <>
+                    <button className="btn btn-outline-success btn-sm px-3" onClick={() => openCommentModal(request)}>Approve</button>
+                    <button className="btn btn-outline-danger btn-sm px-3" onClick={() => openCommentModal(request)}>Reject</button>
+                  </>
+                ) : (
+                  <div className="text-muted small">
+                    <ApprovalTimeline request={request} />
+                  </div>
+                )}
+              </div>
+      
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
+      </div>
+      
+      
+      
 
 
 

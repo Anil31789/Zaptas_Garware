@@ -1,63 +1,100 @@
-import React, { useRef } from "react";
-import { useReactToPrint } from "react-to-print";
+import React, { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 export default function ITSecurityForm() {
   const formRef = useRef(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [userDetails, setUserDetails] = useState(null);
 
-  const handlePrint = useReactToPrint({
-    content: () => {
-      console.log("Form Ref:", formRef.current); // Debugging: Check if ref is attached
-      return formRef.current || document.createElement("div"); // Fallback to avoid null
-    },
-    documentTitle: "IT Security Form",
-    pageStyle: "@page { size: auto; margin: 20mm; }",
-  });
+  useEffect(() => {
+    const storedUserDetails = localStorage.getItem("userDetails");
+    if (storedUserDetails) {
+      setUserDetails(JSON.parse(storedUserDetails));
+    }
+  }, []);
+
+  const data = location.state;
+
+  useEffect(() => {
+    if (!data) {
+      navigate("/");
+    }
+  }, [data, navigate]);
+
+  if (!data) {
+    return null;
+  }
 
   const formData = {
-    employeeName: "John Doe",
-    date: "16-02-2025",
-    department: "IT",
+    employeeName: userDetails?.name,
+    date: data?.requestDate ? new Date(data.requestDate).toLocaleDateString("en-GB") : "N/A",
+    department: userDetails?.jobTitle,
     location: "New York",
     designation: "Security Analyst",
-    hodName: "Michael Smith",
-    employeeSignature: "signature1.png",
-    hodSignature: "signature2.png",
-    cctvLocation: "Server Room",
-    reason: "Security Audit",
-    expectedPeriod: "One Time",
-    hodJustification: "Necessary for internal security compliance.",
-    itComments: "Approved as per security policy.",
-    reviewedBy: "David Johnson",
-    approvedBy: "Sophia Brown",
+    hodName: data?.HODName,
+    employeeSignature: userDetails?.name,
+    hodSignature: data?.HODName,
+    serviceType: data?.serviceType,
+    hodJustification: data?.hodApproval?.comment,
+    itComments: data?.itApproval?.comment,
+    ...(data?.hodApproval?.comment && data?.itApproval?.comment && {
+      reviewedBy: data?.itApproval?.name,
+      approvedBy: data?.itHeadApproval?.name,
+    }),
+  };
+  console.log(formData,data)
+
+  const handlePrintPDF = async () => {
+    const input = formRef.current;
+
+    if (!input) return;
+
+    const canvas = await html2canvas(input);
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF("p", "mm", "a4");
+    const imgWidth = 210; // A4 width in mm
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+    pdf.save("IT_Security_Form.pdf"); // Download PDF
+    window.open(pdf.output("bloburl"), "_blank"); // Open PDF in new tab
   };
 
   return (
     <div className="container mt-4">
       {/* Print Button */}
-      <button className="btn btn-primary mb-3" onClick={handlePrint}>
-        Print Form
-      </button>
+      <div className="d-flex justify-content-end mb-3">
+        <button className="btn btn-primary" onClick={handlePrintPDF}>
+          Print Form (PDF)
+        </button>
+      </div>
 
       {/* Printable Section */}
-      <div ref={formRef} className="form-container p-4 bg-white rounded shadow border">
-        <h3 className="text-center text-uppercase">IT Security Form</h3>
+      <div ref={formRef} className="p-4 bg-white rounded shadow border">
+        <h2 className="text-center text-uppercase mb-4">IT {formData?.serviceType} Form</h2>
 
-        {/* Applicant’s Data */}
-        <h5 className="mt-3">Applicant’s Data</h5>
-        <div className="row">
-          {[
-            { label: "Employee Name", value: formData.employeeName },
-            { label: "Date", value: formData.date },
-            { label: "Department", value: formData.department },
-            { label: "Location", value: formData.location },
-            { label: "Designation", value: formData.designation },
-            { label: "HOD Name", value: formData.hodName },
-          ].map((field, index) => (
-            <div className="col-md-6 mb-3" key={index}>
-              <strong>{field.label}:</strong> {field.value || "N/A"}
-            </div>
-          ))}
-        </div>
+        <h4 className="border-bottom pb-2">Applicant’s Details</h4>
+        <table className="table table-bordered">
+          <tbody>
+            {[
+              { label: "Employee Name", value: formData.employeeName },
+              { label: "Date", value: formData.date },
+              { label: "Department", value: formData.department },
+              { label: "Location", value: formData.location },
+              { label: "Designation", value: formData.designation },
+              { label: "HOD Name", value: formData.hodName },
+            ].map((field, index) => (
+              <tr key={index}>
+                <td className="fw-bold">{field.label}</td>
+                <td>{field.value || ""}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
         {/* Signatures */}
         <div className="row">
@@ -65,46 +102,60 @@ export default function ITSecurityForm() {
             { label: "Employee Signature", value: formData.employeeSignature },
             { label: "HOD’s Signature", value: formData.hodSignature },
           ].map((field, index) => (
-            <div className="col-md-6" key={index}>
+            <div className="col-md-6 mb-3" key={index}>
               <strong>{field.label}:</strong>
-              <div className="border p-3 rounded bg-light text-muted text-center">
-                {field.value ? <img src={field.value} alt="Signature" width="100" /> : "Signature Not Available"}
+              <div className="border p-3 rounded bg-light text-center">
+                {field?.value || ""}
               </div>
             </div>
           ))}
         </div>
 
-        {/* Access Details */}
-        <h5 className="mt-4">Equipment Request for Access</h5>
-        <div className="mb-3"><strong>Type of Access:</strong> CCTV Camera</div>
-        <div className="mb-3"><strong>Location of CCTV Camera:</strong> {formData.cctvLocation || "N/A"}</div>
-        <div className="mb-3"><strong>Reason for Access:</strong> {formData.reason || "N/A"}</div>
-        <div className="mb-3"><strong>Expected Period:</strong> {formData.expectedPeriod || "N/A"}</div>
+        <h4 className="border-bottom pb-2 mt-4">{formData?.serviceType}</h4>
+        <table className="table table-bordered">
+          <tbody>
+            {data?.serviceFields?.length > 0 ? (
+              data.serviceFields.map((field, index) => (
+                <tr key={index}>
+                  <td className="fw-light">{field.fieldConfig}</td>
+                  <td className="fw-bold">{field.fieldValue || ""}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="2" className="text-center">No service fields available.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
 
         {/* Justification */}
-        <h5 className="mt-4">Justification from HOD</h5>
-        <p className="border p-3">{formData.hodJustification || "N/A"}</p>
+        <h4 className="border-bottom pb-2 mt-4">Justification from HOD</h4>
+        <p className="border p-3">{formData.hodJustification}</p>
 
         {/* IT Department Comments */}
-        <h5 className="mt-4">Comments from IT Department</h5>
-        <p className="border p-3">{formData.itComments || "N/A"}</p>
+        <h4 className="border-bottom pb-2 mt-4">Comments from IT Department</h4>
+        <p className="border p-3">{formData.itComments}</p>
 
         {/* IT Department Review */}
-        <h5 className="mt-4">IT Department</h5>
-        <div className="row">
-          {[
-            { label: "Reviewed By", value: formData.reviewedBy },
-            { label: "Approved By", value: formData.approvedBy },
-          ].map((field, index) => (
-            <div className="col-md-6 mb-3" key={index}>
-              <strong>{field.label}:</strong> {field.value || "N/A"}
-            </div>
-          ))}
-        </div>
+        <h4 className="border-bottom pb-2 mt-4">IT Department</h4>
+        <table className="table table-bordered">
+          <tbody>
+            {[
+              { label: "Reviewed By", value: formData.reviewedBy },
+              { label: "Approved By", value: formData.approvedBy },
+            ].map((field, index) => (
+              <tr key={index}>
+                <td className="fw-bold">{field.label}</td>
+                <td>{field.value || ""}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
         {/* Notes Section */}
         <div className="mt-4 p-3 bg-light border rounded">
-          <h6>Note:</h6>
+          <h5>Note:</h5>
           <ul>
             <li>Approval of request is subject to IT security policy.</li>
             <li>HOD’s approval is mandatory and considered risk acceptance.</li>
