@@ -195,16 +195,22 @@ const ServiceRequestPage = () => {
     <div className="container mt-4">
       <h2 className="mb-4 text-center">Service Requests</h2>
       <div className="d-flex justify-content-center mb-4">
-        {['Pending', 'Approved', 'Rejected', 'My Requests'].map((tab) => (
-          <button
-            key={tab}
-            className={`btn me-2 ${activeTab === tab ? 'btn-primary' : 'btn-outline-primary'}`}
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
+  {[
+    { label: 'Pending', variant: 'warning' },
+    { label: 'Approved', variant: 'success' },
+    { label: 'Rejected', variant: 'danger' },
+    { label: 'My Requests', variant: 'info' }
+  ].map(({ label, variant }) => (
+    <button
+      key={label}
+      className={`btn me-2 btn-${activeTab === label ? variant : `outline-${variant}`}`}
+      onClick={() => setActiveTab(label)}
+    >
+      {label}
+    </button>
+  ))}
+</div>
+
       {loading ? (
         <div className="text-center">
           <div className="spinner-border text-primary" role="status">
@@ -232,7 +238,7 @@ const ServiceRequestPage = () => {
               </div>
       
               {/* Details Section with Fixed Height and Scroll */}
-              <div className="card-body overflow-auto" style={{ maxHeight: "250px" }}>
+              <div className="card-body overflow-auto" style={{ maxHeight: "100px" }}>
                 <p className="fw-bold text-secondary mb-2">Details:</p>
                 <div className="px-2">
                   {request.serviceFields.map((field, index) => (
