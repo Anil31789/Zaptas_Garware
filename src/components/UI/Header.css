@@ -168,6 +168,7 @@ img.profile-img {
     top: 100%;
     left: 0;
     width: 100%;
+    min-width: 270px;
     z-index: 1000;
     background-color: white;
     border: 1px solid #ddd;

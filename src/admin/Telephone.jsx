@@ -16,9 +16,8 @@ const ExcelUploader = () => {
     limit: 10,
   });
 
-
-// Fetch data from API
-const fetchDataFromAPI = async (page = 1) => {
+  // Fetch data from API
+  const fetchDataFromAPI = async (page = 1) => {
     try {
       const url = `${ConnectMe.BASE_URL}/telecom/fetch-data?page=${page}&limit=${pagination.limit}`;
       const token = getTokenFromLocalStorage();
@@ -26,38 +25,33 @@ const fetchDataFromAPI = async (page = 1) => {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       };
-  
+
       const response = await apiCall("GET", url, headers);
-  
-      console.log("API Response: ", response);
-  
+
       if (response.success && Array.isArray(response.data.data) && response.data.data.length > 0) {
         const filteredColumns = Object.keys(response.data.data[0]).filter(col => col !== "_id" && col !== "__v");
-  
-        setColumns(filteredColumns); // Set columns excluding _id and __v
+
+        setColumns(filteredColumns);
         setData(response.data.data);
-        setPagination((prevState) => ({
-          ...prevState,
+        setPagination({
           totalRecords: response.data.pagination.totalRecords,
           totalPages: response.data.pagination.totalPages,
           currentPage: page,
-        }));
+          limit: pagination.limit,
+        });
       } else {
-        showToast("No data available or failed to fetch data.", "error");
+        showToast("No data available.", "error");
       }
     } catch (error) {
-      console.error("Error fetching data", error);
-      showToast("An error occurred while fetching data.", "error");
+      showToast("Error fetching data.", "error");
     }
   };
-  
-  
 
   // Handle File Upload
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (!file) return;
-  
+
     const reader = new FileReader();
     reader.readAsBinaryString(file);
     reader.onload = (e) => {
@@ -66,123 +60,76 @@ const fetchDataFromAPI = async (page = 1) => {
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const parsedData = XLSX.utils.sheet_to_json(sheet);
-  
+
       if (parsedData.length > 0) {
         const filteredColumns = Object.keys(parsedData[0]).filter(col => col !== "_id" && col !== "__v");
         setColumns(filteredColumns);
       }
-  
-      // Mark all uploaded data as new
-      const formattedData = parsedData.map(row => {
-        const { _id, __v, ...filteredRow } = row;
-        return { ...filteredRow, isNew: true }; // Ensure isNew flag is added
-      });
-  
+
+      const formattedData = parsedData.map(row => ({
+        ...row,
+        isNew: true,
+      }));
+
       setData(formattedData);
     };
   };
-  
 
-  // Handle Add Row
+  // ✅ Updated `handleAddRow` to ensure new empty row appears
   const handleAddRow = () => {
     if (columns.length === 0) {
       showToast("Please upload a file first!", "warning");
       return;
     }
-  
-    // Create an empty row with 'isNew' flag
-    const emptyRow = columns.reduce((acc, key) => ({ ...acc, [key]: "", isNew: true }), {});
-  
-    // Update pagination state
-    const totalRecords = pagination.totalRecords + 1;
-    const totalPages = Math.ceil(totalRecords / pagination.limit);
-    let newPage = pagination.currentPage;
-  
-    // If the current page is the last page and it has space, stay on the current page
-    if (pagination.currentPage === totalPages && totalRecords <= pagination.limit * pagination.currentPage) {
-      newPage = pagination.currentPage;
-    } else {
-      // Otherwise, move to the last page
-      newPage = totalPages;
-    }
-  
-    setPagination((prevState) => ({
-      ...prevState,
-      totalRecords,
-      totalPages,
-      currentPage: newPage,
-    }));
-  
-    // Append the new row to the data
-    setData((prevData) => {
-      // If adding on a new page, don't modify the current page's data
-      if (newPage !== pagination.currentPage) {
-        return prevData;
-      }
-      return [...prevData, emptyRow];
-    });
-  };
-  
 
-  
-  
+    const emptyRow = columns.reduce((acc, key) => ({ ...acc, [key]: "", isNew: true, isEditing: true }), {});
+
+    setData((prevData) => [...prevData, emptyRow]);
+  };
 
   // Handle Delete Row
   const handleDeleteRow = (index) => {
     setData(data.filter((_, i) => i !== index));
   };
 
-
-
   // Handle Save Data
   const handleSave = async () => {
     try {
       const updatedData = data.filter(row => row.isNew || row.isUpdated);
-  
+
       if (updatedData.length === 0) {
         showToast("No changes detected.", "info");
         return;
       }
-  
+
       const url = `${ConnectMe.BASE_URL}/telecom/save-data`;
       const token = getTokenFromLocalStorage();
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       };
-  
+
       const response = await apiCall("POST", url, headers, { data: updatedData });
-  
+
       if (response.success) {
         showToast("Data saved successfully!", "success");
-  
-        // Reset flags after saving
         setData(prevData => prevData.map(row => ({ ...row, isNew: false, isUpdated: false })));
       } else {
         showToast("Failed to save data.", "error");
       }
     } catch (error) {
-      console.error("Error saving data", error);
-      showToast("An error occurred while saving data.", "error");
+      showToast("Error saving data.", "error");
     }
   };
-  
 
-  // Filter data based on search query
-  const filteredData = data.filter((row) =>
-    columns.some((col) =>
-      row[col] ? row[col].toString().toLowerCase().includes(searchQuery.toLowerCase()) : false
-    )
-  );
-
-  // Pagination controls
+  // Handle Pagination
   const handlePageChange = (page) => {
-    if (page < 1 || page > pagination.totalPages) return; // Prevent invalid page numbers
-    fetchDataFromAPI(page); // Fetch data for the selected page
+    if (page < 1 || page > pagination.totalPages) return;
+    fetchDataFromAPI(page);
   };
 
   useEffect(() => {
-    fetchDataFromAPI(pagination.currentPage); // Fetch data on initial load
+    fetchDataFromAPI(pagination.currentPage);
   }, [pagination.currentPage]);
 
   return (
@@ -212,34 +159,52 @@ const fetchDataFromAPI = async (page = 1) => {
             <thead>
               <tr>
                 {columns.map((col, index) => (
-                  <th key={index}>
-                    {col}{" "}
-                    {/* <Button variant="danger" size="sm" onClick={() => handleDeleteColumn(col)}>
-                      ❌
-                    </Button> */}
-                  </th>
+                  <th key={index}>{col}</th>
                 ))}
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {filteredData.map((row, rowIndex) => (
+              {data.map((row, rowIndex) => (
                 <tr key={rowIndex}>
                   {columns.map((col, colIndex) => (
                     <td key={colIndex}>
-                      <Form.Control
-                        type="text"
-                        value={row[col] || ""}
-                        onChange={(e) => {
+                      {row.isEditing ? (
+                        <Form.Control
+                          type="text"
+                          value={row[col] || ""}
+                          onChange={(e) => {
                             const newData = [...data];
-                            newData[rowIndex] = { ...newData[rowIndex], [col]: e.target.value, isUpdated: true };
+                            newData[rowIndex] = { ...newData[rowIndex], [col]: e.target.value };
                             setData(newData);
-                        }}
-                      />
+                          }}
+                        />
+                      ) : (
+                        row[col]
+                      )}
                     </td>
                   ))}
-                  <td>
-                    <Button variant="danger" size="sm" onClick={() => handleDeleteRow(rowIndex)}>
+
+                  {/* Actions Column */}
+                  <td style={{ display: "flex", gap: "5px" }}>
+                    <Button
+                      variant={row.isEditing ? "success" : "primary"}
+                      size="sm"
+                      onClick={() => {
+                        const newData = [...data];
+                        newData[rowIndex].isEditing = !newData[rowIndex].isEditing;
+                        setData(newData);
+                      }}
+                    >
+                      {row.isEditing ? "💾" : "✏️"}
+                    </Button>
+
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={() => handleDeleteRow(rowIndex)}
+                      disabled={row.isEditing}
+                    >
                       Delete
                     </Button>
                   </td>
@@ -251,21 +216,13 @@ const fetchDataFromAPI = async (page = 1) => {
           {/* Pagination Controls */}
           <Row className="mt-3">
             <Col>
-              <Button
-                variant="secondary"
-                onClick={() => handlePageChange(pagination.currentPage - 1)}
-                disabled={pagination.currentPage === 1}
-              >
+              <Button variant="secondary" onClick={() => handlePageChange(pagination.currentPage - 1)} disabled={pagination.currentPage === 1}>
                 Previous
               </Button>
               <span className="mx-2">
                 Page {pagination.currentPage} of {pagination.totalPages}
               </span>
-              <Button
-                variant="secondary"
-                onClick={() => handlePageChange(pagination.currentPage + 1)}
-                disabled={pagination.currentPage === pagination.totalPages}
-              >
+              <Button variant="secondary" onClick={() => handlePageChange(pagination.currentPage + 1)} disabled={pagination.currentPage === pagination.totalPages}>
                 Next
               </Button>
             </Col>
@@ -273,12 +230,8 @@ const fetchDataFromAPI = async (page = 1) => {
 
           <Row className="mt-3">
             <Col>
-              <Button variant="primary" onClick={handleAddRow}>
-                ➕ Add Row
-              </Button>
-              <Button variant="success" className="ms-2" onClick={handleSave}>
-                💾 Save Data
-              </Button>
+              <Button variant="primary" onClick={handleAddRow}>➕ Add Row</Button>
+              <Button variant="success" className="ms-2" onClick={handleSave}>💾 Save Data</Button>
             </Col>
           </Row>
         </>

@@ -1125,7 +1125,7 @@ export default function Headers() {
       'Content-Type': 'application/json',
     };
 
-    const { options: fetchedOptions, loading } = useDebouncedSearch(searchQuery, 500, headers);
+    const { options: fetchedOptions, loading } = useDebouncedSearch(searchQuery, 1000, headers);
 
     const handleSearchChange = (e) => {
       const query = e.target.value;
@@ -1167,15 +1167,28 @@ export default function Headers() {
             {options.length > 0 ? (
               <ListGroup>
                 {options.map((option, index) => (
-                  <ListGroup.Item
-                    key={index}
-                    action
-                    onClick={() => handleSearchClick(option)} // Handle item click
-                  >
-                    <strong>{option.name}</strong><br />
-                    <small>Location: {option.location}</small><br />
-                    <small>Department: {option.department}</small>
-                  </ListGroup.Item>
+                <ListGroup.Item
+                key={index}
+                action
+                onClick={() => handleSearchClick(option)} // Handle item click
+              >
+                <div className="d-flex justify-content-between">
+                  <strong>{option.name}</strong>
+                  <small className="text-muted">{option.department}</small>
+                  
+                </div>
+                <small>{option.location}</small>
+                 (
+                 <small>{option.areaNo}</small>/
+                <small>{option.extensionNo}</small>)
+
+                <br />
+                <small>{option.cellularNumber}</small><br/>
+                <small>{option.email}</small>
+
+
+              </ListGroup.Item>
+              
                 ))}
               </ListGroup>
             ) : (
