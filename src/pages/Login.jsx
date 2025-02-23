@@ -124,11 +124,11 @@ const Login = () => {
               {/* Email Input */}
               <Form.Group className="mb-3" controlId="formEmail">
                 <Form.Label>
-                  <FaEnvelope /> Email Address
+                  <FaEnvelope /> Username
                 </Form.Label>
                 <Form.Control
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder="Domain Username"
                   value={emailOrPhone}
                   onChange={(e) => setEmailOrPhone(e.target.value)}
                   required
@@ -143,7 +143,7 @@ const Login = () => {
                 </Form.Label>
                 <Form.Control
                   type={isOtpLogin ? "text" : "password"}
-                  placeholder={isOtpLogin ? "Enter OTP" : "Enter Password"}
+                  placeholder={"Domain Password"}
                   value={passwordOrOtp}
                   onChange={(e) => setPasswordOrOtp(e.target.value)}
                   required
@@ -151,7 +151,7 @@ const Login = () => {
               </Form.Group>
 
               {/* Toggle Login Mode */}
-              <Form.Group className="mb-3">
+              {/* <Form.Group className="mb-3">
                 <Form.Check
                   type="switch"
                   id="otpLoginSwitch"
@@ -159,7 +159,7 @@ const Login = () => {
                   checked={isOtpLogin}
                   onChange={(e) => setIsOtpLogin(e.target.checked)}
                 />
-              </Form.Group>
+              </Form.Group> */}
 
               {/* Send OTP Button */}
               {isOtpLogin && (
