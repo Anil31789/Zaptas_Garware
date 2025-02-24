@@ -120,7 +120,7 @@ export default function WorkAnniversary() {
     <div className="card mb-3" style={{ cursor: "pointer", borderRadius: "10px" }}>
       <div className="card-header d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
-          <FaAward className="me-2" size={24} />
+          <FaAward className="me-2" size={20} />
           <h5 className="mb-0">Work Anniversary</h5>
         </div>
       </div>

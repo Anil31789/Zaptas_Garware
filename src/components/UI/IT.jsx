@@ -38,7 +38,7 @@ const IT = () => {
     <div className="card mb-3">
     <div className="card-header d-flex justify-content-between align-items-center">
     <div className="d-flex align-items-center">
-        <FaLaptopCode className="me-2" size={24} />
+        <FaLaptopCode className="me-2" size={20} />
         <h5 className="mb-0">IT Services</h5>
       </div>
       <a

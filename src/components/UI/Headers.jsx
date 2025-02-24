@@ -1167,27 +1167,34 @@ export default function Headers() {
             {options.length > 0 ? (
               <ListGroup>
                 {options.map((option, index) => (
-                <ListGroup.Item
-                key={index}
-                action
-                onClick={() => handleSearchClick(option)} // Handle item click
-              >
-                <div className="d-flex justify-content-between">
-                  <strong>{option.name}</strong>
-                  <small className="text-muted">{option.department}</small>
-                  
-                </div>
-                <small>{option.location}</small>
-                 (
-                 <small>{option.areaNo}</small>-
-                <small>{option.extensionNo}</small>)
-
-                <br />
-                <small>{option.cellularNumber}</small><br/>
-                <small>{option.email}</small>
-
-
-              </ListGroup.Item>
+               <ListGroup.Item
+               key={index}
+               action
+               onClick={() => handleSearchClick(option)} // Handle item click
+             >
+               {/* First Row - Name and Department */}
+               <div className="d-flex justify-content-between">
+                 <strong>{option.name}</strong>
+                 <small className="text-muted">{option.department}</small>
+               </div>
+             
+               {/* Second Row - Location, Area No, and Extension No */}
+               <div className="d-flex justify-content-between align-items-center">
+                 <div className="d-flex align-items-center gap-2">
+                   <small>{option.location}</small>
+                   <small>(</small>
+                   <small>{option.areaNo}</small>
+                   <small>-</small>
+                   <small>{option.extensionNo}</small>
+                   <small>)</small>
+                 </div>
+                 <small className="">{option.cellularNumber}</small>
+               </div>
+             
+               {/* Third Row - Email */}
+               <small>{option.email}</small>
+             </ListGroup.Item>
+             
               
                 ))}
               </ListGroup>

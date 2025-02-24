@@ -14,8 +14,8 @@ export default function GalleryCard() {
     CsrType: [],
     Awards: [],
   });
-  const [selectedImage, setSelectedImage] = useState(null); // For handling the selected image in the modal
-  const [showModal, setShowModal] = useState(false); // For controlling the modal visibility
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetchData("Announcements");
@@ -45,32 +45,32 @@ export default function GalleryCard() {
   };
 
   const handleTitleClick = (item) => {
-    setSelectedImage(item); // Set the selected image data
-    setShowModal(true); // Show the modal
+    setSelectedImage(item);
+    setShowModal(true);
   };
 
   const renderCarousel = (items, section, rowLimit) => {
-    if (!items || items.length === 0) return <p>No {section} available</p>;
+    if (!items || items.length === 0) return <p className="text-center">No {section} available</p>;
 
     const limitedItems = items.slice(0, rowLimit);
     const groupedItems = [];
 
     for (let i = 0; i < limitedItems.length; i += 2) {
-      groupedItems.push(limitedItems.slice(i, i + 2)); // Group 2 images per row
+      groupedItems.push(limitedItems.slice(i, i + 2));
     }
 
     return (
       <div className="carousel-inner">
         {groupedItems.map((row, rowIndex) => (
-          <div key={rowIndex} className="row no-gutters">
+          <div key={rowIndex} className="row gx-0">
             {row.map((item) => {
               const imageUrl = item?.images?.[0]?.imagePath
                 ? `${ConnectMe.img_URL}${item.images[0].imagePath}`
                 : "";
 
               return (
-                <div key={item._id} className="col-6 mb-0 p-0">
-                  <div className="card border-0 shadow-none overflow-hidden h-100 p-0">
+                <div key={item._id} className="col-6 p-1">
+                  <div className="card border-0 shadow-sm overflow-hidden h-100">
                     {imageUrl && (
                       <img
                         src={imageUrl}
@@ -81,10 +81,9 @@ export default function GalleryCard() {
                           height: "125px",
                           objectFit: "cover",
                           cursor: "pointer",
-                          paddingTop: "10px",
                           borderRadius: "10px",
                         }}
-                        onClick={() => handleTitleClick(item)} // On click, set the selected image
+                        onClick={() => handleTitleClick(item)}
                       />
                     )}
                     <div
@@ -117,32 +116,35 @@ export default function GalleryCard() {
           onClick={() => {
             navigate("/photos");
           }}
+          style={{ cursor: "pointer" }}
         >
           View All <HiArrowCircleRight />
         </a>
       </div>
-      <div className="card-body p-0">
-        <div className="row d-flex flex-column justify-content-center align-content-center">
-          {/* CSR Section */}
-          {data.CsrType && data.CsrType.length > 0 && (
-            <div className="col text-center mb-2">
-              {renderCarousel(data.CsrType, "CSR", 6)}
-            </div>
-          )}
+      <div className="card-body card-scroll p-0" style={{ overflowX: "hidden" }}>
+        <div className="container-fluid">
+          <div className="row d-flex flex-column justify-content-center align-content-center">
+            {/* CSR Section */}
+            {data.CsrType && data.CsrType.length > 0 && (
+              <div className="col text-center mb-2">
+                {renderCarousel(data.CsrType, "CSR", 6)}
+              </div>
+            )}
 
-          {/* Announcements Section */}
-          {data.Announcements && data.Announcements.length > 0 && (
-            <div className="col text-center mb-2">
-              {renderCarousel(data.Announcements, "Announcements", 4)}
-            </div>
-          )}
+            {/* Announcements Section */}
+            {data.Announcements && data.Announcements.length > 0 && (
+              <div className="col text-center mb-2">
+                {renderCarousel(data.Announcements, "Announcements", 4)}
+              </div>
+            )}
 
-          {/* Awards Section */}
-          {data.Awards && data.Awards.length > 0 && (
-            <div className="col text-center mb-2">
-              {renderCarousel(data.Awards, "Awards", 2)}
-            </div>
-          )}
+            {/* Awards Section */}
+            {data.Awards && data.Awards.length > 0 && (
+              <div className="col text-center mb-2">
+                {renderCarousel(data.Awards, "Awards", 2)}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -157,6 +159,7 @@ export default function GalleryCard() {
               src={`${ConnectMe.img_URL}${selectedImage.images[0].imagePath}`}
               className="img-fluid"
               alt={selectedImage?.title}
+              style={{ maxWidth: "100%", borderRadius: "10px" }}
             />
           )}
         </Modal.Body>

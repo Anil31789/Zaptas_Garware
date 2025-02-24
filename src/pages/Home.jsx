@@ -59,6 +59,15 @@ export default function Home() {
           <div className="col-md-4 d-flex">
             <NewJoiners />
           </div>
+          <div className="col-md-4 d-flex mt-4">
+            <HR />
+          </div>
+          <div className="col-md-4 d-flex mt-4">
+            <IT />
+          </div>
+          <div className="col-md-4 d-flex mt-4">
+            <Accounts />
+            </div>
 
           
         </div>
@@ -69,15 +78,7 @@ export default function Home() {
         <div className="container-fluid p-4">
         <div className="row d-flex">
              {/* New Components */}
-          <div className="col-md-4 d-flex">
-            <HR />
-          </div>
-          <div className="col-md-4 d-flex">
-            <IT />
-          </div>
-          <div className="col-md-4 d-flex">
-            <Accounts />
-            </div>
+          
           </div>
         </div>
         

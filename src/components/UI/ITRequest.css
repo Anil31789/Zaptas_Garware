@@ -1,42 +1,24 @@
-/* Hover effect on card */
-.card-body.hovered {
-    background-color: #f8f9fa;
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, box-shadow 0.3s;
+.animated-live {
+  font-size: 17px;
+  font-weight: bold;
+  z-index: 1;
+  margin-bottom: 20px;
+  max-width: 100%;
+  animation: pulseEffect 3s infinite ease-in-out;
+}
+
+/* Keyframes for Live Pulse Effect */
+@keyframes pulseEffect {
+  0% {
+    transform: scale(1);
+    opacity: 2;
   }
-  
-  /* "Coming Soon" animation */
-  .coming-soon {
-    font-size: 24px;
-    animation: fadeInOut 2s ease-in-out infinite;
-    color: #6c757d;
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
   }
-  
-  /* Fade in and out animation */
-  @keyframes fadeInOut {
-    0% {
-      opacity: 0;
-    }
-    50% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-    }
+  100% {
+    transform: scale(1);
+    opacity: 0.1;
   }
-  
-  /* Optional: Add a bouncing animation */
-  .coming-soon {
-    animation: bounce 2s infinite;
-  }
-  
-  @keyframes bounce {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
-  
+}

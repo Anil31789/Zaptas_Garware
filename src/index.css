@@ -37,7 +37,7 @@ body {
 .card-header {
   background:#a42938;;
   color: white;
-  padding: 12px;
+  /* padding: 12px; */
 }
 
 .card-header a {
@@ -90,7 +90,7 @@ a:hover {
 }
 
 .card-body.card-scroll {
-  max-height: 550px;
+  max-height: 430px;
   overflow: auto;
 }
 

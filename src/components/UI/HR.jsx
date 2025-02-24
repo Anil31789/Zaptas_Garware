@@ -112,11 +112,11 @@ const HR = () => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="card-header d-flex align-items-center">
-        <FaUsersGear className="me-2" size={24} />
+      <div className="card-header  d-flex align-items-center">
+        <FaUsersGear className="me-2" size={20} />
         <h5 className="mb-0">HR Section</h5>
       </div>
-      <div className="card-body">
+      <div className="card-body ">
         <ul>
           {hrLinks.map((link) => (
             <li key={link.id}>
