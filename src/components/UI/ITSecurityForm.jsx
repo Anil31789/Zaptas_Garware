@@ -75,9 +75,14 @@ export default function ITSecurityForm() {
       </div>
 
       {/* Printable Section */}
-      <div ref={formRef} className="p-4 bg-white rounded shadow border">
-        <h2 className="text-center text-uppercase mb-4">IT {formData?.serviceType} Form</h2>
-
+      <div ref={formRef} className="p-4 bg-white rounded shadow border position-relative">
+  <div className="text-center position-absolute w-100">
+    <h2 className="text-uppercase">IT {formData?.serviceType} Form</h2>
+  </div>
+  <div className="d-flex justify-content-start">
+    <img src="./logo.PNG" alt="Company Logo" className="img-fluid" style={{ maxHeight: "35px" }} />
+  </div>
+  <br></br>
         <h4 className="border-bottom pb-2">Applicant’s Details</h4>
         <table className="table table-bordered">
           <tbody>

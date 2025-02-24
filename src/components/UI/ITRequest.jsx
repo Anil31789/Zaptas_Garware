@@ -40,7 +40,7 @@ export default function ITRequest() {
             alignItems: "center",
             justifyContent: "center",
             textAlign: "center",
-            padding: "20px",
+            padding: "10px",
           }}
         >
           {/* Heading with live animation */}
@@ -65,7 +65,7 @@ export default function ITRequest() {
           </video>
 
           {/* Paragraph - Auto Adjusts */}
-          <p style={{ fontSize: "16px", marginTop: "10px", maxWidth: "100%" }}>
+          <p style={{ fontSize: "14px", marginTop: "10px", maxWidth: "100%" }}>
             Experience the breathtaking views and cultural richness of Goa and
             Kochi through this captivating visual journey.
           </p>

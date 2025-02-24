@@ -1,116 +1,132 @@
 import React, { useState } from "react";
 import { FaMoneyBillWave } from "react-icons/fa6";
-import { AiOutlineUser } from "react-icons/ai";
+import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
+import { AiOutlineFileText } from "react-icons/ai";
 import ConnectMe from "../../config/connect";
 
 const Accounts = () => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [expanded, setExpanded] = useState({});
+
+  const toggleMenu = (id) => {
+    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   const accountsData = [
     {
       id: "1",
-      title: "Reimbursement Form Formats",
+      title: "💰 Reimbursement Form Formats",
       subMenu: [
         {
-          title: "Fuel",
+          id: "1.1",
+          title: "🚗 Fuel",
           link: `${ConnectMe.img_URL}/uploads/forms/FUELCLAIMFORMAT.xls`,
         },
         {
-          title: "Travelling Expenses",
+          id: "1.2",
+          title: "✈️ Travelling Expenses",
           link: `${ConnectMe.img_URL}/uploads/forms/TESformat.xls`,
         },
         {
-          title: "Cash Voucher",
+          id: "1.3",
+          title: "💵 Cash Voucher",
           link: `${ConnectMe.img_URL}/uploads/forms/CASHPAYMENTVOUCHER(003).xlsx`,
         },
       ],
     },
     {
       id: "2",
-      title: "Income Tax-Related Forms",
+      title: "📑 Income Tax-Related Forms",
       subMenu: [
         {
-          title:
-            "Income Tax Declaration proposed investment .",
+          id: "2.1",
+          title: "📋 Income Tax Declaration",
           link: `${ConnectMe.img_URL}/uploads/forms/INCOMETAXSAVINGSTATEMENTFORFY2024-25_updated.xls`,
         },
         {
-          title:
-            "Submission of actual investment proofs at the end of the year (physical copies required).",
+          id: "2.2",
+          title: "📁 Actual Investment Proof Submission",
           link: `${ConnectMe.img_URL}/uploads/forms/form12BAA.docx`,
         },
       ],
     },
     {
       id: "3",
-      title: "LTA Forms",
+      title: "📜 LTA Forms",
       subMenu: [
         {
-          title: "Formats for Leave Travel Allowance (LTA).",
+          id: "3.1",
+          title: "🛫 Leave Travel Allowance (LTA) Format",
           link: `${ConnectMe.img_URL}/uploads/forms/LTAFORM.xls`,
         },
       ],
     },
     {
       id: "4",
-      title: "Insurance-Related Forms",
+      title: "🛡️ Insurance-Related Forms",
       subMenu: [
         {
-          title: "Group Personal Accident (GPA) Claim Form",
+          id: "4.1",
+          title: "📝 Group Personal Accident (GPA) Claim Form",
           link: `${ConnectMe.img_URL}/uploads/forms/PAClaimform.pdf`,
         },
         {
-          title: "Group Mediclaim (GMC) Claim Form",
+          id: "4.2",
+          title: "🏥 Group Mediclaim (GMC) Claim Form",
           link: `${ConnectMe.img_URL}/uploads/forms/GMCStandard-Cashless-Request-Form.pdf`,
         },
         {
-          title: "Group Mediclaim (GMC) Manual for understanding the policy",
+          id: "4.3",
+          title: "📘 GMC Manual (Policy Understanding)",
           link: `${ConnectMe.img_URL}/uploads/forms/GMCEmployeesUserManual2024-25.pdf`,
         },
       ],
     },
   ];
-
   return (
-    <div
-      className="card mb-3"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="card-header d-flex justify-content-between align-items-center">
-        <div className="d-flex align-items-center">
-          <FaMoneyBillWave className="me-2" size={20} />
-          <h5 className="mb-0">Accounts Section</h5>
-        </div>
+    <div className="card shadow-lg border-0 mb-3">
+      <div className="card-header d-flex align-items-center">
+        <FaMoneyBillWave className="me-2" size={20} />
+        <h5 className="mb-0">Accounts Section</h5>
       </div>
       <div className="card-body">
-        <ul className="list-unstyled">
-          {/* <li className="fw-bold">Accounts</li> */}
-          <ul className="ps-3">
-            {accountsData.map((category) => (
-              <li key={category.id} className="mb-2">
-                {category.title}
-                <ul className="ps-3">
-                  {category.subMenu.map((subItem, index) => (
-                    <li key={index}>
-                      <a
-                        href={subItem.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-decoration-none"
-                      >
-                        {subItem.title}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        </ul>
+        {accountsData.map((category) => (
+          <div key={category.id} className="mb-2">
+            <button
+              className="fw-bold d-flex align-items-center border-0 bg-transparent w-100 text-start py-2"
+              type="button"
+              onClick={() => toggleMenu(category.id)}
+              aria-expanded={expanded[category.id]}
+            >
+              {/* Dynamic Arrow Change */}
+              {expanded[category.id] ? (
+                <IoIosArrowDown size={18} className="me-2" />
+              ) : (
+                <IoIosArrowForward size={18} className="me-2" />
+              )}
+              <span>{category.title}</span>
+            </button>
+            {expanded[category.id] && (
+              <ul className="list-unstyled ps-4">
+                {category.subMenu.map((subItem) => (
+                  <li key={subItem.id} className="mb-1">
+                    <a
+                      href={subItem.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-decoration-none text-dark d-flex align-items-center"
+                    >
+                      <span>{subItem.title}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );
+  
 };
 
 export default Accounts;

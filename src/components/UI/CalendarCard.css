@@ -48,7 +48,7 @@
 .calendar-card .more-events {
   font-size: 12px;
   color: #ffa107;
-  margin-left: 4px;
+  margin-left: 40px;
   cursor: pointer;
   position: relative;
 }
@@ -61,7 +61,7 @@
 
 .calendar-card .react-calendar__tile {
   position: relative;
-  height: 60px;
+  height: 35px;
   overflow: visible !important;
 }
 

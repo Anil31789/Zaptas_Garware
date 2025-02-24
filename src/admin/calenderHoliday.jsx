@@ -37,14 +37,14 @@ const handleChange = (e) => {
     const files = Array.from(e.target.files); // Convert FileList to an array
 
     // Define the allowed file types
-    const allowedTypes = ["image/png", "image/jpg", "image/jpeg"];
+    const allowedTypes = ["image/png", "image/jpg", "image/jpeg", "video/mp4"];
     
     // Filter out files that don't match the allowed types
     const invalidFiles = files.filter(file => !allowedTypes.includes(file.type));
 
     if (invalidFiles.length > 0) {
       // Show toast if there are invalid files
-      showToast("Only PNG, JPG, or JPEG files are allowed", "error");
+      showToast("Only PNG, Mp4, JPG, or JPEG files are allowed", "error");
       return; // Exit the function early to prevent invalid files from being processed
     }
 

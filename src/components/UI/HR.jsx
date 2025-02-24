@@ -1,20 +1,34 @@
 import React, { useState } from "react";
 import { FaUsersGear } from "react-icons/fa6";
+import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
+import { MdCorporateFare, MdLocationPin, MdPhoneIphone } from "react-icons/md";
 import ConnectMe from "../../config/connect";
 
 const HR = () => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [expanded, setExpanded] = useState({ "1.1": true });
+
+  const toggleMenu = (id) => {
+    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const getIconForTitle = (title) => {
+    const lowerTitle = title.toLowerCase();
+    if (lowerTitle.includes("corporate")) return <MdCorporateFare size={18} />;
+    if (lowerTitle.includes("mobile")) return <MdPhoneIphone size={18} />;
+    if (lowerTitle.includes("location") || lowerTitle.includes("coordinates"))
+      return <MdLocationPin size={18} />;
+    return null; // Prevents extra icons
+  };
 
   const hrLinks = [
     {
       id: 1,
-      title: "Domestic Travel Policy",
+      title: "📄 Domestic Travel Policy",
       url: `${ConnectMe.img_URL}/uploads/policy/hr/hrpolicy.pdf`,
     },
-  
     {
-      id: 3,
-      title: "Regional Holiday Calendar",
+      id: 2,
+      title: "📅 Regional Holiday Calendar",
       url: `${ConnectMe.img_URL}/uploads/leaves/Location-wiseHolidayCalendarfor2025.pdf`,
     },
   ];
@@ -22,36 +36,30 @@ const HR = () => {
   const telcom = [
     {
       id: 1,
-      title: "Telephone",
+      title: "📞 Telephone Directory",
       subMenu: [
         {
           id: "1.1",
           title: "Waluj",
-          link: "#",
           subMenu: [
             {
               id: "1.1.1",
-              title: "Corporate Office",
+              title: "🏢 Corporate Office",
               link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCorp.off.pdf`,
             },
             {
               id: "1.1.2",
-              title: "Plants",
+              title: "🏭 Plants",
               link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujPlants.pdf`,
             },
             {
               id: "1.1.3",
-              title: "Abbreviated Numbers",
+              title: "📞 Abbreviated Numbers",
               link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujAbv.pdf`,
             },
-            // {
-            //   id: "1.1.4",
-            //   title: "Chikalthana",
-            //   link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCHK.pdf`,
-            // },
             {
               id: "1.1.5",
-              title: "Mobile Number",
+              title: "📲 Mobile Numbers",
               link: `${ConnectMe.BASE_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–Walujmobile.pdf`,
             },
           ],
@@ -61,92 +69,126 @@ const HR = () => {
           title: "Chikalthana",
           subMenu: [
             {
-              id: "1.1.1",
-              title: "Coordinates",
+              id: "1.2.1",
+              title: "📍 Coordinates",
               link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–WalujCHK.pdf`,
             },
-       
           ],
-        
         },
-
-
-
         {
           id: "1.3",
           title: "Mumbai",
           subMenu: [
             {
               id: "1.3.1",
-              title: "Corporate Office",
+              title: "🏢 Corporate Office",
               link: `${ConnectMe.img_URL}/uploads/telecomHr/Mumbai/corporateoffice.pdf`,
             },
-       
           ],
-        
         },
-
-
-
         {
           id: "1.4",
           title: "Nashik",
           subMenu: [
             {
               id: "1.4.1",
-              title: "Mobile Number",
+              title: "📲 Mobile Numbers",
               link: `${ConnectMe.img_URL}/uploads/telecomHr/Nashik/telcom.pdf`,
             },
-       
           ],
-        
         },
-
       ],
     },
   ];
 
   return (
-    <div
-      className="card mb-3"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="card-header  d-flex align-items-center">
+    <div className="card shadow-lg border-0 mb-3">
+      <div className="card-header d-flex">
         <FaUsersGear className="me-2" size={20} />
         <h5 className="mb-0">HR Section</h5>
       </div>
-      <div className="card-body ">
-        <ul>
+      <div className="card-body">
+        {/* HR Policy Links */}
+        <ul className="list-group mb-3">
           {hrLinks.map((link) => (
-            <li key={link.id}>
-              <a href={link.url} target="_blank" rel="noopener noreferrer">
+            <li key={link.id} className="list-group-item">
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-decoration-none text-dark"
+              >
                 {link.title}
               </a>
             </li>
           ))}
-          {telcom.map((item) => (
-            <li key={item.id}>
-              {item.title}
-              <ul>
-                {item.subMenu.map((subItem) => (
-                  <li key={subItem.id}>
-                    {subItem.title}
-                    <ul>
-                      {subItem.subMenu.map((subSubItem) => (
-                        <li key={subSubItem.id}>
-                          <a href={subSubItem.link} target="_blank" rel="noopener noreferrer">
-                            {subSubItem.title}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
         </ul>
+
+        {/* Telecom Directory - Open by Default */}
+        <div className="accordion" id="telecomAccordion">
+          {telcom.map((item) => (
+            <div key={item.id} className="accordion-item">
+              <h2 className="accordion-header">
+                <button
+                  className="accordion-button fw-bold"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target={`#collapse-${item.id}`}
+                  aria-expanded="true"
+                >
+                  {item.title}
+                </button>
+              </h2>
+              <div
+                id={`collapse-${item.id}`}
+                className="accordion-collapse collapse show"
+              >
+                <div className="accordion-body">
+                  <ul className="list-unstyled">
+                    {item.subMenu.map((sub) => (
+                      <li key={sub.id} className="mb-2">
+                        <div
+                          className="d-flex align-items-center text-primary fw-bold"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => toggleMenu(sub.id)}
+                        >
+                          {expanded[sub.id] ? (
+                            <IoIosArrowDown size={18} />
+                          ) : (
+                            <IoIosArrowForward size={18} />
+                          )}
+                          <span className="ms-2">{sub.title}</span>
+                        </div>
+                        {expanded[sub.id] && (
+                          <ul className="list-unstyled ps-4">
+                            {sub.subMenu.map((linkItem) => (
+                              <li key={linkItem.id} className="mb-1">
+                                <a
+                                  href={linkItem.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-decoration-none text-dark"
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "5px",
+                                  }}
+                                >
+                                  {getIconForTitle(linkItem.title)}
+                                  {linkItem.title}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

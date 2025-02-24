@@ -193,23 +193,34 @@ const ServiceRequestPage = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4 text-center">Service Requests</h2>
-      <div className="d-flex justify-content-center mb-4">
-  {[
-    { label: 'Pending', variant: 'warning' },
-    { label: 'Approved', variant: 'success' },
-    { label: 'Rejected', variant: 'danger' },
-    { label: 'My Requests', variant: 'info' }
-  ].map(({ label, variant }) => (
-    <button
-      key={label}
-      className={`btn me-2 btn-${activeTab === label ? variant : `outline-${variant}`}`}
-      onClick={() => setActiveTab(label)}
-    >
-      {label}
-    </button>
-  ))}
+      {/* <h2 className="mb-4 text-center">Service Requests</h2> */}
+      <div className="d-flex justify-content-between mb-4">
+  <div>
+    {[
+      { label: 'Pending', variant: 'warning' },
+      { label: 'Approved', variant: 'success' },
+      { label: 'Rejected', variant: 'danger' },
+      { label: 'My Requests', variant: 'info' }
+    ].map(({ label, variant }) => (
+      <button
+        key={label}
+        className={`btn me-2 btn-${activeTab === label ? variant : `outline-${variant}`}`}
+        onClick={() => setActiveTab(label)}
+      >
+        {label}
+      </button>
+    ))}
+  </div>
+  
+  <input
+    type="text"
+    className="form-control w-25"
+    placeholder="Request Search..."
+    onChange={(e) => setSearchQuery(e.target.value)}
+  />
 </div>
+
+
 
       {loading ? (
         <div className="text-center">
