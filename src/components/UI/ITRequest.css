@@ -1,5 +1,5 @@
 .animated-live {
-  font-size: 17px;
+  font-size: 10px;
   font-weight: bold;
   z-index: 1;
   margin-bottom: 20px;
@@ -19,6 +19,6 @@
   }
   100% {
     transform: scale(1);
-    opacity: 0.1;
+    opacity: 0.9;
   }
 }

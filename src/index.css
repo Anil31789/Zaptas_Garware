@@ -90,7 +90,7 @@ a:hover {
 }
 
 .card-body.card-scroll {
-  max-height: 430px;
+  max-height: 380px;
   overflow: auto;
 }
 
