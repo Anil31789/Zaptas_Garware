@@ -328,36 +328,35 @@ export default function LinkedInCard() {
                       ) : (
                         // If logged in, show like button
                         <p
-                          className="card-like fs-6 m-0"
+                        className="card-like fs-6 m-0"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          cursor: loadingPostIds.includes(post.id) ? "not-allowed" : "pointer",
+                          opacity: loadingPostIds.includes(post.id) ? 0.5 : 1, // Reduce opacity when loading
+                        }}
+                        onClick={(event) => {
+                          event.stopPropagation(); // Prevent other interactions
+                      
+                          if (loadingPostIds.includes(post.id)) return; // Prevent multiple clicks while loading
+                      
+                          handleLikeToggle(
+                            post.id,
+                            post?.fetchUserLikesStatus ? "disslike" : "likepost"
+                          );
+                        }}
+                      >
+                        <FaThumbsUp
+                          className={`like-icon ${loadingPostIds.includes(post.id) ? "loading" : ""}`}
                           style={{
-                            display: "flex",
-                            alignItems: "center",
-
-                            cursor: "pointer",
+                            color: post?.fetchUserLikesStatus ? "blue" : "gray",
                           }}
-                          onClick={(event) => {
-                            event.stopPropagation(); // Prevent other interactions
-                            handleLikeToggle(
-                              post.id,
-                              post?.fetchUserLikesStatus
-                                ? "disslike"
-                                : "likepost"
-                            );
-                          }}
-                        >
-                          <FaThumbsUp
-                            className={`like-icon ${loadingPostIds.includes(post.id) ? "loading" : ""
-                              }`}
-                            style={{
-                              color: post?.fetchUserLikesStatus
-                                ? "blue"
-                                : "gray",
-                            }}
-                          />
-                          <span style={{ marginLeft: "5px" }}>
-                            {post?.likeCount?.totalLikes}
-                          </span>
-                        </p>
+                        />
+                        <span style={{ marginLeft: "5px" }}>
+                          {post?.likeCount?.totalLikes}
+                        </span>
+                      </p>
+                      
                       )}
                     </div>
                   </div>

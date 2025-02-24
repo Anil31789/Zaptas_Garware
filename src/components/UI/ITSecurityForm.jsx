@@ -30,6 +30,7 @@ export default function ITSecurityForm() {
 
   const formData = {
     employeeName: userDetails?.name,
+    requestId:data?.requestId,
     date: data?.requestDate ? new Date(data.requestDate).toLocaleDateString("en-GB") : "N/A",
     department: userDetails?.jobTitle,
     location: "New York",
@@ -81,6 +82,7 @@ export default function ITSecurityForm() {
         <table className="table table-bordered">
           <tbody>
             {[
+                { label: "ID", value: formData.requestId },
               { label: "Employee Name", value: formData.employeeName },
               { label: "Date", value: formData.date },
               { label: "Department", value: formData.department },
