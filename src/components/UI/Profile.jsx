@@ -120,35 +120,38 @@ const UserProfile = () => {
     <Container className="mt-5">
       <Row className="justify-content-start">
         {/* Left Column for Profile Image */}
-        <Col md={4} sm={12}>
-          <Card className="p-4 shadow-lg text-center d-flex align-items-center" style={{ borderRadius: "12px" }}>
-            <Image
-              src={
-                updatedPhoto || `${ConnectMe.img_URL}${userDetailsLocal?.images?.imagePath}` || "./user.png"
-              }
-              roundedCircle
-              width="130"
-              height="130"
-              alt="User Profile"
-              className="mb-3"
-            />
-            <div>
-              <label htmlFor="file-upload" className="btn btn-primary btn-sm">
-                <FaCamera size={16} /> Update Photo
-              </label>
-              <input id="file-upload" type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoChange} />
-            </div>
-            {updatedPhoto && (
-              <Button variant="danger" size="sm" className="mt-2" onClick={handleRemovePhoto}>
-                <FaTrash size={14} /> Remove
-              </Button>
-            )}
-            <Button variant="success" size="sm" className="mt-3 px-4" onClick={handleSubmit}>
-  Save
-</Button>
+      <Col md={4} sm={12}>
+  <Card className="p-4 shadow-lg text-center d-flex align-items-center" style={{ borderRadius: "12px" }}>
+    <Image
+      src={
+        updatedPhoto || `${ConnectMe.img_URL}${userDetailsLocal?.images?.imagePath}` || "./user.png"
+      }
+      roundedCircle
+      width="130"
+      height="130"
+      alt="User Profile"
+      className="mb-3"
+    />
+    <div>
+      <label htmlFor="file-upload" className="btn btn-primary btn-sm">
+        <FaCamera size={16} /> Update Photo
+      </label>
+      <input id="file-upload" type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoChange} />
+    </div>
+    
+    {updatedPhoto && (
+      <>
+        <Button variant="danger" size="sm" className="mt-2" onClick={handleRemovePhoto}>
+          <FaTrash size={14} /> Remove
+        </Button>
+        <Button variant="success" size="sm" className="mt-3 px-4" onClick={handleSubmit}>
+          Save
+        </Button>
+      </>
+    )}
+  </Card>
+</Col>
 
-          </Card>
-        </Col>
 
         {/* Right Column for User Details */}
         <Col md={7} sm={12}>
