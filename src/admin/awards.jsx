@@ -560,58 +560,66 @@ export default function AwardsPage() {
 
                 ** Note: It will replace existing CSR Image
               </div>
-
               <div className="row">
-              {selectedAnnouncement?.imagePath?.length > 0 &&
-                selectedAnnouncement.imagePath.map((media, index) => {
-                  const mediaUrl = `${ConnectMe.img_URL}${media}`;
-                  const isVideo = media.toLowerCase().endsWith(".mp4");
+  {/* Display existing images/videos */}
+  {selectedImages.length === 0 &&
+    selectedAnnouncement.imagePath?.length > 0 &&
+    selectedAnnouncement.imagePath.map((el, index) => {
+      const fileUrl = `${ConnectMe.img_URL}${el}`;
+      const isVideo = /\.(mp4|avi|mov|mkv)$/i.test(fileUrl);
 
-                  return (
-                    <div key={index} className="col-sm-4 mb-4 position-relative">
-                      <div className="model-card">
-                        {isVideo ? (
-                          <video
-                            src={mediaUrl}
-                            className="modelcard-image" // Same class as image
-                            controls
-                            style={{
-                              width: "100%",
-                              height: "200px",
-                              objectFit: "cover",
-                              position: "relative",
-                            }}
-                            onClick={() => {
-                              handleClose();
-                              setSelectedImage(mediaUrl);
-                            }}
-                            onMouseEnter={(e) => handleHoverEffect(e)}
-                            onMouseLeave={(e) => removeHoverEffect(e)}
-                          />
-                        ) : (
-                          <img
-                            src={mediaUrl}
-                            alt={`Selected Media ${index + 1}`}
-                            className="modelcard-image" // Same class as video
-                            style={{
-                              width: "100%",
-                              height: "200px",
-                              objectFit: "cover",
-                              position: "relative",
-                            }}
-                            onClick={() => {
-                              handleClose();
-                              setSelectedImage(mediaUrl);
-                            }}
-                            onMouseEnter={(e) => handleHoverEffect(e)}
-                            onMouseLeave={(e) => removeHoverEffect(e)}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
+      return (
+        <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
+          <label htmlFor="profile-media">Media</label>
+          {isVideo ? (
+            <video controls className="banner-image">
+              <source src={fileUrl} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <img src={fileUrl} alt={`Existing Media ${index + 1}`} className="banner-image" />
+          )}
+          <div
+            className="delete-icon"
+            onClick={() => removeImage(index, "update")}
+            style={{ cursor: "pointer" }}
+          >
+            <FaTimesCircle style={{ color: "red", fontSize: "24px" }} />
+          </div>
+        </div>
+      );
+    })}
+
+  {/* Display newly added images/videos */}
+  {selectedImages.length > 0 &&
+    selectedImages.map((file, index) => {
+      const isVideo = file.type.startsWith("video/");
+
+      return (
+        <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
+          <label htmlFor="new-media">New Media</label>
+          {isVideo ? (
+            <video controls className="banner-image">
+              <source src={file.url} type={file.type} />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <img src={file.url} alt={`Selected Media ${index + 1}`} className="banner-image" />
+          )}
+          <div
+            className="delete-icon"
+            onClick={() => removeImage(index)}
+            style={{ cursor: "pointer" }}
+          >
+            <FaTimesCircle style={{ color: "red", fontSize: "24px" }} />
+          </div>
+        </div>
+      );
+    })}
+</div>
+
+
+
 
               <button type="submit" className="btn btn-success" disabled={loading}>Save Changes</button>
             </form>
@@ -725,55 +733,34 @@ export default function AwardsPage() {
 
 
             <div className="row">
-              {selectedAnnouncement?.imagePath?.length > 0 &&
-                selectedAnnouncement.imagePath.map((media, index) => {
-                  const mediaUrl = `${ConnectMe.img_URL}${media}`;
-                  const isVideo = media.toLowerCase().endsWith(".mp4");
+              {selectedImages && selectedImages.length > 0 &&
+                selectedImages.map((file, index) => (
+                  <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
+                    <div className="banner-card">
+                      {file.type.startsWith("image/") ? (
+                        <img
+                          src={file.url} // Use the URL from the selectedImages array
+                          alt={`Selected Banner ${index + 1}`}
+                          className="banner-image"
+                        />
+                      ) : file.type.startsWith("video/") ? (
+                        <video controls className="banner-image">
+                          <source src={file.url} type={file.type} />
+                          Your browser does not support the video tag.
+                        </video>
+                      ) : null}
 
-                  return (
-                    <div key={index} className="col-sm-4 mb-4 position-relative">
-                      <div className="model-card">
-                        {isVideo ? (
-                          <video
-                            src={mediaUrl}
-                            className="modelcard-image" // Same class as image
-                            controls
-                            style={{
-                              width: "100%",
-                              height: "200px",
-                              objectFit: "cover",
-                              position: "relative",
-                            }}
-                            onClick={() => {
-                              handleClose();
-                              setSelectedImage(mediaUrl);
-                            }}
-                            onMouseEnter={(e) => handleHoverEffect(e)}
-                            onMouseLeave={(e) => removeHoverEffect(e)}
-                          />
-                        ) : (
-                          <img
-                            src={mediaUrl}
-                            alt={`Selected Media ${index + 1}`}
-                            className="modelcard-image" // Same class as video
-                            style={{
-                              width: "100%",
-                              height: "200px",
-                              objectFit: "cover",
-                              position: "relative",
-                            }}
-                            onClick={() => {
-                              handleClose();
-                              setSelectedImage(mediaUrl);
-                            }}
-                            onMouseEnter={(e) => handleHoverEffect(e)}
-                            onMouseLeave={(e) => removeHoverEffect(e)}
-                          />
-                        )}
+                      {/* Cross icon in the top-right corner */}
+                      <div
+                        className="delete-icon"
+                        onClick={() => removeImage(index)} // Remove the specific image or video
+                        style={{ cursor: "pointer" }}
+                      >
+                        <FaTimesCircle style={{ color: "red", fontSize: "24px" }} />
                       </div>
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
             </div>
 
 

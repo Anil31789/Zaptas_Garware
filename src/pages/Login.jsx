@@ -6,6 +6,7 @@ import ConnectMe from "../config/connect";
 import { addTokenToLocalStorage, apiCall } from "../utils/apiCall";
 import { useNavigate } from "react-router-dom";
 
+import { motion } from 'framer-motion';
 
 
 const Login = () => {
@@ -20,7 +21,7 @@ const Login = () => {
 
 
   useEffect(() => {
-    // AutoLogin()
+     AutoLogin()
 
   }, [])
 
@@ -115,92 +116,110 @@ const Login = () => {
 
   return (
     <Container className="mt-5">
-      <Row className="justify-content-center">
-        <Col md={6}>
-          <div className="p-4 shadow rounded bg-white">
-            <h3 className="text-center mb-4">Login</h3>
+    <Row className="justify-content-center">
+      <Col md={6}>
+        <motion.div 
+          className="p-4 shadow rounded bg-white text-center"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <img src='./logo.PNG' alt="Garware Hi-Tech Films Logo" className="mb-3" width="150" />
+          <h3 className="text-center mb-4 text-primary">Garware Hi-Tech Films Intranet Login</h3>
+          <p className="text-muted">A secure gateway to company resources and collaboration.</p>
 
-            <Form>
-              {/* Email Input */}
-              <Form.Group className="mb-3" controlId="formEmail">
-                <Form.Label>
-                  <FaEnvelope /> Username
-                </Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Domain Username"
-                  value={emailOrPhone}
-                  onChange={(e) => setEmailOrPhone(e.target.value)}
-                  required
-                />
-              </Form.Group>
+          <Form>
+            {/* Email Input */}
+            <Form.Group className="mb-3" controlId="formEmail">
+              <Form.Label>
+                <FaEnvelope /> Username
+              </Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Domain Username"
+                value={emailOrPhone}
+                onChange={(e) => setEmailOrPhone(e.target.value)}
+                required
+              />
+            </Form.Group>
 
-              {/* OTP or Password Input */}
-              <Form.Group className="mb-3" controlId="formPasswordOrOtp">
-                <Form.Label>
-                  {isOtpLogin ? <FaKey /> : <FaLock />}{" "}
-                  {isOtpLogin ? "OTP" : "Password"}
-                </Form.Label>
-                <Form.Control
-                  type={isOtpLogin ? "text" : "password"}
-                  placeholder={"Domain Password"}
-                  value={passwordOrOtp}
-                  onChange={(e) => setPasswordOrOtp(e.target.value)}
-                  required
-                />
-              </Form.Group>
+            {/* OTP or Password Input */}
+            <Form.Group className="mb-3" controlId="formPasswordOrOtp">
+              <Form.Label>
+                {isOtpLogin ? <FaKey /> : <FaLock />} {isOtpLogin ? "OTP" : "Password"}
+              </Form.Label>
+              <Form.Control
+                type={isOtpLogin ? "text" : "password"}
+                placeholder={"Domain Password"}
+                value={passwordOrOtp}
+                onChange={(e) => setPasswordOrOtp(e.target.value)}
+                required
+              />
+            </Form.Group>
 
-              {/* Toggle Login Mode */}
-              {/* <Form.Group className="mb-3">
-                <Form.Check
-                  type="switch"
-                  id="otpLoginSwitch"
-                  label="Login with OTP"
-                  checked={isOtpLogin}
-                  onChange={(e) => setIsOtpLogin(e.target.checked)}
-                />
-              </Form.Group> */}
-
-              {/* Send OTP Button */}
-              {isOtpLogin && (
-                <Button
-                  variant="primary"
-                  onClick={handleSendOtp}
-                  disabled={loading || otpSent}
-                  className="w-100 mb-3"
-                >
-                  {loading && otpSent ? (
-                    <Spinner animation="border" size="sm" />
-                  ) : (
-                    "Send OTP"
-                  )}
-                </Button>
-              )}
-
-              {/* Login Button */}
+            {/* Send OTP Button */}
+            {isOtpLogin && (
               <Button
-                variant="success"
-                onClick={handleLogin}
-                disabled={loading}
-                className="w-100"
+                variant="primary"
+                onClick={handleSendOtp}
+                disabled={loading || otpSent}
+                className="w-100 mb-3"
               >
-                {loading ? (
+                {loading && otpSent ? (
                   <Spinner animation="border" size="sm" />
                 ) : (
-                  "Login"
+                  "Send OTP"
                 )}
               </Button>
+            )}
 
-              {/* OTP Sent Alert */}
-              {otpSent && (
-                <Alert variant="info" className="mt-3">
-                  OTP has been sent to your email. Please check your inbox.
-                </Alert>
+            {/* Login Button */}
+            <Button
+              variant="success"
+              onClick={handleLogin}
+              disabled={loading}
+              className="w-100"
+            >
+              {loading ? (
+                <Spinner animation="border" size="sm" />
+              ) : (
+                "Login"
               )}
-            </Form>
-          </div>
-        </Col>
-      </Row>
+            </Button>
+
+            {/* OTP Sent Alert */}
+            {otpSent && (
+              <Alert variant="info" className="mt-3">
+                OTP has been sent to your email. Please check your inbox.
+              </Alert>
+            )}
+          </Form>
+        </motion.div>
+      </Col>
+    </Row>
+
+    {/* Intranet Benefits Section */}
+    <Row className="justify-content-center mt-4">
+      <Col md={8} className="text-center">
+        <motion.div 
+          className="p-4 shadow rounded bg-light"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h4 className="text-primary">How the Intranet Benefits Garware Employees</h4>
+          <p className="text-muted">The intranet at Garware Hi-Tech Films serves as a central hub for employees, providing seamless communication, collaboration, and access to essential resources. Benefits include:</p>
+          <ul className="list-unstyled text-start">
+            <li>🔹 Quick access to company news, announcements, and events</li>
+            <li>🔹 Employee directory for easy communication</li>
+            <li>🔹 Secure document sharing and storage</li>
+            <li>🔹 Self-service portals for HR and IT requests</li>
+            <li>🔹 Enhanced teamwork through collaboration tools</li>
+            <li>🔹 Improved productivity with a centralized knowledge base</li>
+          </ul>
+        </motion.div>
+      </Col>
+    </Row>
     </Container>
   );
 };

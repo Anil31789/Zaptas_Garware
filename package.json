@@ -1,7 +1,6 @@
 {
   "name": "management",
   "private": true,
-
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -16,6 +15,7 @@
     "bootstrap": "^5.3.3",
     "canvas-confetti": "^1.9.3",
     "cropperjs": "^1.6.2",
+    "framer-motion": "^12.4.7",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.2",
     "react": "^18.3.1",
