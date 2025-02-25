@@ -202,7 +202,7 @@ export default function LinkedInCard() {
       <div className="card-header d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
           <FaLinkedin className="me-2"/>
-          <h5 className="mb-0">LinkedIn</h5>
+          <p className="mb-0">LinkedIn</p>
         </div>
         <a
           onClick={() => {

@@ -141,7 +141,7 @@ export default function AnnouncementCard() {
         <div className="card-header d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
             <IoIosMegaphone className="me-2" />
-            <h5 className="mb-0">Announcements</h5>
+            <p className="mb-0">Announcements</p>
           </div>
           <a
             className="text-decoration-none"
@@ -175,7 +175,7 @@ export default function AnnouncementCard() {
 
 
                   <div className="card-text fs-6">
-                    <PostCard post={announcement.description} size={73} />
+                    <PostCard post={announcement.description} size={75} />
                   </div>
 
                   <div className="d-flex justify-content-between mt-3">

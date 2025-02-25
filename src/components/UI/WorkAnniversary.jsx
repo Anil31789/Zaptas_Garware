@@ -121,7 +121,7 @@ export default function WorkAnniversary() {
       <div className="card-header d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
           <FaAward className="me-2" size={20} />
-          <h5 className="mb-0">Work Anniversary</h5>
+          <p className="mb-0">Work Anniversary</p>
         </div>
       </div>
       <div className="card-body">

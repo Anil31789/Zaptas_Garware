@@ -5,7 +5,7 @@ import { MdCorporateFare, MdLocationPin, MdPhoneIphone } from "react-icons/md";
 import ConnectMe from "../../config/connect";
 
 const HR = () => {
-  const [expanded, setExpanded] = useState({ "1.1": true });
+  const [expanded, setExpanded] = useState({ "1": true }); // Only "Telephone Directory" open
 
   const toggleMenu = (id) => {
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -13,11 +13,11 @@ const HR = () => {
 
   const getIconForTitle = (title) => {
     const lowerTitle = title.toLowerCase();
-    if (lowerTitle.includes("corporate")) return <MdCorporateFare size={18} />;
-    if (lowerTitle.includes("mobile")) return <MdPhoneIphone size={18} />;
+    // if (lowerTitle.includes("corporate")) return <MdCorporateFare size={18} />;
+    // if (lowerTitle.includes("mobile")) return <MdPhoneIphone size={18} />;
     if (lowerTitle.includes("location") || lowerTitle.includes("coordinates"))
-      return <MdLocationPin size={18} />;
-    return null; // Prevents extra icons
+      // return <MdLocationPin size={18} />;
+    return null;
   };
 
   const hrLinks = [
@@ -35,7 +35,7 @@ const HR = () => {
 
   const telcom = [
     {
-      id: 1,
+      id: "1",
       title: "📞 Telephone Directory",
       subMenu: [
         {
@@ -105,7 +105,7 @@ const HR = () => {
     <div className="card shadow-lg border-0 mb-3">
       <div className="card-header d-flex">
         <FaUsersGear className="me-2" size={20} />
-        <h5 className="mb-0">HR Section</h5>
+        <p className="mb-0">HR Section</p>
       </div>
       <div className="card-body">
         {/* HR Policy Links */}
@@ -124,24 +124,22 @@ const HR = () => {
           ))}
         </ul>
 
-        {/* Telecom Directory - Open by Default */}
+        {/* Telecom Directory - Only Main Section Open by Default */}
         <div className="accordion" id="telecomAccordion">
           {telcom.map((item) => (
             <div key={item.id} className="accordion-item">
               <h2 className="accordion-header">
                 <button
-                  className="accordion-button fw-bold"
+                  className={`accordion-button fw-bold ${expanded[item.id] ? "" : "collapsed"}`}
                   type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target={`#collapse-${item.id}`}
-                  aria-expanded="true"
+                  onClick={() => toggleMenu(item.id)}
+                  aria-expanded={expanded[item.id]}
                 >
                   {item.title}
                 </button>
               </h2>
               <div
-                id={`collapse-${item.id}`}
-                className="accordion-collapse collapse show"
+                className={`accordion-collapse collapse ${expanded[item.id] ? "show" : ""}`}
               >
                 <div className="accordion-body">
                   <ul className="list-unstyled">

@@ -143,7 +143,7 @@ export default function AnnouncementCard() {
         <div className="card-header d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
             <FaAward className="me-2" />
-            <h5 className="mb-0">Awards</h5>
+            <p className="mb-0">Awards</p>
           </div>
           <a
             className="text-decoration-none"
@@ -188,7 +188,7 @@ export default function AnnouncementCard() {
                   </p>
                   <div className="card-text fs-6">
                     {" "}
-                    <PostCard post={announcement.description} size={80} />
+                    <PostCard post={announcement.description} size={90} />
                   </div>
 
                   <div className="d-flex mt-2 align-items-center justify-content-between">

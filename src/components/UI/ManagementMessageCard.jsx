@@ -145,7 +145,7 @@ export default function AnnouncementCard() {
         <div className="card-header d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
             <AiOutlineMessage className="me-2" />
-            <h5 className="mb-0">Legacy</h5>
+            <p className="mb-0">Legacy</p>
           </div>
           {/* <a href="#" className="text-decoration-none">
             View All <HiArrowCircleRight />

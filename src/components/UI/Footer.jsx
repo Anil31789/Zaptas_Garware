@@ -57,8 +57,11 @@ export default function Footer() {
       </div>
       {/* Copyright Text */}
       <div className="footer-bottom text-center mt-4">
-        <p>&copy; 2024 Garware Hi Tech Films Limited. All Rights Reserved.</p>
-      </div>
+  <p>
+    &copy; 2025 Developed by 
+    <a href="https://zaptas.com/" target="" style={{ color: "white" }}> Zaptas</a> Technology
+  </p>
+</div>
     </footer>
   );
-}
+} 

@@ -15,7 +15,7 @@ export default function ITRequest() {
       <div className="card-header d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
           <FaPlayCircle className="me-2" size={20} />
-          <h5 className="mb-0">Garware Hi-Tech Films</h5>
+          <p className="mb-0">Garware Hi-Tech Films</p>
         </div>
       </div>
 

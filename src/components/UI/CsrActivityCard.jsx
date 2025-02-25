@@ -148,7 +148,7 @@ export default function AnnouncementCard() {
         <div className="card-header d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
             <FaHandsHelping className="me-2" />
-            <h5 className="mb-0">CSR</h5>
+            <p className="mb-0">CSR</p>
           </div>
           <a
             className="text-decoration-none"

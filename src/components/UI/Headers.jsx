@@ -1114,145 +1114,128 @@ export default function Headers() {
     return { options, loading };
   };
 
-  const SearchBar = () => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [options, setOptions] = useState([]);
-    const [selectedOption, setSelectedOption] = useState(null); // To store the selected option
-    const [modalShow, setModalShow] = useState(false); // To control modal visibility
-    const token = getTokenFromLocalStorage();
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    };
+const SearchBar = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [options, setOptions] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [modalShow, setModalShow] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
-    const { options: fetchedOptions, loading } = useDebouncedSearch(searchQuery, 1000, headers);
-
-    const handleSearchChange = (e) => {
-      const query = e.target.value;
-      setSearchQuery(query);
-
-      if (query.trim() === '') {
-        setOptions([]);
-      }
-    };
-
-    useEffect(() => {
-      setOptions(fetchedOptions);
-    }, [fetchedOptions]);
-
-    const handleSearchClick = (option) => {
-      setSelectedOption(option);  // Set the clicked option
-      setModalShow(true);  // Open the modal
-    };
-
-    const handleModalClose = () => {
-      setModalShow(false);  // Close the modal
-    };
-
-    return (
-      <div className="search-container" style={{ position: 'relative', width: '100%' }}>
-        <InputGroup>
-          <FormControl
-            type="text"
-            placeholder="Directory Search..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="custom-search-input"
-          />
-        </InputGroup>
-
-        {(loading || options.length > 0 || searchQuery) && (
-          <div className="search-dropdown">
-            {loading && <div className="loading">Loading...</div>}
-            {options.length > 0 ? (
-              <ListGroup>
-                {options.map((option, index) => (
-               <ListGroup.Item
-               key={index}
-               action
-               onClick={() => handleSearchClick(option)} // Handle item click
-             >
-               {/* First Row - Name and Department */}
-               <div className="d-flex justify-content-between">
-                 <strong>{option.name}</strong>
-                 <small className="text-muted">{option.department}</small>
-               </div>
-             
-               {/* Second Row - Location, Area No, and Extension No */}
-               <div className="d-flex justify-content-between align-items-center">
-                 <div className="d-flex align-items-center gap-2">
-                   <small>{option.location}</small>
-                   <small>(</small>
-                   <small>{option.areaNo}</small>
-                   <small>-</small>
-                   <small>{option.extensionNo}</small>
-                   <small>)</small>
-                 </div>
-                 <small className="">{option.cellularNumber}</small>
-               </div>
-             
-               {/* Third Row - Email */}
-               <small>{option.email}</small>
-             </ListGroup.Item>
-             
-              
-                ))}
-              </ListGroup>
-            ) : (
-              searchQuery && !loading && <div className="no-results">No results found</div>
-            )}
-          </div>
-        )}
-
-        {/* Modal Popup */}
-        <Modal show={modalShow} onHide={handleModalClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Details</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {/* Display the selected option's details */}
-            {selectedOption ? (
-              <>
-                <h5>Name: {selectedOption.name}</h5>
-
-                {/* Location and Department in one line */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                  <span>Location: {selectedOption.location}</span>
-                  <span>Department: {selectedOption.department}</span>
-                </div>
-
-                {/* Cellular Number and Area No in one line */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                  <span>Cellular Number: {selectedOption.cellularNumber}</span>
-                  <span>Area No:{selectedOption.areaNo}</span>
-                </div>
-
-                {/* Extension No and Abbreviation in one line */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                  <span>Extension No: {selectedOption.extensionNo}</span>
-                  <span>Abbreviation: {selectedOption.abbreviation}</span>
-                </div>
-
-                {/* Email on a new line */}
-                <div style={{ marginBottom: '10px' }}>
-                  <span>Email: {selectedOption.email}</span>
-                </div>
-              </>
-            ) : (
-              <p>No details available</p>
-            )}
-
-          </Modal.Body>
-          <Modal.Footer>
-
-            <Button variant="secondary" onClick={handleModalClose}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
-    );
+  const token = getTokenFromLocalStorage();
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
   };
+
+  const { options: fetchedOptions, loading } = useDebouncedSearch(searchQuery, 1000, headers);
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    setDropdownVisible(true);
+
+    if (query.trim() === "") {
+      setOptions([]);
+      setDropdownVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    setOptions(fetchedOptions);
+    setDropdownVisible(fetchedOptions.length > 0);
+  }, [fetchedOptions]);
+
+  const handleSearchClick = (option) => {
+    setSelectedOption(option);
+    setModalShow(true);
+    setDropdownVisible(false); // Hide dropdown when opening modal
+  };
+
+  const handleModalClose = () => {
+    setModalShow(false);
+    setDropdownVisible(false); // Hide dropdown when closing modal
+    setSearchQuery(""); // Reset search input
+    setOptions([]); // Clear options
+  };
+
+  return (
+    <div className="search-container" style={{ position: "relative", width: "100%" }}>
+      <InputGroup>
+        <FormControl
+          type="text"
+          placeholder="Directory Search..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="custom-search-input"
+        />
+      </InputGroup>
+
+      {dropdownVisible && (loading || options.length > 0) && (
+        <div className="search-dropdown">
+          {loading && <div className="loading">Loading...</div>}
+          {options.length > 0 ? (
+            <ListGroup>
+              {options.map((option, index) => (
+                <ListGroup.Item key={index} action onClick={() => handleSearchClick(option)}>
+                  <div className="d-flex justify-content-between">
+                    <strong>{option.name}</strong>
+                    <small className="text-muted">{option.department}</small>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex align-items-center gap-2">
+                      <small>{option.location}</small>
+                      <small>({option.areaNo}-{option.extensionNo})</small>
+                    </div>
+                    <small>{option.cellularNumber}</small>
+                  </div>
+                  <small>{option.email}</small>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          ) : (
+            searchQuery && !loading && <div className="no-results">No results found</div>
+          )}
+        </div>
+      )}
+
+      {/* Modal Popup */}
+      <Modal show={modalShow} onHide={handleModalClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedOption ? (
+            <>
+              <h5>Name: {selectedOption.name}</h5>
+              <div className="d-flex justify-content-between mb-2">
+                <span>Location: {selectedOption.location}</span>
+                <span>Department: {selectedOption.department}</span>
+              </div>
+              <div className="d-flex justify-content-between mb-2">
+                <span>Cellular Number: {selectedOption.cellularNumber}</span>
+                <span>Area No: {selectedOption.areaNo}</span>
+              </div>
+              <div className="d-flex justify-content-between mb-2">
+                <span>Extension No: {selectedOption.extensionNo}</span>
+                <span>Abbreviation: {selectedOption.abbreviation}</span>
+              </div>
+              <div className="mb-2">
+                <span>Email: {selectedOption.email}</span>
+              </div>
+            </>
+          ) : (
+            <p>No details available</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleModalClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  );
+};
 
 
 

@@ -120,7 +120,7 @@ export default function WorkAnniversary() {
       <div className="card-header d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
           <FaHandshake className="me-2" size={20} />
-          <h5 className="mb-0">New Joiners</h5>
+          <p className="mb-0">New Joiners</p>
         </div>
       </div>
       <div className="card-body">

@@ -86,7 +86,7 @@ const Accounts = () => {
     <div className="card shadow-lg border-0 mb-3">
       <div className="card-header d-flex align-items-center">
         <FaMoneyBillWave className="me-2" size={20} />
-        <h5 className="mb-0">Accounts Section</h5>
+        <p className="mb-0">Accounts Section</p>
       </div>
       <div className="card-body">
         {accountsData.map((category) => (
