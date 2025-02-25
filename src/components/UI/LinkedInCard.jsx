@@ -256,7 +256,7 @@ export default function LinkedInCard() {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        height: "250px", // Fixed height for media
+                        height: "200px", // Fixed height for media
                         overflow: "hidden", // Crop any extra space
                       }}
                       onClick={() => openPostPopup(post)}
@@ -291,10 +291,10 @@ export default function LinkedInCard() {
 
                     {/* Post Text Section */}
                     <div className="announcement-disc col-sm-12 mt-2">
-                      <div className="card-text fs-6">
-                        <PostCard post={post.text} size={150} />
-                      </div>
-                    </div>
+  <div className="card-text fs-6 scrollable-content">
+    <PostCard post={post.text} size={90} />
+  </div>
+</div>
                   </div>
 
 
