@@ -40,7 +40,7 @@ const handleChange = (e) => {
     const files = Array.from(e.target.files); // Convert FileList to an array
 
     // Define the allowed file types
-    const allowedTypes = ["image/png", "image/jpg", "image/jpeg"];
+    const allowedTypes = ["image/png", "image/jpg", "image/jpeg", "video/mp4"];
     
     // Filter out files that don't match the allowed types
     const invalidFiles = files.filter(file => !allowedTypes.includes(file.type));

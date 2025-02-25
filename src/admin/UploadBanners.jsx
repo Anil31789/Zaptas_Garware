@@ -153,7 +153,7 @@ export default function UploadBanners() {
           onChange={(e) => {
             const file = e.target.files[0];
             if (file) {
-              const allowedTypes = ["image/png", "image/jpg", "image/jpeg"];
+              const allowedTypes = ["image/png", "image/jpg", "image/jpeg", "video/mp4"];
               if (!allowedTypes.includes(file.type)) {
                 showToast("Only PNG, JPG, or JPEG files are allowed", "error");
                 fileInputRef.current.value = null;

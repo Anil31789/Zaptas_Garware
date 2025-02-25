@@ -14,6 +14,7 @@ export default function AwardsPage() {
   const [hasMore, setHasMore] = useState(true);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null); // For full-size image preview
+
   const [formData, setFormData] = useState({
     title: "",
     location: "",
@@ -30,42 +31,41 @@ export default function AwardsPage() {
 
 
 
-const handleChange = (e) => {
-  const { id, value, type } = e.target;
+  const handleChange = (e) => {
+    const { id, value, type } = e.target;
 
-  // If the input is a file input, handle it separately
-  if (type === "file") {
-    const files = Array.from(e.target.files); // Convert FileList to an array
+    if (type === "file") {
+      const files = Array.from(e.target.files);
 
-    // Define the allowed file types
-    const allowedTypes = ["image/png", "image/jpg", "image/jpeg"];
-    
-    // Filter out files that don't match the allowed types
-    const invalidFiles = files.filter(file => !allowedTypes.includes(file.type));
+      // Allowed file types
+      const allowedTypes = ["image/png", "image/jpg", "image/jpeg", "video/mp4"];
 
-    if (invalidFiles.length > 0) {
-      // Show toast if there are invalid files
-      showToast("Only PNG, JPG, or JPEG files are allowed", "error");
-      return; // Exit the function early to prevent invalid files from being processed
+      const invalidFiles = files.filter(file => !allowedTypes.includes(file.type));
+      if (invalidFiles.length > 0) {
+        showToast("Only PNG, JPG, JPEG, or MP4 files are allowed", "error");
+        return;
+      }
+
+      // Generate preview URLs including file type
+      const fileData = files.map(file => ({
+        url: URL.createObjectURL(file),
+        type: file.type,
+      }));
+
+      setFormData((prev) => ({
+        ...prev,
+        images: [...(prev.images || []), ...files], // Store the actual files
+      }));
+
+      setSelectedImages((prev) => [...prev, ...fileData]); // Store URLs and types
+    } else {
+      setFormData({
+        ...formData,
+        [id]: value,
+      });
     }
+  };
 
-    // Generate preview URLs for valid files
-    const fileUrls = files.map((file) => URL.createObjectURL(file));
-
-    setFormData((prev) => ({
-      ...prev,
-      images: [...(prev.images || []), ...files], // Append new files to existing images
-    }));
-
-    setSelectedImages((prev) => [...prev, ...fileUrls]); // Append new URLs to existing selected images
-  } else {
-    // Handle regular text inputs
-    setFormData({
-      ...formData,
-      [id]: value, // Update value for regular text inputs
-    });
-  }
-};
 
 
   const removeImage = (index, name = null) => {
@@ -90,66 +90,74 @@ const handleChange = (e) => {
   };
 
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loader
     let imageId = null;
 
-    // Check if formData.images is provided and not empty
-    if (formData.images && formData.images.length > 0) {
-      // Call the uploadImageAnnouncement function only if images are provided
-      imageId = await uploadImageAnnouncement();
-    }
+    try {
+      // Check if formData.images exist and are not empty
+      if (formData.images && formData.images.length > 0) {
+        imageId = await uploadImageAnnouncement();
+      }
 
-    const dataToSave = {
-      fullName: formData.fullName,
-      title: formData.title,
-      AwardierName: formData?.AwardierName,
-      PersonDesignation: formData?.PersonDesignation,
-      location: formData.location,
-      description: formData.description,
-      Designation: formData.Designation,
-      name: formData.name,
-      links: formData.links,
-      AnnouncementDate: formData.AnnouncementDate,
-      // If imageId is populated, use it; otherwise, it will be null (or you can handle it accordingly)
-      images: imageId?.data?.idForUnderverslaUpload || null
-    };
+      const dataToSave = {
+        fullName: formData.fullName,
+        title: formData.title,
+        AwardierName: formData?.AwardierName,
+        PersonDesignation: formData?.PersonDesignation,
+        location: formData.location,
+        description: formData.description,
+        Designation: formData.Designation,
+        name: formData.name,
+        links: formData.links,
+        AnnouncementDate: formData.AnnouncementDate,
+        images: imageId?.data?.idForUnderverslaUpload || null,
+      };
 
+      const token = getTokenFromLocalStorage();
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      };
 
-    const token = getTokenFromLocalStorage();
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    };
+      const url = `${ConnectMe.BASE_URL}/awards/create`;
+      const result = await apiCall('POST', url, headers, JSON.stringify(dataToSave));
 
-    const url = `${ConnectMe.BASE_URL}/awards/create`;
-    const result = await apiCall('POST', url, headers, JSON.stringify(dataToSave));
-
-    if (result.success) {
-      showToast('Uploaded Successfully', 'success')
-      setFormData({
-        title: "",
-        location: "",
-        description: "",
-        images: [],
-        fullName: "",
-        Designation: "",
-        AwardierName: "",
-        PersonDesignation: "",
-        name: 'awards',
-        links: [{ linkTitle: '', link: '' }],
-        AnnouncementDate: ''
-      });
-      setSelectedImages([])
-    } else {
-      console.error('Error saving announcement:', result.message);
+      if (result.success) {
+        showToast('Uploaded Successfully', 'success');
+        setFormData({
+          title: "",
+          location: "",
+          description: "",
+          images: [],
+          fullName: "",
+          Designation: "",
+          AwardierName: "",
+          PersonDesignation: "",
+          name: 'awards',
+          links: [{ linkTitle: '', link: '' }],
+          AnnouncementDate: ''
+        });
+        setSelectedImages([]);
+      } else {
+        console.error('Error saving announcement:', result.message);
+        showToast('Upload failed!', 'error');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      showToast('An unexpected error occurred.', 'error');
+    } finally {
+      setLoading(false); // Stop loader
     }
   };
 
 
+
   const uploadImageAnnouncement = async () => {
     if (selectedImages.length === 0) {
-      showToast('Please select at least one image.', 'error');
+      showToast('Please select at least one image or video.', 'error');
       return;
     }
 
@@ -158,19 +166,26 @@ const handleChange = (e) => {
       const token = getTokenFromLocalStorage();
 
       const formData = new FormData();
-      for (const image of selectedImages) {
-        if (typeof image === 'string') {
-          const response = await fetch(image);
+
+      for (const media of selectedImages) {
+        if (media.url.startsWith("blob:")) {
+          // Fetch the blob from the object URL
+          const response = await fetch(media.url);
           if (!response.ok) {
-            showToast(`Failed to fetch the image from URL: ${image}`, 'error');
+            showToast(`Failed to fetch media from URL: ${media.url}`, 'error');
             return;
           }
           const blob = await response.blob();
-          const file = new File([blob], 'banners.png', { type: blob.type });
 
+          // Extract file extension based on media type
+          const extension = media.type.split("/")[1];
+          const fileName = `banner.${extension}`;
+
+          const file = new File([blob], fileName, { type: blob.type });
           formData.append('files', file);
         } else {
-          formData.append('files', image);
+          // If it's already a file object, append directly
+          formData.append('files', media);
         }
       }
 
@@ -182,17 +197,18 @@ const handleChange = (e) => {
 
       const response = await apiCall('POST', url, headers, formData);
       if (response.success) {
-        showToast('Banner uploaded successfully!', 'success')
-        console.log(response)
-        return response
+        showToast('Banner uploaded successfully!', 'success');
+        console.log(response);
+        return response;
       } else {
-        showToast("Failed to upload banner", 'error')
+        showToast('Failed to upload banner', 'error');
       }
     } catch (error) {
       console.error('Error uploading banner:', error.message);
       showToast(`Error uploading banner: ${error.message || 'An unexpected error occurred'}`, 'error');
     }
   };
+
 
   const handleAddLink = (name = null) => {
 
@@ -420,157 +436,188 @@ const handleChange = (e) => {
 
   return (
     <div className="admin-announcements">
-    <div className="container mt-4">
-  <div className="border p-3">
-   {error && <div className="alert alert-danger">{error}</div>}
-    <div
-      className="d-flex"
-      style={{
-        overflowX: "auto",  // Ensures horizontal scrolling
-        maxWidth: "100%",    // Ensures the parent container doesn't exceed available width
-        flexWrap: "nowrap",  // Prevents wrapping of cards, keeping them in a single row
-      }}
-      onScroll={handleScroll}
-    >
-      {existingAnnouncements.map((announcement) => (
-        <div
-          className="card me-3"
-          key={announcement._id}
-          style={{
-            minWidth: "300px", // Set width of each card
-            flexShrink: 0,     // Prevents shrinking of cards
-          }}
-        >
-          <div className="card-body">
-            <h5 className="card-title">{announcement.title}</h5>
-            <div className="mt-2">
-              <button
-                className="btn btn-primary btn-sm me-2"
-                onClick={() => handleUpdateClick(announcement)}
+      <div className="container mt-4">
+        <div className="border p-3">
+          {error && <div className="alert alert-danger">{error}</div>}
+          <div
+            className="d-flex"
+            style={{
+              overflowX: "auto",  // Ensures horizontal scrolling
+              maxWidth: "100%",    // Ensures the parent container doesn't exceed available width
+              flexWrap: "nowrap",  // Prevents wrapping of cards, keeping them in a single row
+            }}
+            onScroll={handleScroll}
+          >
+            {existingAnnouncements.map((announcement) => (
+              <div
+                className="card me-3"
+                key={announcement._id}
+                style={{
+                  minWidth: "300px", // Set width of each card
+                  flexShrink: 0,     // Prevents shrinking of cards
+                }}
               >
-                Update
-              </button>
-              <button
-                className="btn btn-danger btn-sm"
-                onClick={() => deleteAnnouncemnt(announcement)}
-              >
-                Delete
-              </button>
-            </div>
+                <div className="card-body">
+                  <h5 className="card-title">{announcement.title}</h5>
+                  <div className="mt-2">
+                    <button
+                      className="btn btn-primary btn-sm me-2"
+                      onClick={() => handleUpdateClick(announcement)}
+                    >
+                      Update
+                    </button>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => deleteAnnouncemnt(announcement)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+            {loading && <p className="text-muted ms-3">Loading more...</p>}
+            {!hasMore && <p className="text-muted ms-3">No more announcements.</p>}
           </div>
         </div>
-      ))}
-      {loading && <p className="text-muted ms-3">Loading more...</p>}
-      {!hasMore && <p className="text-muted ms-3">No more announcements.</p>}
-    </div>
-  </div>
 
-  {selectedAnnouncement && (
-    <div className="mt-4">
-      <div className="d-flex justify-content-between align-items-center" style={{ fontSize: '20px' }}>
-        <span>Edit Awards</span>
-        <div onClick={() => setSelectedAnnouncement(null)} style={{ cursor: 'pointer' }}>
-          <FaTimesCircle style={{ color: 'red' }} />
-        </div>
-      </div>
-      <form onSubmit={handleUpdateSubmit}>
-        <div className="mb-3">
-          <label htmlFor="title" className="form-label">Title</label>
-          <input
-            type="text"
-            className="form-control"
-            id="title"
-            name="title"
-            value={selectedAnnouncement.title}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="description" className="form-label">Description</label>
-          <textarea
-            className="form-control"
-            id="description"
-            name="description"
-            rows="4"
-            value={selectedAnnouncement.description}
-            onChange={handleInputChange}
-            required
-          ></textarea>
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="AnnouncementDate" className="form-label">Award Date</label>
-          <input
-            type="date"
-            className="form-control"
-            id="AnnouncementDate"
-            name="AnnouncementDate"
-            value={selectedAnnouncement.AnnouncementDate.substring(0, 10)} // Only the date part
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className="form-group">
-          {/* Render existing images if no new images are selected */}
-          {selectedImages.length === 0 && selectedAnnouncement.imagePath?.length > 0 &&
-            selectedAnnouncement.imagePath.map((el, index) => (
-              <div key={index} className="mb-2">
-                <label htmlFor="profile-image">Images</label>
-                <img
-                  src={`${ConnectMe.img_URL}${el}`} // Display the existing image
-                  alt={`Existing Banner ${index + 1}`}
-                  className="banner-image"
-                />
-                <div
-                  className="delete-icon"
-                  onClick={() => removeImage(index, 'update')} // Remove the specific image
-                  style={{ cursor: 'pointer' }}
-                >
-                  <FaTimesCircle style={{ color: 'red', fontSize: '24px' }} />
-                </div>
-              </div>
-            ))
-          }
-
-          {/* File input for selecting new images */}
-          <input
-            type="file"
-            id="profile-image"
-            onChange={handleChange}
-            multiple // Allow multiple file uploads
-            className="form-control"
-          />
-
-          ** Note: It will replace existing CSR Image
-        </div>
-
-        <div className="row">
-          {selectedImages && selectedImages.length > 0 && selectedImages.map((image, index) => (
-            <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
-              <div className="banner-card">
-                <img
-                  src={image} // Use the URL from the selectedImages array
-                  alt={`Selected Banner ${index + 1}`}
-                  className="banner-image"
-                />
-                {/* Cross icon in the top-right corner */}
-                <div
-                  className="delete-icon"
-                  onClick={() => removeImage(index)} // Remove the specific image
-                  style={{ cursor: 'pointer' }}
-                >
-                  <FaTimesCircle style={{ color: 'red', fontSize: '24px' }} />
-                </div>
+        {selectedAnnouncement && (
+          <div className="mt-4">
+            <div className="d-flex justify-content-between align-items-center" style={{ fontSize: '20px' }}>
+              <span>Edit Awards</span>
+              <div onClick={() => setSelectedAnnouncement(null)} style={{ cursor: 'pointer' }}>
+                <FaTimesCircle style={{ color: 'red' }} />
               </div>
             </div>
-          ))}
-        </div>
-        <button type="submit" className="btn btn-success">Save Changes</button>
-      </form>
-    </div>
-  )}
-</div>
+            <form onSubmit={handleUpdateSubmit}>
+              <div className="mb-3">
+                <label htmlFor="title" className="form-label">Title</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="title"
+                  name="title"
+                  value={selectedAnnouncement.title}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="description" className="form-label">Description</label>
+                <textarea
+                  className="form-control"
+                  id="description"
+                  name="description"
+                  rows="4"
+                  value={selectedAnnouncement.description}
+                  onChange={handleInputChange}
+                  required
+                ></textarea>
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="AnnouncementDate" className="form-label">Award Date</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  id="AnnouncementDate"
+                  name="AnnouncementDate"
+                  value={selectedAnnouncement.AnnouncementDate.substring(0, 10)} // Only the date part
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="form-group">
+                {/* Render existing images if no new images are selected */}
+                {selectedImages.length === 0 && selectedAnnouncement.imagePath?.length > 0 &&
+                  selectedAnnouncement.imagePath.map((el, index) => (
+                    <div key={index} className="mb-2">
+                      <label htmlFor="profile-image">Images</label>
+                      <img
+                        src={`${ConnectMe.img_URL}${el}`} // Display the existing image
+                        alt={`Existing Banner ${index + 1}`}
+                        className="banner-image"
+                      />
+                      <div
+                        className="delete-icon"
+                        onClick={() => removeImage(index, 'update')} // Remove the specific image
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <FaTimesCircle style={{ color: 'red', fontSize: '24px' }} />
+                      </div>
+                    </div>
+                  ))
+                }
+
+                {/* File input for selecting new images */}
+                <input
+                  type="file"
+                  id="profile-image"
+                  onChange={handleChange}
+                  multiple // Allow multiple file uploads
+                  className="form-control"
+                />
+
+                ** Note: It will replace existing CSR Image
+              </div>
+
+              <div className="row">
+              {selectedAnnouncement?.imagePath?.length > 0 &&
+                selectedAnnouncement.imagePath.map((media, index) => {
+                  const mediaUrl = `${ConnectMe.img_URL}${media}`;
+                  const isVideo = media.toLowerCase().endsWith(".mp4");
+
+                  return (
+                    <div key={index} className="col-sm-4 mb-4 position-relative">
+                      <div className="model-card">
+                        {isVideo ? (
+                          <video
+                            src={mediaUrl}
+                            className="modelcard-image" // Same class as image
+                            controls
+                            style={{
+                              width: "100%",
+                              height: "200px",
+                              objectFit: "cover",
+                              position: "relative",
+                            }}
+                            onClick={() => {
+                              handleClose();
+                              setSelectedImage(mediaUrl);
+                            }}
+                            onMouseEnter={(e) => handleHoverEffect(e)}
+                            onMouseLeave={(e) => removeHoverEffect(e)}
+                          />
+                        ) : (
+                          <img
+                            src={mediaUrl}
+                            alt={`Selected Media ${index + 1}`}
+                            className="modelcard-image" // Same class as video
+                            style={{
+                              width: "100%",
+                              height: "200px",
+                              objectFit: "cover",
+                              position: "relative",
+                            }}
+                            onClick={() => {
+                              handleClose();
+                              setSelectedImage(mediaUrl);
+                            }}
+                            onMouseEnter={(e) => handleHoverEffect(e)}
+                            onMouseLeave={(e) => removeHoverEffect(e)}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+
+              <button type="submit" className="btn btn-success" disabled={loading}>Save Changes</button>
+            </form>
+          </div>
+        )}
+      </div>
 
 
       <hr></hr>
@@ -678,31 +725,62 @@ const handleChange = (e) => {
 
 
             <div className="row">
-              {selectedImages && selectedImages.length > 0 && selectedImages.map((image, index) => (
-                <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
-                  <div className="banner-card">
-                    <img
-                      src={image} // Use the URL from the selectedImages array
-                      alt={`Selected Banner ${index + 1}`}
-                      className="banner-image"
-                    />
-                    {/* Cross icon in the top-right corner */}
-                    <div
-                      className="delete-icon"
-                      onClick={() => removeImage(index)} // Remove the specific image
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <FaTimesCircle style={{ color: 'red', fontSize: '24px' }} />
+              {selectedAnnouncement?.imagePath?.length > 0 &&
+                selectedAnnouncement.imagePath.map((media, index) => {
+                  const mediaUrl = `${ConnectMe.img_URL}${media}`;
+                  const isVideo = media.toLowerCase().endsWith(".mp4");
+
+                  return (
+                    <div key={index} className="col-sm-4 mb-4 position-relative">
+                      <div className="model-card">
+                        {isVideo ? (
+                          <video
+                            src={mediaUrl}
+                            className="modelcard-image" // Same class as image
+                            controls
+                            style={{
+                              width: "100%",
+                              height: "200px",
+                              objectFit: "cover",
+                              position: "relative",
+                            }}
+                            onClick={() => {
+                              handleClose();
+                              setSelectedImage(mediaUrl);
+                            }}
+                            onMouseEnter={(e) => handleHoverEffect(e)}
+                            onMouseLeave={(e) => removeHoverEffect(e)}
+                          />
+                        ) : (
+                          <img
+                            src={mediaUrl}
+                            alt={`Selected Media ${index + 1}`}
+                            className="modelcard-image" // Same class as video
+                            style={{
+                              width: "100%",
+                              height: "200px",
+                              objectFit: "cover",
+                              position: "relative",
+                            }}
+                            onClick={() => {
+                              handleClose();
+                              setSelectedImage(mediaUrl);
+                            }}
+                            onMouseEnter={(e) => handleHoverEffect(e)}
+                            onMouseLeave={(e) => removeHoverEffect(e)}
+                          />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
+                  );
+                })}
             </div>
 
 
 
+
             <div className="form-actions">
-              <button type="submit" className="save-btn">
+              <button type="submit" className="save-btn" disabled={loading}>
                 Save
               </button>
               <button type="reset" className="cancel-btn">
