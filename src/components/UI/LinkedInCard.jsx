@@ -32,6 +32,10 @@ export default function LinkedInCard() {
   const [showComments, setShowComments] = useState(false);
   const [loginRequired, setloginRequired] = useState(false);
   const [loading, setLoading] = useState(false); // Loader state
+  const [activeIndex, setActiveIndex] = useState(0); // Track active slide
+
+  // Update active post when the carousel changes
+
   const currentRequest = useRef(null);
   const navigate = useNavigate();
 
@@ -188,14 +192,10 @@ export default function LinkedInCard() {
     setSelectedPost(null);
   };
 
-  const addComment = () => {
-    if (newComment.trim()) {
-      setComments((prevComments) => [...prevComments, newComment]);
-      setNewComment("");
-    }
-  };
+
 
   const memoizedPosts = useMemo(() => posts, [posts]);
+
 
   return (
     <div className="card mb-3">
@@ -223,7 +223,8 @@ export default function LinkedInCard() {
       ) : (
         <div className="card-body card-scroll">
           {/* Carousel for Posts */}
-          <Carousel>
+          <Carousel activeIndex={activeIndex} onSelect={(selectedIndex) => setActiveIndex(selectedIndex)}>
+
             {memoizedPosts.map((post) => (
               <Carousel.Item key={post.id} className="linkekItem">
                 <div
@@ -296,76 +297,65 @@ export default function LinkedInCard() {
                     </div>
                   </div>
 
-                  {/* Footer Section with Fixed Like Button */}
-                  <div className="like-section">
-                    <div className="d-flex  align-items-center my-3">
-                      {loginRequired ? (
-                        // If loginRequired, show "Login with LinkedIn" button
-                        <button
-                          onClick={handleLinkedInCallback}
-                          className="btn btn-primary btn-lg"
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
 
-                            padding: "10px 20px",
-                            fontSize: "16px",
-                            fontWeight: "bold",
-                            borderRadius: "5px",
-                          }}
-                        >
-                          <img
-                            src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
-                            alt="LinkedIn"
-                            style={{
-                              width: "20px",
-                              height: "20px",
-                              marginRight: "10px",
-                            }}
-                          />
-                          Login with LinkedIn
-                        </button>
-                      ) : (
-                        // If logged in, show like button
-                        <p
-                        className="card-like fs-6 m-0"
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          cursor: loadingPostIds.includes(post.id) ? "not-allowed" : "pointer",
-                          opacity: loadingPostIds.includes(post.id) ? 0.5 : 1, // Reduce opacity when loading
-                        }}
-                        onClick={(event) => {
-                          event.stopPropagation(); // Prevent other interactions
-                      
-                          if (loadingPostIds.includes(post.id)) return; // Prevent multiple clicks while loading
-                      
-                          handleLikeToggle(
-                            post.id,
-                            post?.fetchUserLikesStatus ? "disslike" : "likepost"
-                          );
-                        }}
-                      >
-                        <FaThumbsUp
-                          className={`like-icon ${loadingPostIds.includes(post.id) ? "loading" : ""}`}
-                          style={{
-                            color: post?.fetchUserLikesStatus ? "blue" : "gray",
-                          }}
-                        />
-                        <span style={{ marginLeft: "5px" }}>
-                          {post?.likeCount?.totalLikes}
-                        </span>
-                      </p>
-                      
-                      )}
-                    </div>
-                  </div>
                 </div>
               </Carousel.Item>
             ))}
           </Carousel>
         </div>
       )}
+
+      <div className="like-section text-center mt-3">
+        {loginRequired ? (
+          <button
+            onClick={handleLinkedInCallback}
+            className="btn btn-primary btn-lg"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              padding: "10px 20px",
+              fontSize: "16px",
+              fontWeight: "bold",
+              borderRadius: "5px",
+            }}
+          >
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
+              alt="LinkedIn"
+              style={{
+                width: "20px",
+                height: "20px",
+                marginRight: "10px",
+              }}
+            />
+            Login with LinkedIn
+          </button>
+        ) : (
+          <p
+            className="card-like fs-6 m-0"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              cursor: loadingPostIds.includes(memoizedPosts[activeIndex]?.id) ? "not-allowed" : "pointer",
+              opacity: loadingPostIds.includes(memoizedPosts[activeIndex]?.id) ? 0.5 : 1,
+            }}
+            onClick={(event) => {
+              event.stopPropagation();
+              if (loadingPostIds.includes(memoizedPosts[activeIndex]?.id)) return;
+              handleLikeToggle(memoizedPosts[activeIndex]?.id, memoizedPosts[activeIndex]?.fetchUserLikesStatus ? "disslike" : "likepost");
+            }}
+          >
+            <FaThumbsUp
+              className={`like-icon ${loadingPostIds.includes(memoizedPosts[activeIndex]?.id) ? "loading" : ""}`}
+              style={{
+                color: memoizedPosts[activeIndex]?.fetchUserLikesStatus ? "blue" : "gray",
+              }}
+            />
+            <span style={{ marginLeft: "5px" }}>{memoizedPosts[activeIndex]?.likeCount?.totalLikes}</span>
+          </p>
+        )}
+      </div>
+
 
       {/* Modal for LinkedIn Post */}
       <Modal show={showModal} onHide={closePostPopup} size="lg" centered>
@@ -390,7 +380,7 @@ export default function LinkedInCard() {
                 className="img-fluid rounded"
                 style={{ maxHeight: "400px" }}
               />
-            ) :  (
+            ) : (
               <video
                 controls
                 autoPlay
@@ -406,7 +396,7 @@ export default function LinkedInCard() {
                 <source src={selectedPost?.multimedia?.url} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
-            ) }
+            )}
           </div>
 
           {/* Like and Comment Section */}
