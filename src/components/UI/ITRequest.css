@@ -2,7 +2,7 @@
   font-size: 10px;
   font-weight: bold;
   z-index: 1;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   max-width: 100%;
   animation: pulseEffect 3s infinite ease-in-out;
 }
