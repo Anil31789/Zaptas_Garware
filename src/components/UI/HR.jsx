@@ -24,12 +24,12 @@ const HR = () => {
     {
       id: 1,
       title: "📄 Domestic Travel Policy",
-      url: `${ConnectMe.img_URL}/uploads/policy/hr/hrpolicy.pdf`,
+      url: `${ConnectMe.img_URL}/uploads/policy/hr/hrpolicy.docx`,
     },
     {
       id: 2,
       title: "📅 Regional Holiday Calendar",
-      url: `${ConnectMe.img_URL}/uploads/leaves/Location-wiseHolidayCalendarfor2025.pdf`,
+      url: `${ConnectMe.img_URL}/uploads/leaves/Location-wiseHolidayCalendarfor2025.docx`,
     },
   ];
 

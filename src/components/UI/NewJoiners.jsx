@@ -143,7 +143,7 @@ export default function WorkAnniversary() {
                   {`${workAnniversaries[currentIndex]?.FirstName || ""} ${workAnniversaries[currentIndex]?.MiddleName || ""} ${workAnniversaries[currentIndex]?.LastName || ""
                     }`.trim()}
                 </h5>
-                <p className="message">{workAnniversaries[currentIndex]?.CustomField6 || "Support"}</p>
+               {/* <p className="message">{workAnniversaries[currentIndex]?.CustomField6 || "Support"}</p> */}
                 <div className="info">
                   <span className="date">
                     <FaHandshake className="icon" />{" "}

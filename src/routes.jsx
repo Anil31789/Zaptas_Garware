@@ -60,10 +60,10 @@ export const routes = [
   {
     path: "/admin",
     element: (
-      <AdminLayout />
-      // <ProtectedRoute haveAdminAccess={true}>
-      //   <AdminLayout />
-      // </ProtectedRoute>
+      // <AdminLayout />
+      <ProtectedRoute haveAdminAccess={true}>
+        <AdminLayout />
+      </ProtectedRoute>
     ),
     errorElement: <ErrorPage />,
     children: [
