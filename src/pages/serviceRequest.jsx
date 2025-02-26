@@ -5,18 +5,17 @@ import ConnectMe from '../config/connect';
 import showToast from '../utils/toastHelper';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FaCheckCircle, FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FaRegCircleQuestion } from 'react-icons/fa6';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
-
-
 const ServiceRequestPage = () => {
-  const navigate = useNavigate()
-  const formRef = useRef(null);
+  const navigate = useNavigate();
   const location = useLocation();
-  const initialTab = location.state?.status || "My Requests"; // Default to "My Requests"
+  const initialTab = location.state?.status || 'My Requests'; // Default tab
+  const formRef = useRef(null);
+  
   const [serviceRequests, setServiceRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [comment, setComment] = useState('');
@@ -24,12 +23,11 @@ const ServiceRequestPage = () => {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [communicationType, setCommunicationType] = useState('');
   const [showCommunicationField, setShowCommunicationField] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-
     fetchServiceRequests();
   }, [activeTab]);
-
 
   const fetchServiceRequests = async () => {
     setLoading(true);
@@ -56,6 +54,7 @@ const ServiceRequestPage = () => {
       return;
     }
 
+    // Hide modal (assuming bootstrap modal is available globally)
     const modal = document.getElementById('commentModal');
     if (modal) {
       const modalInstance = bootstrap.Modal.getInstance(modal);
@@ -73,9 +72,6 @@ const ServiceRequestPage = () => {
       if (response && response.data) {
         showToast(`Service request ${action}ed successfully!`, 'success');
         setServiceRequests((prevRequests) =>
-          prevRequests.filter((request) => request._id !== selectedRequest)
-        );
-        setServiceRequests((prevRequests) =>
           prevRequests.map((request) =>
             request._id === selectedRequest
               ? { ...request, status: action === 'approve' ? 'Approved' : 'Rejected' }
@@ -84,7 +80,7 @@ const ServiceRequestPage = () => {
         );
         setSelectedRequest(null);
         setComment('');
-        await fetchServiceRequests()
+        await fetchServiceRequests();
       } else {
         showToast(`Failed to ${action} the request.`, 'error');
       }
@@ -97,18 +93,12 @@ const ServiceRequestPage = () => {
   const openCommentModal = (request) => {
     setSelectedRequest(request._id);
     setComment('');
-
     // Show the communication type field if hodCommunication is true
     setShowCommunicationField(request?.hodCommunication || false);
-    setCommunicationType(''); // Reset the communication type field
-
+    setCommunicationType('');
     const modal = new bootstrap.Modal(document.getElementById('commentModal'));
     modal.show();
   };
-
-
-
-
 
   const ApprovalTimeline = ({ request }) => {
     const approvalSteps = [
@@ -118,13 +108,11 @@ const ServiceRequestPage = () => {
       { name: 'IT Head Approval', status: request.itHeadApproval?.status, comment: request.itHeadApproval?.comment, date: request.itHeadApproval?.date }
     ];
 
-    // Determine the progress percentage based on approvals
     const approvedSteps = approvalSteps.filter(step => step.status === 'Approved').length;
     const progressPercentage = (approvedSteps / approvalSteps.length) * 100;
 
     return (
       <div className="mt-4">
-        {/* Progress Bar */}
         <div className="progress" style={{ height: '5px' }}>
           <div
             className="progress-bar bg-success"
@@ -135,8 +123,6 @@ const ServiceRequestPage = () => {
             aria-valuemax="100"
           ></div>
         </div>
-
-        {/* Approval Timeline */}
         <div className="d-flex justify-content-between align-items-center mt-2">
           {approvalSteps.map((step, index) => (
             <OverlayTrigger
@@ -166,9 +152,6 @@ const ServiceRequestPage = () => {
     );
   };
 
-
-
-
   const handlePrint = async () => {
     if (!formRef.current) {
       alert("Form not found!");
@@ -189,38 +172,41 @@ const ServiceRequestPage = () => {
     window.open(pdfURL, "_blank");
   };
 
-
+  // Filter service requests based on search query
+  const filteredRequests = serviceRequests.filter((request) =>
+    request.requestId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    request.EmployeeCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    request.serviceType.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="container mt-4">
-      {/* <h2 className="mb-4 text-center">Service Requests</h2> */}
       <div className="d-flex justify-content-between mb-4">
-  <div>
-    {[
-      { label: 'Pending', variant: 'warning' },
-      { label: 'Approved', variant: 'success' },
-      { label: 'Rejected', variant: 'danger' },
-      { label: 'My Requests', variant: 'info' }
-    ].map(({ label, variant }) => (
-      <button
-        key={label}
-        className={`btn me-2 btn-${activeTab === label ? variant : `outline-${variant}`}`}
-        onClick={() => setActiveTab(label)}
-      >
-        {label}
-      </button>
-    ))}
-  </div>
-  
-  <input
-    type="text"
-    className="form-control w-25"
-    placeholder="Request Search..."
-    onChange={(e) => setSearchQuery(e.target.value)}
-  />
-</div>
-
-
+        <div>
+          {[
+            { label: 'Pending', variant: 'warning' },
+            { label: 'Approved', variant: 'success' },
+            { label: 'Rejected', variant: 'danger' },
+            { label: 'My Requests', variant: 'info' }
+          ].map(({ label, variant }) => (
+            <button
+              key={label}
+              className={`btn me-2 btn-${activeTab === label ? variant : `outline-${variant}`}`}
+              onClick={() => setActiveTab(label)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        {/* Search Bar */}
+        <input
+          type="text"
+          className="form-control w-25"
+          placeholder="Request Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
 
       {loading ? (
         <div className="text-center">
@@ -230,63 +216,61 @@ const ServiceRequestPage = () => {
         </div>
       ) : (
         <div className="row">
-        {serviceRequests.map((request) => (
-          <div className="col-md-4 mb-3" key={request._id}>
-            <div className="card border rounded shadow-sm">
-              
-              {/* Header Section */}
-              <div className="card-header bg-white border-bottom d-flex justify-content-between align-items-center p-3">
-                <div>
-                  <h6 className="mb-1 fw-semibold text-dark">Request ID: {request.requestId}</h6>
-                  <p className="mb-1 small text-muted">Employee: {request.EmployeeCode}</p>
-                  <p className="mb-0 small text-muted">{request.serviceType}</p>
-                </div>
-                <FaInfoCircle 
-                  size={20} 
-                  className="text-secondary cursor-pointer" 
-                  onClick={() => navigate("/securityform", { state: request })} 
-                />
-              </div>
-      
-              {/* Details Section with Fixed Height and Scroll */}
-              <div className="card-body overflow-auto" style={{ maxHeight: "100px" }}>
-                <p className="fw-bold text-secondary mb-2">Details:</p>
-                <div className="px-2">
-                  {request.serviceFields.map((field, index) => (
-                    <div key={index} className="d-flex justify-content-between border-bottom py-2">
-                      <span className="text-muted small">{field.fieldConfig}:</span>
-                      <span className="text-dark small">{field.fieldValue}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-      
-              {/* Footer Section */}
-              <div className="card-footer bg-light p-3 d-flex justify-content-between align-items-center">
-                {activeTab === 'Pending' ? (
-                  <>
-                    <button className="btn btn-outline-success btn-sm px-3" onClick={() => openCommentModal(request)}>Approve</button>
-                    <button className="btn btn-outline-danger btn-sm px-3" onClick={() => openCommentModal(request)}>Reject</button>
-                  </>
-                ) : (
-                  <div className="text-muted small">
-                    <ApprovalTimeline request={request} />
+          {filteredRequests.map((request) => (
+            <div className="col-md-4 mb-3" key={request._id}>
+              <div className="card border rounded shadow-sm">
+                {/* Header Section */}
+                <div className="card-header bg-white border-bottom d-flex justify-content-between align-items-center p-3">
+                  <div>
+                    <h6 className="mb-1 fw-semibold text-dark">Request ID: {request.requestId}</h6>
+                    <p className="mb-1 small text-muted">Employee: {request.EmployeeCode}</p>
+                    <p className="mb-0 small text-muted">{request.serviceType}</p>
                   </div>
-                )}
+                  <FaInfoCircle 
+                    size={20} 
+                    className="text-secondary cursor-pointer" 
+                    onClick={() => navigate('/securityform', { state: request })} 
+                  />
+                </div>
+
+                {/* Details Section with fixed height and scroll */}
+                <div className="card-body overflow-auto" style={{ maxHeight: '100px' }}>
+                  <p className="fw-bold text-secondary mb-2">Details:</p>
+                  <div className="px-2">
+                    {request.serviceFields.map((field, index) => (
+                      <div key={index} className="d-flex justify-content-between border-bottom py-2">
+                        <span className="text-muted small">{field.fieldConfig}:</span>
+                        <span className="text-dark small">{field.fieldValue}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Footer Section */}
+                <div className="card-footer bg-light p-3 d-flex justify-content-between align-items-center">
+                  {activeTab === 'Pending' ? (
+                    <>
+                      <button className="btn btn-outline-success btn-sm px-3" onClick={() => openCommentModal(request)}>Approve</button>
+                      <button className="btn btn-outline-danger btn-sm px-3" onClick={() => openCommentModal(request)}>Reject</button>
+                    </>
+                  ) : (
+                    <div className="text-muted small">
+                      <ApprovalTimeline request={request} />
+                    </div>
+                  )}
+                </div>
               </div>
-      
             </div>
-          </div>
-        ))}
-      </div>
-      
-      
-      
-
-
-
+          ))}
+        </div>
       )}
 
+      {/* Print Button (if needed) */}
+      {/* <div className="mt-4">
+        <button className="btn btn-primary" onClick={handlePrint}>Print</button>
+      </div> */}
+
+      {/* Comment Modal */}
       <div className="modal fade" id="commentModal" tabIndex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
@@ -295,7 +279,7 @@ const ServiceRequestPage = () => {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
-              {/* Show Communication Type field if hodCommunication is true */}
+              {/* Communication Type field if applicable */}
               {showCommunicationField && (
                 <div className="mb-3">
                   <label className="form-label">
@@ -314,7 +298,6 @@ const ServiceRequestPage = () => {
                   </select>
                 </div>
               )}
-
               <label className="form-label">Comment</label>
               <textarea
                 className="form-control"
@@ -326,10 +309,20 @@ const ServiceRequestPage = () => {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" className="btn btn-success" onClick={() => handleAction('approve')} disabled={showCommunicationField && !communicationType}>
+              <button 
+                type="button" 
+                className="btn btn-success" 
+                onClick={() => handleAction('approve')}
+                disabled={showCommunicationField && !communicationType}
+              >
                 Approve
               </button>
-              <button type="button" className="btn btn-danger" onClick={() => handleAction('reject')} disabled={showCommunicationField && !communicationType}>
+              <button 
+                type="button" 
+                className="btn btn-danger" 
+                onClick={() => handleAction('reject')}
+                disabled={showCommunicationField && !communicationType}
+              >
                 Reject
               </button>
             </div>
