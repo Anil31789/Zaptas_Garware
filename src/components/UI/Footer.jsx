@@ -59,7 +59,7 @@ export default function Footer() {
       <div className="footer-bottom text-center mt-4">
   <p>
     &copy; 2025 Developed by 
-    <a href="https://zaptas.com/" target="" style={{ color: "white" }}> Zaptas</a> Technology
+    <a href="https://zaptas.com/" target="_blank" style={{ color: "white" }}> Zaptas</a> Technology
   </p>
 </div>
     </footer>

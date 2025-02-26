@@ -1,39 +1,53 @@
-.description {
+/* General Media Container */
+.media-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
   overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  /* Number of lines to show */
-  -webkit-box-orient: vertical;
-}
-
-.description.full {
-  overflow: visible;
-  -webkit-line-clamp: unset;
-}
-
-.content-box {
-  border: 1px solid #ddd;
-  padding: 16px;
   border-radius: 8px;
   background-color: #f9f9f9;
 }
 
+/* Image Styling */
+.media-container img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: 400px; /* Adjust as per design */
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Video Styling */
+.media-container video {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Image Slider */
 .image-slider {
   display: flex;
   gap: 10px;
   overflow-x: auto;
+  padding: 10px 0;
 }
 
 .slider-image {
-  width: 100%;
-  max-width: 120px;
-  height: auto;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
   cursor: pointer;
   border: 1px solid #ddd;
-  border-radius: 8px;
 }
 
+/* Full-Screen Overlay for Enlarged Image */
 .image-preview-overlay {
   position: fixed;
   top: 0;
@@ -53,49 +67,40 @@
   border-radius: 8px;
 }
 
-.carousel-item.view-all-images img {
-  height: 100%;
-  min-height: 120px;
-  max-height: 210px;
-  object-fit: contain;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-  max-width: 100%;
-}
-
-.view-all-page {
-  padding: 15px;
-}
-
-p.like-section {
-  margin-bottom: 0;
-}
-
-.banner-img {
-  gap: 10px;
-  margin-bottom: 20px;
-  background-color: #fdeec3;
-  min-height: 350px;
-}
-
-.box-img {
-  background-color: #fdeec3;
-  padding: 50px 20px;
-}
 /* Main Image Container */
 .main-image-container {
-  position: relative;  /* For proper placement of the image */
-  width: 100%;         /* Ensure the container takes up full width */
-  max-height: 400px;   /* Set a fixed height or max-height (adjust as per your design) */
-  overflow: hidden;    /* Hide any overflow if the image goes beyond the container */
+  position: relative;
+  width: 100%;
+  max-height: 400px;
+  overflow: hidden;
 }
 
-/* Main Image Styling */
-.main-image-container img {
-  width: 100%;               /* Ensure the image spans the full width */
-  height: 150px;              /* Maintain the image's aspect ratio */
-  max-height: 400px;         /* Ensure the image doesn't exceed the container height */
-  object-fit: cover;         /* Ensure the image covers the container properly without stretching */
-  border-radius: 8px;        /* Optional rounded corners for the image */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better style */
-  cursor: pointer;          /* Make the image clickable */
+.main-image-container img,
+.main-image-container video {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+/* Video Controls */
+.video-player {
+  width: 100%;
+  max-height: 400px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Responsive Fix */
+@media (max-width: 768px) {
+  .slider-image {
+    max-width: 90px;
+    height: 90px;
+  }
+  .main-image-container img,
+  .main-image-container video {
+    max-height: 250px;
+  }
 }

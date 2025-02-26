@@ -131,7 +131,7 @@ export default function ViewAllPage() {
                       <strong>{post?.AwardierName} {post?.PersonDesignation}</strong>
                     </p>
                     <div className="card-text fs-6">
-                      <PostCard post={post.description} size={270} />
+                      <PostCard post={post.description} size={250} />
                     </div>
                   </div>
   
