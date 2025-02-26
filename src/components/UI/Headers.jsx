@@ -818,7 +818,7 @@ export default function Headers() {
   //           {
   //             id: "1.1.5",
   //             title: "Mobile Number",
-  //             link: `${ConnectMe.BASE_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–Walujmobile.pdf`,
+  //             link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–Walujmobile.pdf`,
   //           },
   //         ],
   //       },
@@ -968,7 +968,7 @@ export default function Headers() {
           {
             id: "1.1.5",
             title: "Mobile Number",
-            link: `${ConnectMe.BASE_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–Walujmobile.pdf`,
+            link: `${ConnectMe.img_URL}/uploads/telecomHr/Aurangabad–Waluj/Aurangabad–Walujmobile.pdf`,
           },
         ],
       },
