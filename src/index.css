@@ -26,7 +26,8 @@ body {
   border: none;
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 0px 10px rgba(0, 0, 0, 0.2);
-  margin: 8px;
+  margin: 8px ;
+  
 }
 
 .card:hover {
@@ -38,6 +39,7 @@ body {
   background:#a42938;;
   color: white;
   /* padding: 12px; */
+  
 }
 
 .card-header a {

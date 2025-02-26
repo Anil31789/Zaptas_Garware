@@ -21,8 +21,8 @@ export default function Home() {
     <div>
       <Banner />
 
-      <div className="container-fluid p-4">
-        <div className="row d-flex">
+      <div className="container-fluid p-4 ">
+        <div className="row d-flex ">
           <div className="col-md-4 d-flex">
             <LinkedInCard />
           </div>
@@ -32,31 +32,31 @@ export default function Home() {
           <div className="col-md-4 d-flex">
             <AnnouncementCard />
           </div>
-          <div className="col-md-4 d-flex">
+          <div className="col-md-4 d-flex mt-3">
             <CalendarCard />
           </div>
-          <div className="col-md-4 d-flex">
+          <div className="col-md-4 d-flex mt-3">
             <IndustryCard />
           </div>
-          <div className="col-md-4 d-flex">
+          <div className="col-md-4 d-flex mt-3">
             <CsrActivityCard />
           </div>
-          <div className="col-md-4 d-flex">
+          <div className="col-md-4 d-flex mt-3">
             <GalleryCard />
           </div>
-          <div className="col-md-4 d-flex">
+          <div className="col-md-4 d-flex mt-3">
             <ITRequest />
           </div>
-          <div className="col-md-4 d-flex">
+          <div className="col-md-4 d-flex mt-3">
             <AwardsCard />
           </div>
-          <div className="col-md-4 d-flex">
+          <div className="col-md-4 d-flex mt-3">
             <BirthdayBox />
           </div>
-          <div className="col-md-4 d-flex">
+          <div className="col-md-4 d-flex mt-3">
             <WorkAnniversary />
           </div>
-          <div className="col-md-4 d-flex">
+          <div className="col-md-4 d-flex mt-3">
             <NewJoiners />
           </div>
           <div className="col-md-4 d-flex mt-4">
