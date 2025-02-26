@@ -561,62 +561,62 @@ export default function AwardsPage() {
                 ** Note: It will replace existing CSR Image
               </div>
               <div className="row">
-  {/* Display existing images/videos */}
-  {selectedImages.length === 0 &&
-    selectedAnnouncement.imagePath?.length > 0 &&
-    selectedAnnouncement.imagePath.map((el, index) => {
-      const fileUrl = `${ConnectMe.img_URL}${el}`;
-      const isVideo = /\.(mp4|avi|mov|mkv)$/i.test(fileUrl);
+                {/* Display existing images/videos */}
+                {selectedImages.length === 0 &&
+                  selectedAnnouncement.imagePath?.length > 0 &&
+                  selectedAnnouncement.imagePath.map((el, index) => {
+                    const fileUrl = `${ConnectMe.img_URL}${el}`;
+                    const isVideo = /\.(mp4|avi|mov|mkv)$/i.test(fileUrl);
 
-      return (
-        <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
-          <label htmlFor="profile-media">Media</label>
-          {isVideo ? (
-            <video controls className="banner-image">
-              <source src={fileUrl} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          ) : (
-            <img src={fileUrl} alt={`Existing Media ${index + 1}`} className="banner-image" />
-          )}
-          <div
-            className="delete-icon"
-            onClick={() => removeImage(index, "update")}
-            style={{ cursor: "pointer" }}
-          >
-            <FaTimesCircle style={{ color: "red", fontSize: "24px" }} />
-          </div>
-        </div>
-      );
-    })}
+                    return (
+                      <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
+                        <label htmlFor="profile-media">Media</label>
+                        {isVideo ? (
+                          <video controls className="banner-image">
+                            <source src={fileUrl} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                        ) : (
+                          <img src={fileUrl} alt={`Existing Media ${index + 1}`} className="banner-image" />
+                        )}
+                        <div
+                          className="delete-icon"
+                          onClick={() => removeImage(index, "update")}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <FaTimesCircle style={{ color: "red", fontSize: "24px" }} />
+                        </div>
+                      </div>
+                    );
+                  })}
 
-  {/* Display newly added images/videos */}
-  {selectedImages.length > 0 &&
-    selectedImages.map((file, index) => {
-      const isVideo = file.type.startsWith("video/");
+                {/* Display newly added images/videos */}
+                {selectedImages.length > 0 &&
+                  selectedImages.map((file, index) => {
+                    const isVideo = file.type.startsWith("video/");
 
-      return (
-        <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
-          <label htmlFor="new-media">New Media</label>
-          {isVideo ? (
-            <video controls className="banner-image">
-              <source src={file.url} type={file.type} />
-              Your browser does not support the video tag.
-            </video>
-          ) : (
-            <img src={file.url} alt={`Selected Media ${index + 1}`} className="banner-image" />
-          )}
-          <div
-            className="delete-icon"
-            onClick={() => removeImage(index)}
-            style={{ cursor: "pointer" }}
-          >
-            <FaTimesCircle style={{ color: "red", fontSize: "24px" }} />
-          </div>
-        </div>
-      );
-    })}
-</div>
+                    return (
+                      <div key={index} className="col-6 col-sm-3 mb-4 position-relative">
+                        <label htmlFor="new-media">New Media</label>
+                        {isVideo ? (
+                          <video controls className="banner-image">
+                            <source src={file.url} type={file.type} />
+                            Your browser does not support the video tag.
+                          </video>
+                        ) : (
+                          <img src={file.url} alt={`Selected Media ${index + 1}`} className="banner-image" />
+                        )}
+                        <div
+                          className="delete-icon"
+                          onClick={() => removeImage(index)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <FaTimesCircle style={{ color: "red", fontSize: "24px" }} />
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
 
 
 
