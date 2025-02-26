@@ -145,7 +145,9 @@ export default function ViewAllPage() {
                           style={{
                             cursor: "pointer",
                             maxWidth: "100%",
-                            objectFit: "contain",
+                            height:'140px',
+                            maxHeight: "250px", // Fixed height
+                            objectFit: "cover",
                           }}
                           controls
                           onClick={() => setSelectedImage(`${ConnectMe.img_URL}${post.imagePath[0]}`)}
@@ -158,7 +160,8 @@ export default function ViewAllPage() {
                           style={{
                             cursor: "pointer",
                             maxWidth: "100%",
-                            objectFit: "contain",
+                            maxHeight: "250px", // Fixed height
+                            objectFit: "cover",
                           }}
                           onClick={() => setSelectedImage(`${ConnectMe.img_URL}${post.imagePath[0]}`)}
                         />
@@ -167,48 +170,47 @@ export default function ViewAllPage() {
                   )}
                 </div>
   
-                {/* Thumbnails for Additional Images & Videos */}
+                {/* Thumbnails for Additional Images & Videos (Always Visible) */}
                 {post.imagePath?.length > 1 && (
-                  <div className="mt-3 text-center">
-                    <button
-                      onClick={() => toggleOtherImages(post._id)}
-                      className="btn btn-outline-primary btn-sm"
-                    >
-                      {showOtherImages && currentPostImages === post._id
-                        ? "Hide other media"
-                        : `Show ${post.imagePath.length - 1} more`}
-                    </button>
+                  <div className="mt-3 text-center overflow-auto" style={{ maxHeight: "150px" }}>
+                    <div className="row justify-content-center">
+                      {post.imagePath.slice(1).map((media, index) => {
+                        const mediaUrl = `${ConnectMe.img_URL}${media}`;
+                        const isVideo = media.toLowerCase().endsWith(".mp4");
   
-                    {showOtherImages && currentPostImages === post._id && (
-                      <div className="row mt-3 justify-content-center">
-                        {post.imagePath.slice(1).map((media, index) => {
-                          const mediaUrl = `${ConnectMe.img_URL}${media}`;
-                          const isVideo = media.toLowerCase().endsWith(".mp4");
-  
-                          return (
-                            <div key={index} className="col-4 col-md-2 mb-3">
-                              {isVideo ? (
-                                <video
-                                  src={mediaUrl}
-                                  className="img-thumbnail shadow-sm"
-                                  style={{ cursor: "pointer", objectFit: "contain" }}
-                                  controls
-                                  onClick={() => setSelectedImage(mediaUrl)}
-                                />
-                              ) : (
-                                <img
-                                  src={mediaUrl}
-                                  alt={`thumbnail-${index}`}
-                                  className="img-thumbnail shadow-sm"
-                                  style={{ cursor: "pointer", objectFit: "contain" }}
-                                  onClick={() => setSelectedImage(mediaUrl)}
-                                />
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
+                        return (
+                          <div key={index} className="col-4 col-md-2 mb-3">
+                            {isVideo ? (
+                              <video
+                                src={mediaUrl}
+                                className="img-thumbnail shadow-sm"
+                                style={{
+                                  cursor: "pointer",
+                                  maxWidth: "100%",
+                                  maxHeight: "100px",
+                                  objectFit: "cover",
+                                }}
+                                controls
+                                onClick={() => setSelectedImage(mediaUrl)}
+                              />
+                            ) : (
+                              <img
+                                src={mediaUrl}
+                                alt={`thumbnail-${index}`}
+                                className="img-thumbnail shadow-sm"
+                                style={{
+                                  cursor: "pointer",
+                                  maxWidth: "100%",
+                                  maxHeight: "100px",
+                                  objectFit: "cover",
+                                }}
+                                onClick={() => setSelectedImage(mediaUrl)}
+                              />
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 )}
               </div>
@@ -221,11 +223,7 @@ export default function ViewAllPage() {
       {loading && <Loader />}
   
       {/* Image & Video Preview Modal */}
-      <Modal
-        show={selectedImage !== null}
-        onHide={handleClosePreview}
-        centered
-      >
+      <Modal show={selectedImage !== null} onHide={handleClosePreview} centered>
         <Modal.Body>
           <div className="text-center">
             {selectedImage?.toLowerCase().endsWith(".mp4") ? (
@@ -258,4 +256,5 @@ export default function ViewAllPage() {
       </Modal>
     </div>
   );
+  
 }  

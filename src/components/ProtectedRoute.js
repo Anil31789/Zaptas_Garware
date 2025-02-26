@@ -25,7 +25,7 @@ const ProtectedRoute = ({ children, haveAdminAccess=false }) => {
 
                 if (response?.message == 'Token is valid') {
                     if (haveAdminAccess==true ) {
-                        if(response?.data?.haveAdminaccess=='admin'){
+                        if(response?.data?.isAdmin==true){
                             setIsVerified(true); 
                         }
                         else{
