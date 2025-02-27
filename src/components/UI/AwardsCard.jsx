@@ -10,13 +10,14 @@ import showToast from "../../utils/toastHelper";
 import PostCard from "./postDisplay";
 import confetti from "canvas-confetti";
 import { useNavigate } from "react-router-dom";
+import AnnouncementModal from "./UniversalModal";
 export default function AnnouncementCard() {
   const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null); // For full-size image preview
+
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
   // Fetch announcements on component mount
@@ -120,14 +121,7 @@ export default function AnnouncementCard() {
     }
   };
 
-  const handleClose = () => setShow(false);
-  const handleShow = (announcement) => {
-    setSelectedAnnouncement(announcement);
-    setShow(true);
-  };
-  const handleClosePreview = () => {
-    setSelectedImage(null);
-  };
+
 
   if (loading) {
     return (
@@ -136,6 +130,14 @@ export default function AnnouncementCard() {
       </div>
     );
   }
+
+
+
+  const handleClose = () => setShow(false);
+  const handleShow = (announcement) => {
+    setSelectedAnnouncement(announcement);
+    setShow(true);
+  };
 
   return (
     <div>
@@ -248,190 +250,13 @@ export default function AnnouncementCard() {
       </div>
 
       {/* Popup Modal */}
-      {selectedAnnouncement && (
-        <Modal show={show} onHide={handleClose} centered>
-          <Modal.Header closeButton>
-            <Modal.Title className="card-text text-danger fw-bold celebrating-text">{selectedAnnouncement.title}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {/* <div className="d-flex justify-content-between align-items-center mb-4"> */}
-            {/* Left Div */}
-            {/* <div>
-                <h6 className="mb-1">{selectedAnnouncement.AwardierName}</h6>
-                <p className="mb-0 text-muted">
-                  {selectedAnnouncement.PersonDesignation}
-                </p>
-              </div> */}
-            {/* Right Div */}
-            {/* <div>
-                <img
-                  src={"./user.png"}
-                  alt="User"
-                  className="rounded-circle"
-                  style={{ width: "50px", height: "50px" }}
-                />
-              </div>
-            </div> */}
-
-            {/* Description */}
-            <div
-              style={{
-                maxHeight: "500px",
-                overflowY: "auto",
-                border: "1px solid #ddd",
-                padding: "10px",
-                borderRadius: "5px",
-              }}
-            >
-              <div className="card-text fs-6">
-                <PostCard post={selectedAnnouncement.description} size={230} />
-              </div>
-            </div>
-
-            {selectedAnnouncement.links.map((link) => (
-              <div
-                key={link._id}
-                style={{
-                  marginBottom: "16px",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <a
-                  href={link.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ textDecoration: "none", color: "#6d6f72" }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <strong style={{ fontSize: "16px", marginRight: "8px" }}>
-                      {link.linkTitle}
-                    </strong>
-                    <span style={{ fontStyle: "italic", color: "#555" }}>
-                      {link.link}
-                    </span>
-                  </div>
-                </a>
-              </div>
-            ))}
-
-            {/* <p className="mt-3">
-              Location: <strong>{selectedAnnouncement.location} </strong>
-            </p> */}
-
-            <p className="mt-3">
-              Date:{" "}
-              <strong>
-                {new Date(
-                  selectedAnnouncement.AnnouncementDate
-                ).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </strong>
-            </p>
-
-            <div className="row">
-              {selectedAnnouncement?.imagePath?.length > 0 &&
-                selectedAnnouncement.imagePath.map((media, index) => {
-                  const mediaUrl = `${ConnectMe.img_URL}${media}`;
-                  const isVideo = media.toLowerCase().endsWith(".mp4");
-
-                  return (
-                    <div key={index} className="col-sm-4 mb-4 position-relative">
-                      <div className="model-card">
-                        {isVideo ? (
-                          <video
-                            src={mediaUrl}
-                            className="modelcard-image" // Same class as image
-                            controls
-                            style={{
-                              width: "100%",
-                              height: "200px",
-                              objectFit: "cover",
-                              position: "relative",
-                            }}
-                            onClick={() => {
-                              handleClose();
-                              setSelectedImage(mediaUrl);
-                            }}
-                            onMouseEnter={(e) => handleHoverEffect(e)}
-                            onMouseLeave={(e) => removeHoverEffect(e)}
-                          />
-                        ) : (
-                          <img
-                            src={mediaUrl}
-                            alt={`Selected Media ${index + 1}`}
-                            className="modelcard-image" // Same class as video
-                            style={{
-                              width: "100%",
-                              height: "200px",
-                              objectFit: "cover",
-                              position: "relative",
-                            }}
-                            onClick={() => {
-                              handleClose();
-                              setSelectedImage(mediaUrl);
-                            }}
-                            onMouseEnter={(e) => handleHoverEffect(e)}
-                            onMouseLeave={(e) => removeHoverEffect(e)}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
-
-
-            {/* Like Button */}
-            {/* <div className="d-flex align-items-center">
-              <FaThumbsUp
-                onClick={() =>
-                  handleLikedisslike(
-                    selectedAnnouncement._id,
-                    selectedAnnouncement.likedByUser
-                  )
-                }
-                style={{
-                  color: selectedAnnouncement.likedByUser ? "blue" : "gray",
-                  cursor: "pointer",
-                  marginRight: "8px",
-                }}
-              /> */}
-            {/* <span> {selectedAnnouncement?.likes?.length} Likes</span>{" "} */}
-            {/* Display likes count */}
-            {/* </div> */}
-          </Modal.Body>
-        </Modal>
-      )}
-
-      {/* view all popup code  */}
-      {selectedImage && (
-  <div className="image-preview-overlay" onClick={handleClosePreview}>
-    {selectedImage.toLowerCase().endsWith(".mp4") ? (
-      <video
-        src={selectedImage}
-        className="full-size-image"
-        controls
-        autoPlay
-      />
-    ) : (
-      <img
-        src={selectedImage}
-        alt="Full View"
-        className="full-size-image"
-      />
-    )}
-  </div>
-)}
+    
+        <AnnouncementModal
+          show={show}
+          handleClose={handleClose}
+          selectedAnnouncement={selectedAnnouncement}
+        />
+   
 
     </div>
   );
