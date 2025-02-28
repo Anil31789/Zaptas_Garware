@@ -1061,64 +1061,59 @@ export default function Headers() {
   };
 
 
-  const useDebouncedSearch = (query, delay, headers) => {
-    const [debouncedQuery, setDebouncedQuery] = useState(query);
-    const [options, setOptions] = useState([]);
-    const [loading, setLoading] = useState(false);
+const useDebouncedSearch = (query, delay, headers) => {
+  const [debouncedQuery, setDebouncedQuery] = useState(query);
+  const [options, setOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-      const handler = setTimeout(() => {
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (query.trim() !== '') {
         setDebouncedQuery(query);
-      }, delay);
-
-      return () => {
-        clearTimeout(handler);
-      };
-    }, [query, delay]); // Only trigger on query or delay change
-
-    useEffect(() => {
-      const fetchData = async () => {
-        if (debouncedQuery.trim() === '') {
-          setOptions([]);
-          return;
-        }
-
-        setLoading(true);
-        try {
-          const response = await apiCall(
-            'GET',
-            `${ConnectMe.BASE_URL}/telecom/search?q=${debouncedQuery}`,
-            headers,
-            null,
-            2000, // cooldown time
-            true // allow cache
-          );
-
-          if (response.status !== false) {
-            setOptions(response?.data?.data || []);
-          } else {
-            console.error(response.message);
-          }
-        } catch (error) {
-          console.error('Error fetching search data:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      if (debouncedQuery) {
-        fetchData();
       }
-    }, [debouncedQuery, headers]); // Only trigger on debouncedQuery or headers change
+    }, delay);
 
-    return { options, loading };
-  };
+    return () => clearTimeout(handler);
+  }, [query, delay]); // Only update debouncedQuery when query changes
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!debouncedQuery.trim()) return;
+
+      setLoading(true);
+      try {
+        const response = await apiCall(
+          'GET',
+          `${ConnectMe.BASE_URL}/telecom/search?q=${debouncedQuery}`,
+          headers,
+          null,
+          1000, // cooldown time
+          false // allow cache
+        );
+
+        if (response.status !== false) {
+          setOptions(response?.data?.data || []);
+        } else {
+          console.error(response.message);
+        }
+      } catch (error) {
+        console.error('Error fetching search data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [debouncedQuery]); // Removed `headers` dependency to avoid unnecessary API calls
+
+  return { options, loading };
+};
+
 
  
   
   const SearchBar = () => {
     const [searchQuery, setSearchQuery] = useState("");
-    const [options, setOptions] = useState([]);
     const [selectedOption, setSelectedOption] = useState(null);
     const [modalShow, setModalShow] = useState(false);
     const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -1129,23 +1124,16 @@ export default function Headers() {
       "Content-Type": "application/json",
     };
   
-    const { options: fetchedOptions, loading } = useDebouncedSearch(searchQuery, 1000, headers);
+    // Only one API call now
+    const { options: fetchedOptions, loading } = useDebouncedSearch(searchQuery, 2000, headers);
   
     const handleSearchChange = (e) => {
       const query = e.target.value;
       setSearchQuery(query);
-      setDropdownVisible(true);
   
-      if (query.trim() === "") {
-        setOptions([]);
-        setDropdownVisible(false);
-      }
+      // Show dropdown only if there's input
+      setDropdownVisible(query.trim() !== "");
     };
-  
-    useEffect(() => {
-      setOptions(fetchedOptions);
-      setDropdownVisible(fetchedOptions.length > 0);
-    }, [fetchedOptions]);
   
     const handleSearchClick = (option) => {
       setSelectedOption(option);
@@ -1155,9 +1143,8 @@ export default function Headers() {
   
     const handleModalClose = () => {
       setModalShow(false);
-      setDropdownVisible(false);
       setSearchQuery("");
-      setOptions([]);
+      setDropdownVisible(false);
     };
   
     return (
@@ -1172,12 +1159,12 @@ export default function Headers() {
           />
         </InputGroup>
   
-        {dropdownVisible && (loading || options.length > 0) && (
+        {dropdownVisible && (loading || fetchedOptions.length > 0) && (
           <div className="search-dropdown position-absolute w-100 bg-white border rounded shadow mt-1">
             {loading && <div className="p-2 text-center text-muted">Loading...</div>}
-            {options.length > 0 && (
+            {fetchedOptions.length > 0 && (
               <ListGroup className="list-group-flush">
-                {options.map((option, index) => (
+                {fetchedOptions.map((option, index) => (
                   <ListGroup.Item
                     key={index}
                     action
@@ -1199,7 +1186,7 @@ export default function Headers() {
                   </ListGroup.Item>
                 ))}
               </ListGroup>
-            ) }
+            )}
           </div>
         )}
   
@@ -1238,27 +1225,11 @@ export default function Headers() {
             </Button>
           </Modal.Footer>
         </Modal>
-  
-        {/* CSS to Fix Hover Shake Issue */}
-        <style jsx>{`
-          .search-dropdown {
-            z-index: 1050;
-            max-height: 300px;
-            overflow-y: auto;
-            transition: opacity 0.2s ease-in-out;
-          }
-  
-          .search-item {
-            transition: background-color 0.2s ease-in-out;
-          }
-  
-          .search-item:hover {
-            background-color: #f8f9fa;
-          }
-        `}</style>
       </div>
     );
   };
+  
+  
   
 
 

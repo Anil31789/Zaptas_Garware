@@ -180,7 +180,7 @@ const UserProfile = () => {
             )}
             {userDetailsLocal?.jobTitle && (
               <div className="mb-3">
-                <strong>Designation:</strong> <br />
+                <strong>Department:</strong> <br />
                 {userDetailsLocal?.jobTitle}
               </div>
             )}
