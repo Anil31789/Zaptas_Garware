@@ -155,15 +155,15 @@ export default function WorkAnniversary() {
 
                   </span>
                 </div>
-                <button
-                  className="send-wish-btn mt-2"
-                  onClick={() => {
-                    setSelectedEmployee(workAnniversaries[currentIndex]);
-                    setShowPopup(true);
-                  }}
-                >
-                  Make a wish!
-                </button>
+              <button
+                    className="send-wish-btn mt-2"
+                    onClick={() => {
+                      setSelectedEmployee(workAnniversaries[currentIndex]);
+                      setShowPopup(true);
+                    }}
+                  >
+                    Make a wish!
+                  </button>
               </div>
             </div>
           </div>
