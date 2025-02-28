@@ -1114,131 +1114,152 @@ export default function Headers() {
     return { options, loading };
   };
 
-const SearchBar = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [options, setOptions] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [modalShow, setModalShow] = useState(false);
-  const [dropdownVisible, setDropdownVisible] = useState(false);
-
-  const token = getTokenFromLocalStorage();
-  const headers = {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
-  };
-
-  const { options: fetchedOptions, loading } = useDebouncedSearch(searchQuery, 1000, headers);
-
-  const handleSearchChange = (e) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-    setDropdownVisible(true);
-
-    if (query.trim() === "") {
-      setOptions([]);
+ 
+  
+  const SearchBar = () => {
+    const [searchQuery, setSearchQuery] = useState("");
+    const [options, setOptions] = useState([]);
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [modalShow, setModalShow] = useState(false);
+    const [dropdownVisible, setDropdownVisible] = useState(false);
+  
+    const token = getTokenFromLocalStorage();
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+  
+    const { options: fetchedOptions, loading } = useDebouncedSearch(searchQuery, 1000, headers);
+  
+    const handleSearchChange = (e) => {
+      const query = e.target.value;
+      setSearchQuery(query);
+      setDropdownVisible(true);
+  
+      if (query.trim() === "") {
+        setOptions([]);
+        setDropdownVisible(false);
+      }
+    };
+  
+    useEffect(() => {
+      setOptions(fetchedOptions);
+      setDropdownVisible(fetchedOptions.length > 0);
+    }, [fetchedOptions]);
+  
+    const handleSearchClick = (option) => {
+      setSelectedOption(option);
+      setModalShow(true);
       setDropdownVisible(false);
-    }
-  };
-
-  useEffect(() => {
-    setOptions(fetchedOptions);
-    setDropdownVisible(fetchedOptions.length > 0);
-  }, [fetchedOptions]);
-
-  const handleSearchClick = (option) => {
-    setSelectedOption(option);
-    setModalShow(true);
-    setDropdownVisible(false); // Hide dropdown when opening modal
-  };
-
-  const handleModalClose = () => {
-    setModalShow(false);
-    setDropdownVisible(false); // Hide dropdown when closing modal
-    setSearchQuery(""); // Reset search input
-    setOptions([]); // Clear options
-  };
-
-  return (
-    <div className="search-container" style={{ position: "relative", width: "100%" }}>
-      <InputGroup>
-        <FormControl
-          type="text"
-          placeholder="Directory Search..."
-          value={searchQuery}
-          onChange={handleSearchChange}
-          className="custom-search-input"
-        />
-      </InputGroup>
-
-      {dropdownVisible && (loading || options.length > 0) && (
-        <div className="search-dropdown">
-          {loading && <div className="loading">Loading...</div>}
-          {options.length > 0 ? (
-            <ListGroup>
-              {options.map((option, index) => (
-                <ListGroup.Item key={index} action onClick={() => handleSearchClick(option)}>
-                  <div className="d-flex justify-content-between">
-                    <strong>{option.name}</strong>
-                    <small className="text-muted">{option.department}</small>
-                  </div>
-                  <div className="d-flex justify-content-between align-items-center">
-                    <div className="d-flex align-items-center gap-2">
-                      <small>{option.location}</small>
-                      <small>({option.areaNo}-{option.extensionNo})</small>
+    };
+  
+    const handleModalClose = () => {
+      setModalShow(false);
+      setDropdownVisible(false);
+      setSearchQuery("");
+      setOptions([]);
+    };
+  
+    return (
+      <div className="search-container position-relative w-100">
+        <InputGroup>
+          <FormControl
+            type="text"
+            placeholder="Directory Search..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="custom-search-input"
+          />
+        </InputGroup>
+  
+        {dropdownVisible && (loading || options.length > 0) && (
+          <div className="search-dropdown position-absolute w-100 bg-white border rounded shadow mt-1">
+            {loading && <div className="p-2 text-center text-muted">Loading...</div>}
+            {options.length > 0 && (
+              <ListGroup className="list-group-flush">
+                {options.map((option, index) => (
+                  <ListGroup.Item
+                    key={index}
+                    action
+                    className="search-item px-3 py-2"
+                    onClick={() => handleSearchClick(option)}
+                  >
+                    <div className="d-flex justify-content-between">
+                      <strong>{option.name}</strong>
+                      <small className="text-muted">{option.department}</small>
                     </div>
-                    <small>{option.cellularNumber}</small>
-                  </div>
-                  <small>{option.email}</small>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          ) : (
-            searchQuery && !loading && <div className="no-results">No results found</div>
-          )}
-        </div>
-      )}
-
-      {/* Modal Popup */}
-      <Modal show={modalShow} onHide={handleModalClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedOption ? (
-            <>
-              <h5>Name: {selectedOption.name}</h5>
-              <div className="d-flex justify-content-between mb-2">
-                <span>Location: {selectedOption.location}</span>
-                <span>Department: {selectedOption.department}</span>
-              </div>
-              <div className="d-flex justify-content-between mb-2">
-                <span>Cellular Number: {selectedOption.cellularNumber}</span>
-                <span>Area No: {selectedOption.areaNo}</span>
-              </div>
-              <div className="d-flex justify-content-between mb-2">
-                <span>Extension No: {selectedOption.extensionNo}</span>
-                <span>Abbreviation: {selectedOption.abbreviation}</span>
-              </div>
-              <div className="mb-2">
-                <span>Email: {selectedOption.email}</span>
-              </div>
-            </>
-          ) : (
-            <p>No details available</p>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleModalClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
-  );
-};
-
-
-
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div className="d-flex align-items-center gap-2">
+                        <small>{option.location}</small>
+                        <small>({option.areaNo}-{option.extensionNo})</small>
+                      </div>
+                      <small>{option.cellularNumber}</small>
+                    </div>
+                    <small>{option.email}</small>
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            ) }
+          </div>
+        )}
+  
+        {/* Modal Popup */}
+        <Modal show={modalShow} onHide={handleModalClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Details</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {selectedOption ? (
+              <>
+                <h5>Name: {selectedOption.name}</h5>
+                <div className="d-flex justify-content-between mb-2">
+                  <span>Location: {selectedOption.location}</span>
+                  <span>Department: {selectedOption.department}</span>
+                </div>
+                <div className="d-flex justify-content-between mb-2">
+                  <span>Cellular Number: {selectedOption.cellularNumber}</span>
+                  <span>Area No: {selectedOption.areaNo}</span>
+                </div>
+                <div className="d-flex justify-content-between mb-2">
+                  <span>Extension No: {selectedOption.extensionNo}</span>
+                  <span>Abbreviation: {selectedOption.abbreviation}</span>
+                </div>
+                <div className="mb-2">
+                  <span>Email: {selectedOption.email}</span>
+                </div>
+              </>
+            ) : (
+              <p>No details available</p>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleModalClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+  
+        {/* CSS to Fix Hover Shake Issue */}
+        <style jsx>{`
+          .search-dropdown {
+            z-index: 1050;
+            max-height: 300px;
+            overflow-y: auto;
+            transition: opacity 0.2s ease-in-out;
+          }
+  
+          .search-item {
+            transition: background-color 0.2s ease-in-out;
+          }
+  
+          .search-item:hover {
+            background-color: #f8f9fa;
+          }
+        `}</style>
+      </div>
+    );
+  };
+  
 
 
 
