@@ -69,7 +69,7 @@ export default function ITRequest() {
             Experience the breathtaking views and cultural richness of Goa and
             Kochi through this captivating visual journey.
           </p>
-        <a href="https://www.bseindia.com/stock-share-price/garware-polyester-ltd/garwarpoly/500655/" target="_blank">Today GHFL Shere Price </a>
+        <a href="https://www.bseindia.com/stock-share-price/garware-polyester-ltd/garwarpoly/500655/" target="_blank" className="celebrating-text">Today's GHFL share price</a>
         </div>
       </div>
     </div>
