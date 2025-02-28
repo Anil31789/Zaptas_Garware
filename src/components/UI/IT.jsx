@@ -4,7 +4,10 @@ import { useNavigate } from "react-router-dom";
 import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import { HiArrowCircleRight } from "react-icons/hi";
-import { FaUserPlus, FaUserMinus, FaNetworkWired, FaMobileAlt, FaServer, FaCogs, FaVideo, FaUserShield, FaEnvelope, FaLaptop } from "react-icons/fa";
+import {
+  FaUserPlus, FaUserMinus, FaNetworkWired, FaMobileAlt, FaServer, FaCogs, FaVideo, 
+  FaUserShield, FaEnvelope, FaLaptop 
+} from "react-icons/fa";
 
 const IT = () => {
   const navigate = useNavigate();
@@ -65,28 +68,26 @@ const IT = () => {
         </a>
       </div>
       <div className="card-body">
-        <ul className="list-unstyled">
-          <ul className="ps-3">
-            {isLoading ? (
-              <li className="text-muted">Loading...</li>
-            ) : (
-              serviceTypes.map((service) => (
-                <li key={service.id} className="mb-1 d-flex align-items-center">
-                  {serviceIcons[service.name] || <FaServer className="me-2 text-muted" />}
-                  <a
-                    href="#"
-                    className="text-decoration-none"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigate("/ITService", { state: { id: service._id } });
-                    }}
-                  >
-                    {service.name}
-                  </a>
-                </li>
-              ))
-            )}
-          </ul>
+        <ul className="list-unstyled ps-3">
+          {isLoading ? (
+            <li className="text-muted">Loading...</li>
+          ) : (
+            serviceTypes.map((service, index) => (
+              <li key={service._id || index} className="mb-1 d-flex align-items-center">
+                {serviceIcons[service.name] || <FaServer className="me-2 text-muted" />}
+                <a
+                  href="#"
+                  className="text-decoration-none"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/ITService", { state: { id: service._id } });
+                  }}
+                >
+                  {service.name}
+                </a>
+              </li>
+            ))
+          )}
         </ul>
       </div>
     </div>

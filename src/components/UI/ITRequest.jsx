@@ -50,26 +50,34 @@ export default function ITRequest() {
 
           {/* Video */}
           <video
-            src="./GarwareGoaKochiVideoArvindFinal.mp4"
-            controls
-            autoPlay
-            muted
-            style={{
-              width: "120%",
-              height: "35vh",
-              objectFit: "cover",
-              borderRadius:"5px",
-            }}
-          >
-            Your browser does not support the video tag.
-          </video>
+  src="./GarwareGoaKochiVideoArvindFinal.mp4"
+  controls
+  autoPlay
+  muted
+  loop
+  style={{
+    width: "120%",
+    height: "35vh",
+    objectFit: "cover",
+    borderRadius: "5px",
+  }}
+>
+  Your browser does not support the video tag.
+</video>
+
 
           {/* Paragraph - Auto Adjusts */}
           <p style={{ fontSize: "14px", marginTop: "3px", maxWidth: "100%" }}>
             Experience the breathtaking views and cultural richness of Goa and
             Kochi through this captivating visual journey.
           </p>
-        <a href="https://www.bseindia.com/stock-share-price/garware-polyester-ltd/garwarpoly/500655/" target="_blank">Today GHFL Shere Price </a>
+          <a
+  href="https://www.bseindia.com/stock-share-price/garware-polyester-ltd/garwarpoly/500655/"
+  target="_blank"
+  className="blinking-link "
+>
+  Today GHFL Share Price
+</a>
         </div>
       </div>
     </div>

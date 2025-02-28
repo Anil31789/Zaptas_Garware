@@ -84,3 +84,6 @@
 .mmcsrimg img {
   border-radius: 5px;
 }
+html {
+  scroll-behavior: smooth;
+}

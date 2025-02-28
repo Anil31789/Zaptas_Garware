@@ -134,7 +134,17 @@ const ExcelUploader = () => {
 
   return (
     <Container className="mt-4">
-      <h3 className="mb-4 text-center">Excel Uploader</h3>
+    <div className="d-flex justify-content-between align-items-center mb-4">
+  <h3 className="text-center mb-0">Excel Uploader</h3>
+  <a
+    href="https://docs.google.com/spreadsheets/d/1ozHSVda4tdZ8qSJvzxaG_dRIU7dj-NwdPDstqzDQwSU/edit?gid=1050645612#gid=1050645612"
+    target="_blank"
+    className="celebrating-text"
+  >
+    Sheet
+  </a>
+</div>
+
       <Row className="mb-3">
         <Col>
           <Form.Control type="file" accept=".xlsx, .xls" onChange={handleFileUpload} />
