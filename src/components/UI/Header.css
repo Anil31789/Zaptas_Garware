@@ -203,3 +203,8 @@ img.profile-img {
   
   
   
+  .dropdown-menu .dropdown-item:hover {
+    background-color: rgb(225, 224, 224) !important; /* Red background */
+    color: black !important; /* White text */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}

@@ -25,6 +25,9 @@ body {
   position: relative;
   padding-bottom: 80px;
 }
+.card-header:first-child {
+  border-radius: 0 !important;
+}
 
 
 .card {

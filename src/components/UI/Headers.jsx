@@ -1181,8 +1181,10 @@ const useDebouncedSearch = (query, delay, headers) => {
                         <small>({option.areaNo}-{option.extensionNo})</small>
                       </div>
                       <small>{option.cellularNumber}</small>
+                      {/* <small>{option.AreaCode}</small> */}
+
                     </div>
-                    <small>{option.email}</small>
+                    {/* <small>{option.email}</small> */}
                   </ListGroup.Item>
                 ))}
               </ListGroup>
@@ -1196,28 +1198,40 @@ const useDebouncedSearch = (query, delay, headers) => {
             <Modal.Title>Details</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {selectedOption ? (
-              <>
-                <h5>Name: {selectedOption.name}</h5>
-                <div className="d-flex justify-content-between mb-2">
-                  <span>Location: {selectedOption.location}</span>
-                  <span>Department: {selectedOption.department}</span>
-                </div>
-                <div className="d-flex justify-content-between mb-2">
-                  <span>Cellular Number: {selectedOption.cellularNumber}</span>
-                  <span>Area No: {selectedOption.areaNo}</span>
-                </div>
-                <div className="d-flex justify-content-between mb-2">
-                  <span>Extension No: {selectedOption.extensionNo}</span>
-                  <span>Abbreviation: {selectedOption.abbreviation}</span>
-                </div>
-                <div className="mb-2">
-                  <span>Email: {selectedOption.email}</span>
-                </div>
-              </>
-            ) : (
-              <p>No details available</p>
-            )}
+          {selectedOption ? (
+  <>
+    <h5>Name: {selectedOption.name}</h5>
+
+    <div className="d-flex justify-content-between mb-2">
+      {selectedOption.location && <span><b>Location:</b> {selectedOption.location}</span>}
+      {selectedOption.department && <span><b>Department:</b> {selectedOption.department}</span>}
+
+
+    </div>
+
+    <div className="d-flex justify-content-between mb-2">
+      {selectedOption.cellularNumber && <span><b>Number:</b> {selectedOption.cellularNumber}</span>}
+      {selectedOption.abbreviation && <span><b>Abbreviation:</b> {selectedOption.abbreviation}</span>}
+    </div>
+
+    <div className="d-flex justify-content-between mb-2">
+      {(selectedOption.areaNo || selectedOption.extensionNo) && (
+        <span>
+          <b>Area-Extension:</b> 
+          {selectedOption.areaNo ? `${selectedOption.areaNo}` : ""} 
+          {selectedOption.areaNo && selectedOption.extensionNo ? "-" : ""}
+          {selectedOption.extensionNo ? `${selectedOption.extensionNo}` : ""}
+        </span>
+      )}
+    </div>
+    <div>
+    {selectedOption.AreaCode && <span><b>AreaCode:</b> {selectedOption.AreaCode}</span>}
+    </div>
+  </>
+) : (
+  <p>No details available</p>
+)}
+
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleModalClose}>

@@ -14,7 +14,9 @@ export default function GalleryCard() {
     CsrType: [],
     Awards: [],
   });
-  const [selectedImage, setSelectedImage] = useState(null);
+
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [selectedTitle, setSelectedTitle] = useState("");
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -44,8 +46,9 @@ export default function GalleryCard() {
     }
   };
 
-  const handleTitleClick = (item) => {
-    setSelectedImage(item);
+  const handleImageClick = (item) => {
+    setSelectedImages(item?.images || []);
+    setSelectedTitle(item?.title || "");
     setShowModal(true);
   };
 
@@ -71,21 +74,42 @@ export default function GalleryCard() {
               return (
                 <div key={item._id} className="col-6 p-1">
                   <div className="card border-0 shadow-sm overflow-hidden h-100">
-                    {imageUrl && (
-                      <img
-                        src={imageUrl}
-                        className="d-block w-100"
-                        alt={item.title}
-                        style={{
-                          width: "100%",
-                          height: "125px",
-                          objectFit: "cover",
-                          cursor: "pointer",
-                          borderRadius: "10px",
-                        }}
-                        onClick={() => handleTitleClick(item)}
-                      />
-                    )}
+                    <div style={{ position: "relative" }}>
+                      {imageUrl && (
+                        <img
+                          src={imageUrl}
+                          className="d-block w-100"
+                          alt={item.title}
+                          style={{
+                            width: "100%",
+                            height: "125px",
+                            objectFit: "cover",
+                            cursor: "pointer",
+                            borderRadius: "10px",
+                          }}
+                          onClick={() => handleImageClick(item)}
+                        />
+                      )}
+
+                      {/* Image Count Badge (Bottom Right) */}
+                      {item?.images?.length > 1 && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            bottom: "5px",
+                            right: "5px",
+                            backgroundColor: "rgba(0, 0, 0, 0.7)",
+                            color: "white",
+                            padding: "2px 8px",
+                            borderRadius: "8px",
+                            fontSize: "12px",
+                          }}
+                        >
+                          {item?.images?.length} Images
+                        </div>
+                      )}
+                    </div>
+
                     <div
                       className="card-footer p-2 text-center"
                       style={{ backgroundColor: "#f8f9fa", borderRadius: "10px" }}
@@ -148,20 +172,28 @@ export default function GalleryCard() {
         </div>
       </div>
 
-      {/* Modal for larger image */}
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+      {/* Modal for Larger Image and Related Images */}
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered size="lg">
         <Modal.Header closeButton>
-          <Modal.Title>{selectedImage?.title}</Modal.Title>
+          <Modal.Title>{selectedTitle}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {selectedImage?.images?.[0]?.imagePath && (
-            <img
-              src={`${ConnectMe.img_URL}${selectedImage.images[0].imagePath}`}
-              className="img-fluid"
-              alt={selectedImage?.title}
-              style={{ maxWidth: "100%", borderRadius: "10px" }}
-            />
-          )}
+          <div className="d-flex flex-wrap justify-content-center">
+            {selectedImages.map((img, index) => (
+              <img
+                key={index}
+                src={`${ConnectMe.img_URL}${img.imagePath}`}
+                className="m-2"
+                alt={selectedTitle}
+                style={{
+                  maxWidth: "80%",
+                  height: "auto2",
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                }}
+              />
+            ))}
+          </div>
         </Modal.Body>
       </Modal>
     </div>
