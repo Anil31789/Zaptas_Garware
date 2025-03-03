@@ -6,7 +6,7 @@ const ConnectMe = {
     const hostname = window.location.hostname;
 
     if (hostname === "localhost") {
-      this.BASE_URL = "http://intranet.garwarepoly.com/v1";
+      this.BASE_URL = "http://localhost:3060/v1";
       this.img_URL = "http://localhost:3060";
     } else if (hostname === "intranet.zaptas.in") {
       this.BASE_URL = "https://intranet.zaptas.in/v1";
@@ -21,7 +21,7 @@ const ConnectMe = {
       console.error("❌ Hostname not recognized. Please configure the URLs.");
     }
   },
-};
+};3
 
 // Initialize the URLs
 ConnectMe.setUrls();
