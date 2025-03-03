@@ -89,9 +89,9 @@ export default function WorkAnniversary() {
         if (response.success && response?.data?.birthdayWishes?.length > 0) {
           setWorkAnniversaries(response?.data?.birthdayWishes);
         }
-      //  else {
-      //     setWorkAnniversaries(datadb)
-      //   } 
+        //  else {
+        //     setWorkAnniversaries(datadb)
+        //   } 
       } catch (err) {
         setWorkAnniversaries(datadb)
         setError("Error fetching joiners.");
@@ -154,15 +154,15 @@ export default function WorkAnniversary() {
                     })}
                   </span>
                 </div>
-                <button
-                  className="send-wish-btn mt-2"
-                  onClick={() => {
-                    setSelectedEmployee(workAnniversaries[currentIndex]);
-                    setShowPopup(true);
-                  }}
-                >
-                  Make a wish!
-                </button>
+              <button
+                    className="send-wish-btn mt-2"
+                    onClick={() => {
+                      setSelectedEmployee(workAnniversaries[currentIndex]);
+                      setShowPopup(true);
+                    }}
+                  >
+                    Make a wish!
+                  </button>
               </div>
             </div>
           </div>
