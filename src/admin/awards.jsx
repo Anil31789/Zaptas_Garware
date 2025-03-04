@@ -4,6 +4,8 @@ import { apiCall, getTokenFromLocalStorage } from "../utils/apiCall";
 import ConnectMe from "../config/connect";
 import showToast from "../utils/toastHelper";
 import { FaPlusCircle, FaTimesCircle } from 'react-icons/fa';
+import useAutoScroll from "../../utils/useAutoScroll";
+
 export default function AwardsPage() {
   const [selectedImages, setSelectedImages] = useState([]); // Initializing the state for selected images
   const [existingAnnouncements, setExistingAnnouncements] = useState([]);
@@ -28,6 +30,7 @@ export default function AwardsPage() {
     links: [{ linkTitle: '', link: '' }],
     AnnouncementDate: ''
   });
+  
 
 
 
@@ -254,6 +257,7 @@ export default function AwardsPage() {
       setFormData({ ...formData, links: newLinks });
     }
   };
+  
 
 
 
@@ -302,6 +306,8 @@ export default function AwardsPage() {
     },
     [loading, hasMore]
   );
+  const scrollRef = useAutoScroll(1,1000); // Smooth scrolling
+
 
   useEffect(() => {
     fetchExistingAnnouncements(page);
@@ -432,6 +438,7 @@ export default function AwardsPage() {
       console.error('Error saving announcement:', result.message);
     }
   }
+  
 
 
   return (
@@ -457,7 +464,7 @@ export default function AwardsPage() {
                   flexShrink: 0,     // Prevents shrinking of cards
                 }}
               >
-                <div className="card-body">
+                  <div className="card-body card-scroll" ref={scrollRef}>
                   <h5 className="card-title">{announcement.title}</h5>
                   <div className="mt-2">
                     <button

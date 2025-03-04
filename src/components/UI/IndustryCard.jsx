@@ -11,6 +11,7 @@ import showToast from "../../utils/toastHelper";
 import PostCard from "./postDisplay";
 import { useNavigate } from "react-router-dom";
 import AnnouncementModal from "./UniversalModal";
+import useAutoScroll from "../../utils/useAutoScroll";
 
 export default function AnnouncementCard() {
   const [announcements, setAnnouncements] = useState([]);
@@ -20,6 +21,7 @@ export default function AnnouncementCard() {
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null); // For full-size image preview
   const navigate = useNavigate();
+  const scrollRef = useAutoScroll(1,1); // Smooth scrolling
 
   // Fetch announcements on component mount
   useEffect(() => {
@@ -164,7 +166,7 @@ export default function AnnouncementCard() {
             View All <HiArrowCircleRight />
           </a>
         </div>
-        <div className="card-body card-scroll">
+        <div className="card-body card-scroll"ref={scrollRef}>
           {announcements.map((announcement) => (
             <div
               className="mb-3 announcement-card"

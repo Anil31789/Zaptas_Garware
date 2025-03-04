@@ -21,7 +21,7 @@ const ConnectMe = {
       console.error("❌ Hostname not recognized. Please configure the URLs.");
     }
   },
-};3
+};
 
 // Initialize the URLs
 ConnectMe.setUrls();

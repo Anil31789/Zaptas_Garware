@@ -4,6 +4,7 @@ import { apiCall, getTokenFromLocalStorage } from "../utils/apiCall";
 import ConnectMe from "../config/connect";
 import showToast from "../utils/toastHelper";
 import { FaPlusCircle, FaTimesCircle } from 'react-icons/fa';
+import useAutoScroll from "../../utils/useAutoScroll";
 export default function CsrPage() {
   const [selectedImages, setSelectedImages] = useState([]); // Initializing the state for selected images
   const [existingAnnouncements, setExistingAnnouncements] = useState([]);
@@ -281,6 +282,7 @@ const handleChange = (e) => {
     },
     [loading, hasMore]
   );
+  const scrollRef = useAutoScroll(1,1); // Smooth scrolling
 
   useEffect(() => {
     fetchExistingAnnouncements(page);
@@ -432,7 +434,7 @@ const handleChange = (e) => {
             flexShrink: 0,     // Prevents shrinking of cards
           }}
         >
-          <div className="card-body">
+          <div className="card-body card-scroll" ref={scrollRef}>
             <h5 className="card-title">{announcement.title}</h5>
             <div className="mt-2">
               <button
