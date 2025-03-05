@@ -4,7 +4,7 @@ import { apiCall, getTokenFromLocalStorage } from "../utils/apiCall";
 import ConnectMe from "../config/connect";
 import showToast from "../utils/toastHelper";
 import { FaPlusCircle, FaTimesCircle } from 'react-icons/fa';
-import useAutoScroll from "../../utils/useAutoScroll";
+// import useAutoScroll from "../../utils/useAutoScroll";
 
 export default function AwardsPage() {
   const [selectedImages, setSelectedImages] = useState([]); // Initializing the state for selected images
@@ -306,7 +306,7 @@ export default function AwardsPage() {
     },
     [loading, hasMore]
   );
-  const scrollRef = useAutoScroll(1,1000); // Smooth scrolling
+  // const scrollRef = useAutoScroll(1,1000); // Smooth scrolling
 
 
   useEffect(() => {
@@ -464,7 +464,7 @@ export default function AwardsPage() {
                   flexShrink: 0,     // Prevents shrinking of cards
                 }}
               >
-                  <div className="card-body card-scroll" ref={scrollRef}>
+                  <div className="card-body card-scroll" >
                   <h5 className="card-title">{announcement.title}</h5>
                   <div className="mt-2">
                     <button
