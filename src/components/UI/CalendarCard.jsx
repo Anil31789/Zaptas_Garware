@@ -115,7 +115,16 @@ export default function CalendarCard() {
 
     return colorMap[eventType] || "#6c757d";
   };
+  const tileClassName = ({ date, view }) => {
+    if (view === "month") {
+      if (date.getDay() === 6) {
+        return "text-black"; // Mark only Sundays as red
+      
+    }
 
+  };
+}
+  
   return (
     <div className="card mb-3 calendar-card">
       <div className="card-header d-flex justify-content-between align-items-center">
@@ -139,7 +148,9 @@ export default function CalendarCard() {
           onChange={handleDateClick}
           value={date}
           tileContent={tileContent}
+          tileClassName={tileClassName} // Highlights only Sundays
           onActiveStartDateChange={handleActiveStartDateChange}
+          className="w-100 border rounded p-2" // Bootstrap styling for a cleaner look
         />
         {selectedDateEvents.length > 0 ? (
           <div className="event-list mt-3">
