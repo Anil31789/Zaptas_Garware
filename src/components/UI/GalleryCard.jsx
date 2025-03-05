@@ -6,7 +6,7 @@ import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import showToast from "../../utils/toastHelper";
 import { Modal } from "react-bootstrap"; // Import Modal from react-bootstrap
-import useAutoScroll from "../../utils/useAutoScroll";
+// import useAutoScroll from "../../utils/useAutoScroll";
 
 export default function GalleryCard() {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ export default function GalleryCard() {
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedTitle, setSelectedTitle] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const scrollRef = useAutoScroll(1,1); // Smooth scrolling
+  // const scrollRef = useAutoScroll(1,1); // Smooth scrolling
 
   useEffect(() => {
     fetchData("Announcements");
@@ -147,7 +147,7 @@ export default function GalleryCard() {
           View All <HiArrowCircleRight />
         </a>
       </div>
-      <div className="card-body card-scroll p-0" ref={scrollRef} style={{ overflowX: "hidden" }}>
+      <div className="card-body card-scroll p-0"  style={{ overflowX: "hidden" }}>
         <div className="container-fluid">
           <div className="row d-flex flex-column justify-content-center align-content-center">
             {/* CSR Section */}
