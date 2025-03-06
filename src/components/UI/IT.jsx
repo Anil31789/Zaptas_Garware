@@ -3,11 +3,11 @@ import { FaLaptopCode } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
-import { Accordion, Card } from "react-bootstrap";
+import { Accordion } from "react-bootstrap";
 import { HiArrowCircleRight } from "react-icons/hi";
 import {
   FaUserPlus, FaUserMinus, FaNetworkWired, FaMobileAlt, FaCogs, FaVideo, 
-  FaUserShield, FaEnvelope, FaLaptop 
+  FaUserShield, FaEnvelope, FaLaptop, FaUsers, FaServer, FaTools, FaAt
 } from "react-icons/fa";
 
 const IT = () => {
@@ -39,27 +39,31 @@ const IT = () => {
     fetchServiceTypes();
   }, []);
 
-  // Service categories merged into one dropdown
+  // Service categories with icons
   const itServices = [
     {
       title: "User Management",
+      icon: <FaUsers className="me-2 text-primary" />,
       services: ["SAP ID Creation", "Users Deletion", "New Users addition"],
     },
     {
       title: "Network & VPN",
+      icon: <FaServer className="me-2 text-success" />,
       services: ["Internet / VPN (Employee)", "Internet / VPN (Guest)"],
     },
     {
       title: "Software & Access",
+      icon: <FaTools className="me-2 text-warning" />,
       services: ["Form for New Software", "CCTV Camera Access", "IT Equipment Access"],
     },
     {
       title: "Email Services",
+      icon: <FaAt className="me-2 text-danger" />,
       services: ["New Email Creation", "Form for Email on Mobile"],
     },
   ];
 
-  // Icons mapping
+  // Icons mapping for services
   const serviceIcons = {
     "SAP ID Creation": <FaUserPlus className="me-2 text-primary" />,
     "Users Deletion": <FaUserMinus className="me-2 text-danger" />,
@@ -108,40 +112,41 @@ const IT = () => {
           <p className="text-muted">Loading...</p>
         ) : (
           <Accordion defaultActiveKey="0">
-          {/* IT Services (default open) */}
-          <Accordion.Item eventKey="0">
-            <Accordion.Header>IT Services</Accordion.Header>
-            <Accordion.Body>
-              <Accordion>
-                {itServices.map((category, index) => (
-                  <Accordion.Item eventKey={`sub-${index}`} key={index}>
-                    <Accordion.Header>{category.title}</Accordion.Header>
-                    <Accordion.Body>
-                      <ul className="list-unstyled">
-                        {category.services.map((service, i) => (
-                          <li key={i} className="mb-1 d-flex align-items-center">
-                            {serviceIcons[service] || <FaLaptop className="me-2 text-muted" />}
-                            <a
-                              href="#"
-                              className="text-decoration-none"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                navigate("/ITService", { state: { name: service } });
-                              }}
-                            >
-                              {service}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                ))}
-              </Accordion>
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
-        
+            {/* IT Services (default open) */}
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>IT Services</Accordion.Header>
+              <Accordion.Body>
+                <Accordion>
+                  {itServices.map((category, index) => (
+                    <Accordion.Item eventKey={`sub-${index}`} key={index}>
+                      <Accordion.Header>
+                        {category.icon} {category.title}
+                      </Accordion.Header>
+                      <Accordion.Body>
+                        <ul className="list-unstyled">
+                          {category.services.map((service, i) => (
+                            <li key={i} className="mb-1 d-flex align-items-center">
+                              {serviceIcons[service] || <FaLaptop className="me-2 text-muted" />}
+                              <a
+                                href="#"
+                                className="text-decoration-none"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  navigate("/ITService", { state: { name: service } });
+                                }}
+                              >
+                                {service}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  ))}
+                </Accordion>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
         )}
       </div>
     </div>
