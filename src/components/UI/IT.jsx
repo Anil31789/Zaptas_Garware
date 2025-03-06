@@ -3,9 +3,10 @@ import { FaLaptopCode } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
+import { Accordion, Card } from "react-bootstrap";
 import { HiArrowCircleRight } from "react-icons/hi";
 import {
-  FaUserPlus, FaUserMinus, FaNetworkWired, FaMobileAlt, FaServer, FaCogs, FaVideo, 
+  FaUserPlus, FaUserMinus, FaNetworkWired, FaMobileAlt, FaCogs, FaVideo, 
   FaUserShield, FaEnvelope, FaLaptop 
 } from "react-icons/fa";
 
@@ -38,7 +39,27 @@ const IT = () => {
     fetchServiceTypes();
   }, []);
 
-  // Map each service name to a corresponding icon
+  // Service categories merged into one dropdown
+  const itServices = [
+    {
+      title: "User Management",
+      services: ["SAP ID Creation", "Users Deletion", "New Users addition"],
+    },
+    {
+      title: "Network & VPN",
+      services: ["Internet / VPN (Employee)", "Internet / VPN (Guest)"],
+    },
+    {
+      title: "Software & Access",
+      services: ["Form for New Software", "CCTV Camera Access", "IT Equipment Access"],
+    },
+    {
+      title: "Email Services",
+      services: ["New Email Creation", "Form for Email on Mobile"],
+    },
+  ];
+
+  // Icons mapping
   const serviceIcons = {
     "SAP ID Creation": <FaUserPlus className="me-2 text-primary" />,
     "Users Deletion": <FaUserMinus className="me-2 text-danger" />,
@@ -50,7 +71,6 @@ const IT = () => {
     "Internet / VPN (Guest)": <FaUserShield className="me-2 text-primary" />,
     "New Users addition": <FaUserPlus className="me-2 text-success" />,
     "New Email Creation": <FaEnvelope className="me-2 text-danger" />,
-    "new email creation 2 test": <FaEnvelope className="me-2 text-danger" />,
   };
 
   return (
@@ -68,27 +88,61 @@ const IT = () => {
         </a>
       </div>
       <div className="card-body">
-        <ul className="list-unstyled ps-3">
-          {isLoading ? (
-            <li className="text-muted">Loading...</li>
-          ) : (
-            serviceTypes.map((service, index) => (
-              <li key={service._id || index} className="mb-1 d-flex align-items-center">
-                {serviceIcons[service.name] || <FaServer className="me-2 text-muted" />}
-                <a
-                  href="#"
-                  className="text-decoration-none"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate("/ITService", { state: { id: service._id } });
-                  }}
-                >
-                  {service.name}
-                </a>
-              </li>
-            ))
-          )}
-        </ul>
+        {/* IT Policies Section */}
+        <div className="mb-3">
+          <ul className="list-group">
+            <li className="list-group-item">
+              <a
+                href={`${ConnectMe.img_URL}/uploads/policy/hr/hrpolicy.pdf`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-decoration-none text-dark fw-bold"
+              >
+                📑 IT Policy
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {isLoading ? (
+          <p className="text-muted">Loading...</p>
+        ) : (
+          <Accordion defaultActiveKey="0">
+          {/* IT Services (default open) */}
+          <Accordion.Item eventKey="0">
+            <Accordion.Header>IT Services</Accordion.Header>
+            <Accordion.Body>
+              <Accordion>
+                {itServices.map((category, index) => (
+                  <Accordion.Item eventKey={`sub-${index}`} key={index}>
+                    <Accordion.Header>{category.title}</Accordion.Header>
+                    <Accordion.Body>
+                      <ul className="list-unstyled">
+                        {category.services.map((service, i) => (
+                          <li key={i} className="mb-1 d-flex align-items-center">
+                            {serviceIcons[service] || <FaLaptop className="me-2 text-muted" />}
+                            <a
+                              href="#"
+                              className="text-decoration-none"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                navigate("/ITService", { state: { name: service } });
+                              }}
+                            >
+                              {service}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                ))}
+              </Accordion>
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
+        
+        )}
       </div>
     </div>
   );

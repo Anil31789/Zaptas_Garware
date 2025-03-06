@@ -96,14 +96,11 @@ const Login = () => {
       const response = await apiCall("POST", url, headers, payload);
 
       if (response.success) {
-        // Remove previous user details from localStorage if any
         localStorage.removeItem("userDetails");
-
-        // Set the new user details in localStorage
         localStorage.setItem("userDetails", JSON.stringify(response?.data?.user));
         addTokenToLocalStorage(response?.data?.token);
         showToast("Login successful!", "success");
-        navigate("/"); // Redirect to the home page or any other route
+        navigate("/"); // Redirect to home
       } else {
         showToast(response.message || "Login failed. Please try again.", "error");
       }
@@ -111,6 +108,12 @@ const Login = () => {
       showToast(`Error during login: ${error.message}`, "error");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleLogin();
     }
   };
 
@@ -153,6 +156,7 @@ const Login = () => {
                   placeholder={"Domain Password"}
                   value={passwordOrOtp}
                   onChange={(e) => setPasswordOrOtp(e.target.value)}
+                  onKeyDown={handleKeyDown}
                   required
                 />
               </Form.Group>

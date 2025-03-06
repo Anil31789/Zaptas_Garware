@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Row, Col, Spinner, Card, InputGroup } from "react-bootstrap";
+import { Card, Form, Button, Row, Col, InputGroup, Spinner } from "react-bootstrap";
+import { FaTools, FaChevronDown } from "react-icons/fa";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 import { useLocation } from "react-router-dom";
-import { FaChevronDown } from "react-icons/fa"; // Bootstrap Icons
+// import { FaChevronDown } from "react-icons/fa"; // Bootstrap Icons
 import showToast from "../../utils/toastHelper";
 
 const ITServiceRequestForm = () => {
@@ -94,24 +95,37 @@ const ITServiceRequestForm = () => {
     }
   };
 
+ 
   return (
-    <div className="container mt-5">
-      <Card className="shadow-lg border-0 p-4">
+    <div className="container d-flex justify-content-center align-items-center min-vh-100">
+      <Card className="shadow-lg border-0 p-4 w-100" style={{ maxWidth: "650px", borderRadius: "12px" }}>
         <Card.Body>
-          <h3 className="mb-4 text-center text-primary">IT Service Request Form</h3>
-
+          {/* Form Header */}
+          <div className="text-center mb-3">
+            <FaTools size={32} className="text-primary mb-2" />
+            <h4 className="text-primary fw-bold mb-1" style={{ fontSize: "1.5rem" }}>
+              IT Service Request
+            </h4>
+            <p className="text-muted mb-0" style={{ fontSize: "0.9rem" }}>
+              Please fill in the required details
+            </p>
+          </div>
+  
           <Form onSubmit={handleSubmit}>
             {/* Service Type Selection */}
-            <div className="mb-4">
-              <h5 className="text-secondary">Select Type of Service</h5>
-              <InputGroup className="mb-3">
+            <div className="mb-3">
+              <h6 className="text-secondary fw-semibold mb-1" style={{ fontSize: "1rem" }}>
+                Type of IT Request
+              </h6>
+              <InputGroup className="shadow-sm rounded">
                 <Form.Select
                   name="typeOfService"
                   id="typeOfService"
                   value={formData.typeOfService}
                   onChange={(e) => setFormData({ ...formData, typeOfService: e.target.value })}
                   disabled={isLoading}
-                  className="form-select-lg"
+                  className="form-select"
+                  style={{ fontSize: "0.9rem" }}
                 >
                   <option value="" disabled>
                     {isLoading ? "Loading..." : "Select a service"}
@@ -122,26 +136,28 @@ const ITServiceRequestForm = () => {
                     </option>
                   ))}
                 </Form.Select>
-                <InputGroup.Text>
-                  {/* <FaChevronDown /> */}
+                <InputGroup.Text className="bg-white border-0">
+                  <FaChevronDown className="text-muted" />
                 </InputGroup.Text>
               </InputGroup>
             </div>
-
+  
             {/* Dynamic Fields */}
             {serviceTypes
               .filter((type) => type._id === formData.typeOfService)
               .map((type) => (
                 <div key={type._id}>
-                  <h5 className="text-secondary mb-3">Fill in the Details</h5>
-                  {type.fields.map((field) => (
-                    <Row key={field._id} className="mb-3">
-                      <Col md={12}>
-                        <Form.Group>
-                          <Form.Label className="fw-bold">
+                  <h6 className="text-secondary mb-2" style={{ fontSize: "1rem" }}>
+                    Request Details
+                  </h6>
+                  <Row>
+                    {type.fields.map((field) => (
+                      <Col md={6} key={field._id} className="mb-2">
+                        <Form.Group className="shadow-sm p-2 bg-white rounded">
+                          <Form.Label className="fw-semibold text-dark mb-1" style={{ fontSize: "0.9rem" }}>
                             {field.fieldName} {field.isRequired && <span className="text-danger">*</span>}
                           </Form.Label>
-
+  
                           {/* Boolean (Checkbox) Field */}
                           {field.fieldType === "Boolean" ? (
                             <Form.Check
@@ -149,7 +165,7 @@ const ITServiceRequestForm = () => {
                               id={field._id}
                               checked={formData.fieldsData[field._id] || false}
                               onChange={handleCheckboxChange}
-                              className="form-check-lg"
+                              className="form-check"
                             />
                           ) : field.fieldType === "select" || field.fieldType === "checkbox" ? (
                             // Dropdown (Select) or Multi-Select (Checkbox) Field
@@ -158,7 +174,8 @@ const ITServiceRequestForm = () => {
                               value={formData.fieldsData[field._id] || ""}
                               onChange={handleInputChange}
                               required={field.isRequired}
-                              className="form-control-lg"
+                              className="form-select"
+                              style={{ fontSize: "0.9rem" }}
                             >
                               <option value="">Select {field.fieldName}</option>
                               {field.options.map((option, index) => (
@@ -174,29 +191,29 @@ const ITServiceRequestForm = () => {
                                 field.fieldType === "text"
                                   ? "text"
                                   : field.fieldType === "number"
-                                    ? "number"
-                                    : field.fieldType === "email"
-                                      ? "email"
-                                      : "date"
+                                  ? "number"
+                                  : field.fieldType === "email"
+                                  ? "email"
+                                  : "date"
                               }
                               id={field._id}
                               value={formData.fieldsData[field._id] || ""}
                               onChange={handleInputChange}
                               required={field.isRequired}
-                              className="form-control-lg"
+                              className="form-control"
+                              style={{ fontSize: "0.9rem" }}
                             />
                           )}
                         </Form.Group>
                       </Col>
-                    </Row>
-                  ))}
+                    ))}
+                  </Row>
                 </div>
               ))}
-
-
+  
             {/* Submit Button */}
-            <div className="text-center mt-4">
-              <Button variant="primary" type="submit" className="btn-lg" disabled={isLoading}>
+            <div className="text-center mt-3">
+              <Button variant="primary" type="submit" className="btn w-100 shadow-sm" disabled={isLoading} style={{ fontSize: "1rem", padding: "10px" }}>
                 {isLoading ? (
                   <>
                     <Spinner animation="border" size="sm" /> Submitting...
@@ -211,6 +228,8 @@ const ITServiceRequestForm = () => {
       </Card>
     </div>
   );
+  
+  
 };
 
 export default ITServiceRequestForm;
