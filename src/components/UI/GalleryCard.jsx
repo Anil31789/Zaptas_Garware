@@ -5,8 +5,7 @@ import { HiArrowCircleRight } from "react-icons/hi";
 import ConnectMe from "../../config/connect";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import showToast from "../../utils/toastHelper";
-import { Modal } from "react-bootstrap"; // Import Modal from react-bootstrap
-// import useAutoScroll from "../../utils/useAutoScroll";
+import { Modal } from "react-bootstrap";
 
 export default function GalleryCard() {
   const navigate = useNavigate();
@@ -19,7 +18,6 @@ export default function GalleryCard() {
   const [selectedImages, setSelectedImages] = useState([]);
   const [selectedTitle, setSelectedTitle] = useState("");
   const [showModal, setShowModal] = useState(false);
-  // const scrollRef = useAutoScroll(1,1); // Smooth scrolling
 
   useEffect(() => {
     fetchData("Announcements");
@@ -55,7 +53,9 @@ export default function GalleryCard() {
   };
 
   const renderCarousel = (items, section, rowLimit) => {
-    if (!items || items.length === 0) return <p className="text-center">No {section} available</p>;
+    if (!items || items.length === 0) {
+      return <p className="text-center">No {section} available</p>;
+    }
 
     const limitedItems = items.slice(0, rowLimit);
     const groupedItems = [];
@@ -84,7 +84,7 @@ export default function GalleryCard() {
                           alt={item.title}
                           style={{
                             width: "100%",
-                            height: "125px",
+                            height: "150px",
                             objectFit: "cover",
                             cursor: "pointer",
                             borderRadius: "10px",
@@ -93,32 +93,48 @@ export default function GalleryCard() {
                         />
                       )}
 
-                      {/* Image Count Badge (Bottom Right) */}
+                      {/* Title Overlay (Single Line) */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: 0,
+                          left: 0,
+                          width: "100%",
+                          backgroundColor: "rgba(0, 0, 0, 0.6)",
+                          color: "#ffffff",
+                          padding: "6px",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                          textAlign: "center",
+                          borderBottomLeftRadius: "10px",
+                          borderBottomRightRadius: "10px",
+                          whiteSpace: "nowrap", // Single line
+                          overflow: "hidden", // Hide overflow
+                          textOverflow: "ellipsis", // Add "..."
+                        }}
+                        title={item.title} // Show full title on hover
+                      >
+                        {item.title}
+                      </div>
+
+                      {/* Image Count Badge */}
                       {item?.images?.length > 1 && (
                         <div
                           style={{
                             position: "absolute",
-                            bottom: "5px",
+                            top: "5px",
                             right: "5px",
                             backgroundColor: "rgba(0, 0, 0, 0.7)",
                             color: "white",
                             padding: "2px 8px",
                             borderRadius: "8px",
                             fontSize: "12px",
+                            zIndex: 10,
                           }}
                         >
                           {item?.images?.length} Images
                         </div>
                       )}
-                    </div>
-
-                    <div
-                      className="card-footer p-2 text-center"
-                      style={{ backgroundColor: "#f8f9fa", borderRadius: "10px" }}
-                    >
-                      <h6 className="card-title text-truncate" style={{ fontSize: "12px", fontWeight: "bold" }}>
-                        {item.title}
-                      </h6>
                     </div>
                   </div>
                 </div>
@@ -132,6 +148,7 @@ export default function GalleryCard() {
 
   return (
     <div className="card mb-3">
+      {/* Card Header */}
       <div className="card-header d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
           <FaCameraRetro className="me-2" />
@@ -139,33 +156,33 @@ export default function GalleryCard() {
         </div>
         <a
           className="text-decoration-none"
-          onClick={() => {
-            navigate("/photos");
-          }}
+          onClick={() => navigate("/photos")}
           style={{ cursor: "pointer" }}
         >
           View All <HiArrowCircleRight />
         </a>
       </div>
-      <div className="card-body card-scroll p-0"  style={{ overflowX: "hidden" }}>
+
+      {/* Card Body */}
+      <div className="card-body card-scroll p-0" style={{ overflowX: "hidden" }}>
         <div className="container-fluid">
           <div className="row d-flex flex-column justify-content-center align-content-center">
             {/* CSR Section */}
-            {data.CsrType && data.CsrType.length > 0 && (
+            {data.CsrType?.length > 0 && (
               <div className="col text-center mb-2">
                 {renderCarousel(data.CsrType, "CSR", 6)}
               </div>
             )}
 
             {/* Announcements Section */}
-            {data.Announcements && data.Announcements.length > 0 && (
+            {data.Announcements?.length > 0 && (
               <div className="col text-center mb-2">
                 {renderCarousel(data.Announcements, "Announcements", 4)}
               </div>
             )}
 
             {/* Awards Section */}
-            {data.Awards && data.Awards.length > 0 && (
+            {data.Awards?.length > 0 && (
               <div className="col text-center mb-2">
                 {renderCarousel(data.Awards, "Awards", 2)}
               </div>
@@ -189,7 +206,7 @@ export default function GalleryCard() {
                 alt={selectedTitle}
                 style={{
                   maxWidth: "80%",
-                  height: "auto2",
+                  height: "auto",
                   borderRadius: "10px",
                   cursor: "pointer",
                 }}
