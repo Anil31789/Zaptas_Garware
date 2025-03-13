@@ -23,13 +23,13 @@ export default function Home() {
 
       <div className="container-fluid p-4 ">
         <div className="row d-flex ">
-          <div className="col-md-4 d-flex">
+          <div className="col-md-4 d-flex mt-3">
             <LinkedInCard />
           </div>
-          <div className="col-md-4 d-flex">
+          <div className="col-md-4 d-flex mt-3">
             <ManagementMessageCard />
           </div>
-          <div className="col-md-4 d-flex">
+          <div className="col-md-4 d-flex mt-3">
             <AnnouncementCard />
           </div>
           <div className="col-md-4 d-flex mt-3">

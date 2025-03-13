@@ -11,6 +11,7 @@ import showToast from "../../utils/toastHelper";
 import PostCard from "./postDisplay";
 import { useNavigate } from "react-router-dom";
 import AnnouncementModal from "./UniversalModal";
+import useAutoScroll from "../../utils/useAutoScroll";
 
 export default function AnnouncementCard() {
   const [announcements, setAnnouncements] = useState([]);
@@ -20,7 +21,7 @@ export default function AnnouncementCard() {
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null); // For full-size image preview
   const navigate = useNavigate();
-
+    const { scrollRef, pauseScroll, resumeScroll } = useAutoScroll(1, 30, 2000); 
   // Fetch announcements on component mount
   useEffect(() => {
     fetchAnnouncements();
@@ -132,16 +133,7 @@ export default function AnnouncementCard() {
     );
   }
 
-  const formatText = (text) => {
-    if (!text) return null;
 
-    // Replace `{hashtag|#|tag}` with `#tag` and style it in #6d6f72
-    return text
-      .replace(/{hashtag\|\\#\|/g, "#") // Replace starting hashtag syntax
-      .replace(/}/g, "") // Remove closing syntax
-      .replace(/#(\w+)/g, '<span style="color:#6d6f72;">#$1</span>') // Make hashtags #6d6f72
-      .replace(/(\r\n|\n|\r)/gm, "<br>"); // Replace line breaks with HTML <br> tags for proper rendering
-  };
 
   return (
     <div>
@@ -166,8 +158,13 @@ export default function AnnouncementCard() {
             View All <HiArrowCircleRight />
           </a>
         </div>
-        <div className="card-body card-scroll">
-          {announcements.map((announcement) => (
+       <div
+        className="card-body card-scroll"
+        ref={scrollRef}
+        onMouseEnter={pauseScroll}  // Pause scroll when hovering
+        onMouseLeave={resumeScroll}  // Resume scroll when hover ends
+      >
+          {announcements?.map((announcement) => (
             <div
               className="mb-3 announcement-card"
               key={announcement._id}

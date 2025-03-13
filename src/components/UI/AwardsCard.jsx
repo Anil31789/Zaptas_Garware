@@ -11,6 +11,7 @@ import PostCard from "./postDisplay";
 import confetti from "canvas-confetti";
 import { useNavigate } from "react-router-dom";
 import AnnouncementModal from "./UniversalModal";
+import useAutoScroll from "../../utils/useAutoScroll";
 export default function AnnouncementCard() {
   const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,6 +21,7 @@ export default function AnnouncementCard() {
 
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
+    const { scrollRef, pauseScroll, resumeScroll } = useAutoScroll(1, 30, 2000); 
   // Fetch announcements on component mount
   useEffect(() => {
     fetchAnnouncements();
@@ -162,13 +164,18 @@ export default function AnnouncementCard() {
             View All <HiArrowCircleRight />
           </a>
         </div>
-        <div className="card-body card-scroll">
+       <div
+        className="card-body card-scroll"
+        ref={scrollRef}
+        onMouseEnter={pauseScroll}  // Pause scroll when hovering
+        onMouseLeave={resumeScroll}  // Resume scroll when hover ends
+      >
           {announcements.map((announcement) => (
             <div
               className="mb-3 announcement-card"
               key={announcement._id}
               onClick={(e) => {
-                e.stopPropagation(); // Prevent triggering `handleShow`
+             
                 handleShow(announcement)
               }} // Open modal when clicking the card
               style={{ cursor: "pointer" }}

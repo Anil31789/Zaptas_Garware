@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 import { IoIosMegaphone } from "react-icons/io";
 import AnnouncementModal from "./UniversalModal";
-// import useAutoScroll from "../../utils/useAutoScroll";
+import useAutoScroll from "../../utils/useAutoScroll";
 
 export default function AnnouncementCard() {
   const [announcements, setAnnouncements] = useState([]);
@@ -24,13 +24,18 @@ export default function AnnouncementCard() {
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null); // For full-size image preview
   const navigate = useNavigate();
-//  const scrollRef = useAutoScroll(1,1); // Smooth scrolling
+  const { scrollRef, pauseScroll, resumeScroll } = useAutoScroll(1, 30, 2000);
+
+
   // Fetch announcements on component mount
   useEffect(() => {
     fetchAnnouncements();
   }, []);
 
+
+
   //  End view all popup elements
+
 
   const fetchAnnouncements = async (page = 1, limit = 5) => {
     try {
@@ -160,8 +165,14 @@ export default function AnnouncementCard() {
             View All <HiArrowCircleRight />
           </a>
         </div>
-        <div className="card-body card-scroll" >
-          {announcements.map((announcement) => (
+
+        <div
+          className="card-body card-scroll"
+          ref={scrollRef}
+          onMouseEnter={pauseScroll}  // Pause scroll when hovering
+          onMouseLeave={resumeScroll}  // Resume scroll when hover ends
+        >
+          {announcements?.map((announcement) => (
             <div
               className="mb-3 announcement-card"
               key={announcement._id}
@@ -223,12 +234,12 @@ export default function AnnouncementCard() {
       </div>
 
       {/* Popup Modal */}
-      
+
       <AnnouncementModal
-      show={show}
-      handleClose={handleClose}
-      selectedAnnouncement={selectedAnnouncement}
-    />
+        show={show}
+        handleClose={handleClose}
+        selectedAnnouncement={selectedAnnouncement}
+      />
     </div>
   );
 }
