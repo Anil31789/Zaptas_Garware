@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { FaAward, FaHandshake } from "react-icons/fa";
+import { FaAward, FaChevronLeft, FaChevronRight, FaHandshake } from "react-icons/fa";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 import SendEmailPopup from "./sendMailPopup";
 import "./BirthdayBox.css";
+import { Button } from "react-bootstrap";
 
 
 
@@ -163,6 +164,19 @@ export default function WorkAnniversary() {
                   Make a wish!
                 </button>
               </div>
+            </div>
+            <div className="d-flex justify-content-center align-items-center mt-3">
+              <Button variant="light" className="me-2" onClick={() => setCurrentIndex(currentIndex > 0 ? currentIndex - 1 : workAnniversaries.length - 1)}>
+                <FaChevronLeft />
+              </Button>
+              {workAnniversaries.map((_, index) => (
+                <span key={index} className={`dot mx-1 ${index === currentIndex ? "active" : ""}`} onClick={() => setCurrentIndex(index)}>
+                  {index + 1}
+                </span>
+              ))}
+              <Button variant="light" className="ms-2" onClick={() => setCurrentIndex((currentIndex + 1) % workAnniversaries.length)}>
+                <FaChevronRight />
+              </Button>
             </div>
           </div>
         ) : (

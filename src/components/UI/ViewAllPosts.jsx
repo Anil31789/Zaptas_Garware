@@ -165,15 +165,15 @@ export default function ViewAllPosts() {
                 className="csr-media col-sm-12 text-center"
                 style={{ cursor: "pointer" }}
               >
-                {post.multimedia.type === "image" ? (
+                {post?.multimedia?.type === "image" ? (
                   <img
-                    src={post.multimedia.url}
+                    src={post?.multimedia?.url}
                     alt="LinkedIn Post"
                     style={{ width: "100%", height: "70%" }}
                   />
                 ) : (
                   <video width="100%" height="70%" controls autoPlay muted loop>
-                    <source src={post.multimedia.url} type="video/mp4" />
+                    <source src={post?.multimedia?.url} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 )}
