@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FaAward, FaBirthdayCake, FaHandshake } from "react-icons/fa";
+import { FaBirthdayCake, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { Carousel, Button } from "react-bootstrap";
+
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
 import ConnectMe from "../../config/connect";
 import SendEmailPopup from "./sendMailPopup";
@@ -67,6 +69,7 @@ const datadb = [
 
 
 export default function WorkAnniversary() {
+  
   const [workAnniversaries, setWorkAnniversaries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -114,6 +117,10 @@ export default function WorkAnniversary() {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="error">{error}</div>;
+
+
+
+  
 
   return (
     <div className="card mb-3" style={{ cursor: "pointer", borderRadius: "10px" }}>
@@ -165,7 +172,21 @@ export default function WorkAnniversary() {
                   </button>
               </div>
             </div>
+            <div className="d-flex justify-content-center align-items-center mt-3">
+              <Button variant="light" className="me-2" onClick={() => setCurrentIndex(currentIndex > 0 ? currentIndex - 1 : workAnniversaries.length - 1)}>
+                <FaChevronLeft />
+              </Button>
+              {workAnniversaries.map((_, index) => (
+                <span key={index} className={`dot mx-1 ${index === currentIndex ? "active" : ""}`} onClick={() => setCurrentIndex(index)}>
+                  {index + 1}
+                </span>
+              ))}
+              <Button variant="light" className="ms-2" onClick={() => setCurrentIndex((currentIndex + 1) % workAnniversaries.length)}>
+                <FaChevronRight />
+              </Button>
+            </div>
           </div>
+          
         ) : (
           <div>No birthdays today.</div>
         )}

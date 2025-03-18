@@ -261,9 +261,9 @@ export default function LinkedInCard() {
                       }}
                       onClick={() => openPostPopup(post)}
                     >
-                      {post.multimedia.type === "images" ? (
+                      {post?.multimedia?.type === "images" ? (
                         <img
-                          src={post.multimedia.url}
+                          src={post?.multimedia?.url}
                           alt="LinkedIn Post"
                           style={{
                             width: "100%",
@@ -283,7 +283,7 @@ export default function LinkedInCard() {
                             // objectFit: "cover", // Ensures the video fills the container
                           }}
                         >
-                          <source src={post.multimedia.url} type="video/mp4" />
+                          <source src={post?.multimedia?.url} type="video/mp4" />
                           Your browser does not support the video tag.
                         </video>
                       }
