@@ -6,7 +6,8 @@ import showToast from "../../utils/toastHelper";
 export default function PhotoGallery() {
   const [activeTab, setActiveTab] = useState("Announcements");
   const [data, setData] = useState({ Announcements: [], CsrType: [], Awards: [] });
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+  const [selectedItemImages, setSelectedItemImages] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const observer = useRef(null);
@@ -76,6 +77,43 @@ export default function PhotoGallery() {
     }
   };
 
+  // ✅ Open Modal (Set images of same title)
+  const openModal = (images, index) => {
+    setSelectedItemImages(images);
+    setSelectedImageIndex(index);
+  };
+
+  // ✅ Handle Left/Right Navigation within Same Title
+  const handleNextImage = () => {
+    if (selectedImageIndex !== null) {
+      setSelectedImageIndex((prevIndex) =>
+        prevIndex + 1 < selectedItemImages.length ? prevIndex + 1 : 0
+      );
+    }
+  };
+
+  const handlePrevImage = () => {
+    if (selectedImageIndex !== null) {
+      setSelectedImageIndex((prevIndex) =>
+        prevIndex - 1 >= 0 ? prevIndex - 1 : selectedItemImages.length - 1
+      );
+    }
+  };
+
+  // ✅ Handle Key Navigation
+  const handleKeyDown = (e) => {
+    if (selectedImageIndex !== null) {
+      if (e.key === "ArrowRight") handleNextImage();
+      if (e.key === "ArrowLeft") handlePrevImage();
+      if (e.key === "Escape") setSelectedImageIndex(null);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedImageIndex, selectedItemImages]);
+
   // ✅ Styles
   const imageStyle = {
     cursor: "pointer",
@@ -85,23 +123,15 @@ export default function PhotoGallery() {
     transition: "transform 0.3s ease-in-out",
   };
 
-  const cardStyle = {
-    transition: "transform 0.3s ease-in-out",
-  };
-
-  const cardHoverStyle = {
-    transform: "scale(1.03)",
-  };
-
-  const navLinkStyle = {
-    borderRadius: "30px",
-    padding: "10px 20px",
-  };
-
-  const navLinkActiveStyle = {
-    backgroundColor: "#007bff",
-    borderRadius: "30px",
-    color: "white",
+  const thumbnailStyle = {
+    cursor: "pointer",
+    objectFit: "cover",
+    height: "60px",
+    width: "60px",
+    marginRight: "5px",
+    borderRadius: "8px",
+    border: "2px solid #ddd",
+    transition: "transform 0.2s ease-in-out",
   };
 
   return (
@@ -111,9 +141,8 @@ export default function PhotoGallery() {
         {["Announcements", "CSR", "Awards"].map((tab) => (
           <li className="nav-item" key={tab}>
             <button
-              className={`nav-link ${activeTab === tab ? "active" : ""} text-capitalize fs-6`}
+              className={`nav-link ${activeTab === tab ? "active" : ""}`}
               onClick={() => setActiveTab(tab)}
-              style={activeTab === tab ? navLinkActiveStyle : navLinkStyle}
             >
               {tab}
             </button>
@@ -123,104 +152,63 @@ export default function PhotoGallery() {
 
       {/* ✅ Image Cards */}
       <div className="row g-4">
-        {data[activeTab]?.flatMap((item) =>
-          item?.images?.map((img, imgIndex) => (
-            <div key={`${item._id}-${imgIndex}`} className="col-12 col-sm-6 col-md-4">
-              <div
-                className="card border-0 shadow-lg overflow-hidden h-100"
-                style={cardStyle}
-                onMouseEnter={(e) => (e.currentTarget.style.transform = cardHoverStyle.transform)}
-                onMouseLeave={(e) => (e.currentTarget.style.transform = "")}
-              >
-                {/* ✅ Image */}
+        {data[activeTab]?.map((item) => (
+          <div key={item._id} className="col-12 col-sm-6 col-md-4">
+            <div className="card border-0 shadow-lg">
+              {item.images?.length > 0 && (
                 <img
-                  src={`${ConnectMe.img_URL}${img.imagePath}`}
+                  src={`${ConnectMe.img_URL}${item.images[0].imagePath}`}
                   alt="Gallery Item"
-                  className="img-fluid rounded zoom-effect shadow-sm"
                   style={imageStyle}
-                  onClick={() => setSelectedImage(`${ConnectMe.img_URL}${img.imagePath}`)}
+                  onClick={() => openModal(item.images, 0)}
                 />
-
-                {/* ✅ Card Content */}
-                <div className="card-body">
-                  <h5
-                    className="card-title text-center mb-3 text-primary"
-                    style={{
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    {item.title}
-                  </h5>
-
-                  {/* ✅ Date Display */}
-                  <p className="card-text text-center text-muted">
-                    {item.AnnouncementDate ? (
-                      <span className="d-block">
-                        {new Date(item.AnnouncementDate).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </span>
-                    ) : item.updatedAt ? (
-                      <span className="d-block">
-                        Updated On:{" "}
-                        {new Date(item.updatedAt).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </span>
-                    ) : item.createdAt ? (
-                      <span className="d-block">
-                        Created On:{" "}
-                        {new Date(item.createdAt).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </span>
-                    ) : null}
-                  </p>
+              )}
+              <div className="card-body">
+                <h5 className="card-title">{item.title}</h5>
+                <p className="card-text">
+                  {new Date(item.AnnouncementDate).toLocaleDateString("en-GB")}
+                </p>
+                <div className="d-flex justify-content-center mt-2">
+                  {item.images?.slice(1).map((img, imgIndex) => (
+                    <img
+                      key={imgIndex}
+                      src={`${ConnectMe.img_URL}${img.imagePath}`}
+                      alt="Thumbnail"
+                      style={thumbnailStyle}
+                      onClick={() => openModal(item.images, imgIndex + 1)}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
-          ))
-        )}
+          </div>
+        ))}
       </div>
 
       {/* ✅ Infinite Scroll Loader */}
       <div id="scroll-trigger" className="text-center my-3">
-        {loading && <div className="spinner-border text-primary" role="status"></div>}
+        {loading && <div className="spinner-border text-primary"></div>}
       </div>
 
-      {/* ✅ Modal for Enlarged Image */}
-      {selectedImage && (
-        <div
-          className="modal fade show d-block"
-          tabIndex="-1"
-          role="dialog"
-          onClick={() => setSelectedImage(null)}
-        >
+      {/* ✅ Modal */}
+      {selectedImageIndex !== null && (
+        <div className="modal fade show d-block" onClick={() => setSelectedImageIndex(null)}>
           <div className="modal-dialog modal-dialog-centered modal-lg">
-            <div className="modal-content bg-transparent border-0 shadow-lg">
+            <div className="modal-content bg-transparent">
               <button
                 type="button"
                 className="btn-close position-absolute top-0 end-0 m-3"
-                onClick={() => setSelectedImage(null)}
+                onClick={() => setSelectedImageIndex(null)}
               ></button>
               <img
-                src={selectedImage}
+                src={`${ConnectMe.img_URL}${selectedItemImages[selectedImageIndex].imagePath}`}
                 alt="Enlarged View"
-                className="img-fluid rounded shadow-lg"
+                className="img-fluid"
               />
             </div>
           </div>
         </div>
       )}
-      {selectedImage && <div className="modal-backdrop fade show"></div>}
     </div>
   );
 }
