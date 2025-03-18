@@ -162,6 +162,7 @@ export default function GalleryCard() {
           View All <HiArrowCircleRight />
         </a>
       </div>
+      
 
       {/* Card Body */}
       <div className="card-body card-scroll p-0" style={{ overflowX: "hidden" }}>
