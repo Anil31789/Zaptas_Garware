@@ -40,7 +40,7 @@ const Login = () => {
       "Content-Type": "application/json",
     };
 
-    const response = await apiCall("GET", `${ConnectMe.BASE_URL}/sso/verifyToken`, headers)
+    const response = await apiCall("GET", `${ConnectMe.BASE_URL}/sso/verifyToken`, headers, null,  2000, false)
 
     if (response.success) {
       // Show a success message
@@ -66,7 +66,7 @@ const Login = () => {
       const url = `${ConnectMe.BASE_URL}/sso/sendOtp`;
       const payload = { email: emailOrPhone };
       const headers = { "Content-Type": "application/json" };
-      const response = await apiCall("POST", url, headers, payload);
+      const response = await apiCall("POST", url, headers, payload,  2000, false);
 
       if (response.success) {
         showToast("OTP sent to your email.", "success");
@@ -93,7 +93,7 @@ const Login = () => {
         ? { email: emailOrPhone, otp: passwordOrOtp }
         : { email: emailOrPhone, password: passwordOrOtp };
       const headers = { "Content-Type": "application/json" };
-      const response = await apiCall("POST", url, headers, payload);
+      const response = await apiCall("POST", url, headers, payload,  2000, false);
 
       if (response.success) {
         localStorage.removeItem("userDetails");

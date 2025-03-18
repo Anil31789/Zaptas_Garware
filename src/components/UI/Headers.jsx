@@ -1377,7 +1377,14 @@ const useDebouncedSearch = (query, delay, headers) => {
                 <li className="d-flex justify-content-center mt-3">
                   <a
                     className="btn btn-danger w-50" // Make button width 75% of the parent for better centering
-                    onClick={() => navigate("/login")}
+                    onClick={() => {
+                      // Clear all browser storage
+                      localStorage.clear();
+                      sessionStorage.clear();
+                  
+                      // Redirect to login
+                      navigate("/login");
+                    }}
                     style={{
                       padding: '10px 20px',
                       borderRadius: '10px',
