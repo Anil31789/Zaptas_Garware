@@ -148,10 +148,9 @@ export default function WorkAnniversary() {
                 <div className="info">
                   <span className="date">
                     <FaHandshake className="icon" />{" "}
-                    {new Date(workAnniversaries[currentIndex]?.JoinDate).toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "short"
-                    })}
+                    {workAnniversaries[currentIndex]?.JoinDate &&
+                      new Date(`${new Date().getFullYear()}-${workAnniversaries[currentIndex].JoinDate}`)
+                        .toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}
                   </span>
                 </div>
                 <button

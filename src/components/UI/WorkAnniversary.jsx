@@ -145,32 +145,31 @@ export default function WorkAnniversary() {
                   {`${workAnniversaries[currentIndex]?.FirstName || ""} ${workAnniversaries[currentIndex]?.MiddleName || ""} ${workAnniversaries[currentIndex]?.LastName || ""
                     }`.trim()}
                 </h5>
-               {/* <p className="message">{workAnniversaries[currentIndex]?.CustomField6 || "Support"}</p> */}
+                {/* <p className="message">{workAnniversaries[currentIndex]?.CustomField6 || "Support"}</p> */}
                 <div className="info">
                   <span className="date">
                     <FaAward className="icon" />{" "}
-                    {new Date(workAnniversaries[currentIndex]?.JoinDate).toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "short"
-                    })}
+                    {workAnniversaries[currentIndex]?.JoinDate &&
+                      new Date(`${new Date().getFullYear()}-${workAnniversaries[currentIndex].JoinDate}`)
+                        .toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}
 
                   </span>
                 </div>
-              <button
-                    className="send-wish-btn mt-2"
-                    onClick={() => {
-                      setSelectedEmployee(workAnniversaries[currentIndex]);
-                      setShowPopup(true);
-                    }}
-                  >
-                    Make a wish!
-                  </button>
+                <button
+                  className="send-wish-btn mt-2"
+                  onClick={() => {
+                    setSelectedEmployee(workAnniversaries[currentIndex]);
+                    setShowPopup(true);
+                  }}
+                >
+                  Make a wish!
+                </button>
               </div>
 
-              
+
             </div>
 
-         <div className="d-flex justify-content-center align-items-center mt-3">
+            <div className="d-flex justify-content-center align-items-center mt-3">
               <Button variant="light" className="me-2" onClick={() => setCurrentIndex(currentIndex > 0 ? currentIndex - 1 : workAnniversaries.length - 1)}>
                 <FaChevronLeft />
               </Button>

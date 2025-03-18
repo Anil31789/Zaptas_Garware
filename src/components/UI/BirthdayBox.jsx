@@ -69,7 +69,7 @@ const datadb = [
 
 
 export default function WorkAnniversary() {
-  
+
   const [workAnniversaries, setWorkAnniversaries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -120,7 +120,7 @@ export default function WorkAnniversary() {
 
 
 
-  
+
 
   return (
     <div className="card mb-3" style={{ cursor: "pointer", borderRadius: "10px" }}>
@@ -154,22 +154,21 @@ export default function WorkAnniversary() {
                 <div className="info">
                   <span className="date">
                     <FaBirthdayCake className="icon" />{" "}
-                    {new Date(workAnniversaries[currentIndex]?.BirthDate).toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "short",
-                      // year: "numeric",
-                    })}
+                    {workAnniversaries[currentIndex]?.BirthDate &&
+                      new Date(`${new Date().getFullYear()}-${workAnniversaries[currentIndex].BirthDate}`)
+                        .toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}
                   </span>
+
                 </div>
-              <button
-                    className="send-wish-btn mt-2"
-                    onClick={() => {
-                      setSelectedEmployee(workAnniversaries[currentIndex]);
-                      setShowPopup(true);
-                    }}
-                  >
-                    Make a wish!
-                  </button>
+                <button
+                  className="send-wish-btn mt-2"
+                  onClick={() => {
+                    setSelectedEmployee(workAnniversaries[currentIndex]);
+                    setShowPopup(true);
+                  }}
+                >
+                  Make a wish!
+                </button>
               </div>
             </div>
             <div className="d-flex justify-content-center align-items-center mt-3">
@@ -186,7 +185,7 @@ export default function WorkAnniversary() {
               </Button>
             </div>
           </div>
-          
+
         ) : (
           <div>No birthdays today.</div>
         )}
