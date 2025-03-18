@@ -65,6 +65,7 @@ const handleChange = (e) => {
 };
 
 
+
   const removeImage = (index, name = null) => {
 
 
