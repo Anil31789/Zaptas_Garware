@@ -14,21 +14,19 @@ const useAutoScroll = (speed = 1, stepTime = 30, delay = 1500) => {
   // Define the smooth scroll function outside useEffect to access it in other contexts like resumeScroll
   const smoothScroll = () => {
     if (scrollRef.current && isScrolling.current) {
-      // Scroll the content by the defined speed
       scrollRef.current.scrollTop += speed;
-
-      // If reaches the bottom, reset to the top (create a loop)
+  
       if (
         scrollRef.current.scrollTop + scrollRef.current.clientHeight >=
-        scrollRef.current.scrollHeight
+        scrollRef.current.scrollHeight - 1
       ) {
-        console.log("Reached bottom, resetting to top");
-        scrollRef.current.scrollTop = 0; // Reset scroll position to top
+        scrollRef.current.scrollTop = 0;
       }
-
-      requestId.current = requestAnimationFrame(smoothScroll);
+  
+      setTimeout(() => requestAnimationFrame(smoothScroll), stepTime); // Use timeout
     }
   };
+  
 
   useEffect(() => {
     // Set a timeout to delay the start of the scroll by `delay` ms
