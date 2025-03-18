@@ -7,6 +7,7 @@ import { FaAward, FaHandshake, FaRegClipboard } from "react-icons/fa";
 import { IoGiftOutline } from "react-icons/io5"; // Icon for Paid-Holiday
 import "./CalendarCard.css";
 import { apiCall, getTokenFromLocalStorage } from "../../utils/apiCall";
+import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import ConnectMe from "../../config/connect";
 import showToast from "../../utils/toastHelper";
 import { useNavigate } from "react-router-dom";
@@ -55,12 +56,15 @@ export default function CalendarCard() {
     setSelectedDateEvents(getEventsForDate(date));
   }, [date]);
 
+
+
+
   const tileContent = ({ date, view }) => {
     if (view === "month") {
       const eventsForDate = getEventsForDate(date);
       if (eventsForDate.length > 0) {
         return (
-          <div className="event-dots">
+          <div className="event-dots position-relative">
             {eventsForDate.slice(0, 2).map((event, index) => (
               <span
                 key={index}
@@ -73,11 +77,21 @@ export default function CalendarCard() {
             {eventsForDate.length > 2 && (
               <span className="more-events">+{eventsForDate.length - 2}</span>
             )}
+            {/* Tooltip on hover */}
+            <div className="event-tooltip">
+              {eventsForDate.map((event, index) => (
+                <p key={index} className="mb-1">
+                  {renderEventIcon(event.type)} {event.title}
+                </p>
+              ))}
+            </div>
           </div>
         );
       }
     }
   };
+  
+  
 
   const handleActiveStartDateChange = ({ activeStartDate, view }) => {
     if (view === "month") {
