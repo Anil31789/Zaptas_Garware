@@ -13,6 +13,18 @@ import { HiOutlinePhone, HiOutlineShoppingBag, HiOutlineUserGroup } from "react-
 import SendEmailPopup from "./sendMailPopup";
 import { Button, FormControl, InputGroup, ListGroup, Modal } from "react-bootstrap";
 
+import { 
+  FaUserCircle, 
+  FaUser, 
+  FaMapMarkerAlt, 
+  FaBuilding, 
+  FaPhone, 
+  FaIdBadge, 
+  FaLink, 
+  FaMap, 
+  FaTimesCircle, 
+  FaExclamationCircle 
+} from "react-icons/fa"; // Importing FontAwesome icons
 
 
 export default function Headers() {
@@ -1061,92 +1073,92 @@ export default function Headers() {
   };
 
 
-const useDebouncedSearch = (query, delay, headers) => {
-  const [debouncedQuery, setDebouncedQuery] = useState(query);
-  const [options, setOptions] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const useDebouncedSearch = (query, delay, headers) => {
+    const [debouncedQuery, setDebouncedQuery] = useState(query);
+    const [options, setOptions] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      if (query.trim() !== '') {
-        setDebouncedQuery(query);
-      }
-    }, delay);
-
-    return () => clearTimeout(handler);
-  }, [query, delay]); // Only update debouncedQuery when query changes
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!debouncedQuery.trim()) return;
-
-      setLoading(true);
-      try {
-        const response = await apiCall(
-          'GET',
-          `${ConnectMe.BASE_URL}/telecom/search?q=${debouncedQuery}`,
-          headers,
-          null,
-          1000, // cooldown time
-          false // allow cache
-        );
-
-        if (response.status !== false) {
-          setOptions(response?.data?.data || []);
-        } else {
-          console.error(response.message);
+    useEffect(() => {
+      const handler = setTimeout(() => {
+        if (query.trim() !== '') {
+          setDebouncedQuery(query);
         }
-      } catch (error) {
-        console.error('Error fetching search data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      }, delay);
 
-    fetchData();
-  }, [debouncedQuery]); // Removed `headers` dependency to avoid unnecessary API calls
+      return () => clearTimeout(handler);
+    }, [query, delay]); // Only update debouncedQuery when query changes
 
-  return { options, loading };
-};
+    useEffect(() => {
+      const fetchData = async () => {
+        if (!debouncedQuery.trim()) return;
+
+        setLoading(true);
+        try {
+          const response = await apiCall(
+            'GET',
+            `${ConnectMe.BASE_URL}/telecom/search?q=${debouncedQuery}`,
+            headers,
+            null,
+            1000, // cooldown time
+            false // allow cache
+          );
+
+          if (response.status !== false) {
+            setOptions(response?.data?.data || []);
+          } else {
+            console.error(response.message);
+          }
+        } catch (error) {
+          console.error('Error fetching search data:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchData();
+    }, [debouncedQuery]); // Removed `headers` dependency to avoid unnecessary API calls
+
+    return { options, loading };
+  };
 
 
- 
-  
+
+
   const SearchBar = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedOption, setSelectedOption] = useState(null);
     const [modalShow, setModalShow] = useState(false);
     const [dropdownVisible, setDropdownVisible] = useState(false);
-  
+
     const token = getTokenFromLocalStorage();
     const headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     };
-  
+
     // Only one API call now
     const { options: fetchedOptions, loading } = useDebouncedSearch(searchQuery, 2000, headers);
-  
+
     const handleSearchChange = (e) => {
       const query = e.target.value;
       setSearchQuery(query);
-  
+
       // Show dropdown only if there's input
       setDropdownVisible(query.trim() !== "");
     };
-  
+
     const handleSearchClick = (option) => {
       setSelectedOption(option);
       setModalShow(true);
       setDropdownVisible(false);
     };
-  
+
     const handleModalClose = () => {
       setModalShow(false);
       setSearchQuery("");
       setDropdownVisible(false);
     };
-  
+
     return (
       <div className="search-container position-relative w-100">
         <InputGroup>
@@ -1158,7 +1170,7 @@ const useDebouncedSearch = (query, delay, headers) => {
             className="custom-search-input"
           />
         </InputGroup>
-  
+
         {dropdownVisible && (loading || fetchedOptions.length > 0) && (
           <div className="search-dropdown position-absolute w-100 bg-white border rounded shadow mt-1">
             {loading && <div className="p-2 text-center text-muted">Loading...</div>}
@@ -1178,10 +1190,10 @@ const useDebouncedSearch = (query, delay, headers) => {
                     <div className="d-flex justify-content-between align-items-center">
                       <div className="d-flex align-items-center gap-2">
                         <small>{option.location}</small>
-                        <small>({option.areaNo}-{option.extensionNo})</small>
+                        <small>({option.stdCode}-{option.areaCode})</small>
                       </div>
                       <small>{option.cellularNumber}</small>
-                      {/* <small>{option.AreaCode}</small> */}
+                      {/* <small>{option.areaCode}</small> */}
 
                     </div>
                     {/* <small>{option.email}</small> */}
@@ -1191,60 +1203,98 @@ const useDebouncedSearch = (query, delay, headers) => {
             )}
           </div>
         )}
-  
+
         {/* Modal Popup */}
-        <Modal show={modalShow} onHide={handleModalClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Details</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-          {selectedOption ? (
-  <>
-    <h5>Name: {selectedOption.name}</h5>
+        <Modal show={modalShow} onHide={handleModalClose} centered>
+      {/* Modal Header with Icon */}
+      <Modal.Header closeButton className="bg-primary text-white">
+        <Modal.Title>
+          <FaUserCircle className="me-2" size={24} /> Employee Details
+        </Modal.Title>
+      </Modal.Header>
 
-    <div className="d-flex justify-content-between mb-2">
-      {selectedOption.location && <span><b>Location:</b> {selectedOption.location}</span>}
-      {selectedOption.department && <span><b>Department:</b> {selectedOption.department}</span>}
+      {/* Modal Body */}
+      <Modal.Body>
+        {selectedOption ? (
+          <div className="p-3">
+            {/* Name */}
+            <h4 className="text-primary text-center mb-3">
+              <FaUser className="me-2" size={28} /> {selectedOption.name}
+            </h4>
+
+            {/* Location & Department */}
+            <div className="d-flex justify-content-between align-items-center bg-light p-3 rounded mb-2 shadow-sm">
+              {selectedOption.location && (
+                <span>
+                  <FaMapMarkerAlt className="text-danger me-2" size={20} />
+                  <b>Location:</b> {selectedOption.location}
+                </span>
+              )}
+              {selectedOption.department && (
+                <span>
+                  <FaBuilding className="text-success me-2" size={20} />
+                  <b>Department:</b> {selectedOption.department}
+                </span>
+              )}
+            </div>
+
+            {/* Contact Details */}
+            <div className="d-flex justify-content-between align-items-center bg-light p-3 rounded mb-2 shadow-sm">
+              {selectedOption.cellularNumber && (
+                <span>
+                  <FaPhone className="text-primary me-2" size={20} />
+                  <b>Number:</b> {selectedOption.cellularNumber}
+                </span>
+              )}
+              {selectedOption.abbreviation && (
+                <span>
+                  <FaIdBadge className="text-warning me-2" size={20} />
+                  <b>Abbreviation:</b> {selectedOption.abbreviation}
+                </span>
+              )}
+            </div>
+
+            {/* Area Code & Extension */}
+            {(selectedOption.stdCode || selectedOption.extensionNo) && (
+              <div className="bg-light p-3 rounded mb-2 text-center shadow-sm">
+                <FaLink className="text-info me-2" size={20} />
+                <b>Area-Extension:</b> 
+                {selectedOption.stdCode ? ` ${selectedOption.stdCode}` : ""} 
+                {selectedOption.stdCode && selectedOption.extensionNo ? " - " : ""}
+                {selectedOption.extensionNo ? ` ${selectedOption.extensionNo}` : ""}
+              </div>
+            )}
+
+            {/* Area Code */}
+            {selectedOption.areaCode && (
+              <div className="bg-light p-3 rounded text-center shadow-sm">
+                <FaMap className="text-secondary me-2" size={20} />
+                <b>Area Code:</b> {selectedOption.areaCode}
+              </div>
+            )}
+          </div>
+        ) : (
+          <p className="text-center text-muted">
+            <FaExclamationCircle className="text-warning me-2" size={22} /> No details available
+          </p>
+        )}
+      </Modal.Body>
+
+      {/* Modal Footer with Close Button */}
+      <Modal.Footer className="d-flex justify-content-center">
+        <Button variant="danger" className="fw-bold px-4" onClick={handleModalClose}>
+          <FaTimesCircle className="me-2" size={20} /> Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
 
 
-    </div>
-
-    <div className="d-flex justify-content-between mb-2">
-      {selectedOption.cellularNumber && <span><b>Number:</b> {selectedOption.cellularNumber}</span>}
-      {selectedOption.abbreviation && <span><b>Abbreviation:</b> {selectedOption.abbreviation}</span>}
-    </div>
-
-    <div className="d-flex justify-content-between mb-2">
-      {(selectedOption.areaNo || selectedOption.extensionNo) && (
-        <span>
-          <b>Area-Extension:</b> 
-          {selectedOption.areaNo ? `${selectedOption.areaNo}` : ""} 
-          {selectedOption.areaNo && selectedOption.extensionNo ? "-" : ""}
-          {selectedOption.extensionNo ? `${selectedOption.extensionNo}` : ""}
-        </span>
-      )}
-    </div>
-    <div>
-    {selectedOption.AreaCode && <span><b>AreaCode:</b> {selectedOption.AreaCode}</span>}
-    </div>
-  </>
-) : (
-  <p>No details available</p>
-)}
-
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleModalClose}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
       </div>
     );
   };
-  
-  
-  
+
+
+
 
 
 
@@ -1381,7 +1431,7 @@ const useDebouncedSearch = (query, delay, headers) => {
                       // Clear all browser storage
                       localStorage.clear();
                       sessionStorage.clear();
-                  
+
                       // Redirect to login
                       navigate("/login");
                     }}
