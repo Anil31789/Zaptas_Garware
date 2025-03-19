@@ -156,12 +156,21 @@ export default function PhotoGallery() {
           <div key={item._id} className="col-12 col-sm-6 col-md-4">
             <div className="card border-0 shadow-lg">
               {item.images?.length > 0 && (
-                <img
-                  src={`${ConnectMe.img_URL}${item.images[0].imagePath}`}
-                  alt="Gallery Item"
-                  style={imageStyle}
-                  onClick={() => openModal(item.images, 0)}
-                />
+                item.images[0].imagePath.toLowerCase().endsWith('.mp4') ? (
+                  <video
+                    src={`${ConnectMe.img_URL}${item.images[0].imagePath}`}
+                    style={imageStyle}
+                    controls
+                    onClick={() => openModal(item.images, 0)}
+                  />
+                ) : (
+                  <img
+                    src={`${ConnectMe.img_URL}${item.images[0].imagePath}`}
+                    alt="Gallery Item"
+                    style={imageStyle}
+                    onClick={() => openModal(item.images, 0)}
+                  />
+                )
               )}
               <div className="card-body">
                 <h5 className="card-title">{item.title}</h5>
@@ -169,21 +178,33 @@ export default function PhotoGallery() {
                   {new Date(item.AnnouncementDate).toLocaleDateString("en-GB")}
                 </p>
                 <div className="d-flex justify-content-center mt-2">
-                  {item.images?.slice(1).map((img, imgIndex) => (
-                    <img
-                      key={imgIndex}
-                      src={`${ConnectMe.img_URL}${img.imagePath}`}
-                      alt="Thumbnail"
-                      style={thumbnailStyle}
-                      onClick={() => openModal(item.images, imgIndex + 1)}
-                    />
-                  ))}
+                  {item.images?.slice(1).map((img, imgIndex) => {
+                    const isVideo = img.imagePath.toLowerCase().endsWith('.mp4');
+                    return isVideo ? (
+                      <video
+                        key={imgIndex}
+                        src={`${ConnectMe.img_URL}${img.imagePath}`}
+                        style={thumbnailStyle}
+                        controls
+                        onClick={() => openModal(item.images, imgIndex + 1)}
+                      />
+                    ) : (
+                      <img
+                        key={imgIndex}
+                        src={`${ConnectMe.img_URL}${img.imagePath}`}
+                        alt="Thumbnail"
+                        style={thumbnailStyle}
+                        onClick={() => openModal(item.images, imgIndex + 1)}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             </div>
           </div>
         ))}
       </div>
+
 
       {/* ✅ Infinite Scroll Loader */}
       <div id="scroll-trigger" className="text-center my-3">
@@ -192,23 +213,54 @@ export default function PhotoGallery() {
 
       {/* ✅ Modal */}
       {selectedImageIndex !== null && (
-        <div className="modal fade show d-block" onClick={() => setSelectedImageIndex(null)}>
-          <div className="modal-dialog modal-dialog-centered modal-lg">
-            <div className="modal-content bg-transparent">
-              <button
-                type="button"
-                className="btn-close position-absolute top-0 end-0 m-3"
-                onClick={() => setSelectedImageIndex(null)}
-              ></button>
-              <img
-                src={`${ConnectMe.img_URL}${selectedItemImages[selectedImageIndex].imagePath}`}
-                alt="Enlarged View"
-                className="img-fluid"
-              />
-            </div>
-          </div>
+  <div
+    className="modal fade show d-block"
+    onClick={() => setSelectedImageIndex(null)}
+    style={{ backdropFilter: "blur(10px)", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+  >
+    <div className="modal-dialog modal-dialog-centered modal-lg">
+      <div className="modal-content bg-transparent border-0">
+        <button
+          type="button"
+          className="btn-close position-absolute top-0 end-0 m-3"
+          onClick={() => setSelectedImageIndex(null)}
+        ></button>
+        <div className="text-center p-3">
+          {selectedItemImages[selectedImageIndex].imagePath.toLowerCase().endsWith('.mp4') ? (
+            <video
+              src={`${ConnectMe.img_URL}${selectedItemImages[selectedImageIndex].imagePath}`}
+              className="img-fluid rounded"
+              style={{
+                objectFit: "contain",
+                maxHeight: "90vh",
+              }}
+              controls
+              autoPlay
+            />
+          ) : (
+            <img
+              src={`${ConnectMe.img_URL}${selectedItemImages[selectedImageIndex].imagePath}`}
+              alt="Enlarged View"
+              className="img-fluid rounded"
+              style={{
+                objectFit: "contain",
+                maxHeight: "90vh",
+              }}
+            />
+          )}
         </div>
-      )}
+        <div className="modal-footer justify-content-center">
+          <button className="btn btn-danger" onClick={() => setSelectedImageIndex(null)}>
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+
+
     </div>
   );
 }
